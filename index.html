@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>311 Grocery List</title>
+    <link type="text/css" rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script type="text/javascript">
+
+      let data = null;
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", "groceryList.txt", false);
+      xmlhttp.send();
+      if (xmlhttp.status==200) { data = xmlhttp.responseText; }
+      let list = data.split('\n');
+
+      let node = document.createElement("div");
+      node.id = "groceryTable";
+      document.getElementsByTagName("body")[0].appendChild(node);
+
+      //print each line of the list
+      for(let i = 0; i < list.length; i++) { 
+        itemData = list[i].split('\t');
+
+        node = document.createElement("div");
+        node.id = "row" + i;
+        node.className = "groceryRow";
+        document.getElementById("groceryTable").appendChild(node);
+
+        //add Item name and render based on Status
+        node = document.createElement("div");
+        node.id = "item" + i + "name";
+        switch(itemData[1]){
+          case "GOOD": node.className = "groceryItem good"; break;
+          case "LOW": node.className = "groceryItem low"; break;
+          case "OUT": node.className = "groceryItem out"; break;
+          default: node.className = "groceryItem"; break;
+        }
+        node.innerHTML = "<p>"+itemData[0]+"</p>";
+        document.getElementById("row" + i).appendChild(node);
+
+        //add Item category
+        node = document.createElement("div");
+        node.id = "item" + i + "category";
+        node.className = "groceryCategory";
+        node.innerHTML = "<p>"+itemData[2]+"</p>";
+        document.getElementById("row" + i).appendChild(node);
+      }  
+      </script>  
+  </body>
+</html>

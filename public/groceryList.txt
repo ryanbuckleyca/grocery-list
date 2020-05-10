@@ -1,0 +1,112 @@
+FOOD	STATUS	CATEGORY
+Cauliflower	GOOD	Produce
+Kale	GOOD	Produce
+Sweet Potatoes	LOW	Produce
+Potatoes	GOOD	Produce
+Tomatoes	GOOD	Produce
+Cherry Tomatoes	GOOD	Produce
+Avocados	GOOD	Produce
+Ginger	GOOD	Produce
+Peppers	GOOD	Produce
+Brocolli	GOOD	Produce
+Mushrooms	GOOD	Produce
+Onion	GOOD	Produce
+Bananas	GOOD	Produce
+Spinach	GOOD	Produce
+Carrots	GOOD	Produce
+Baby Carrots	GOOD	Produce
+Garlic	GOOD	Produce
+Greens	LOW	Produce
+Soy Milk	OUT	Beverages
+Orange Juice	GOOD	Beverages
+Oat Milk	OUT	Beverages
+Beer	GOOD	Beverages
+Mixed Berries	GOOD	Frozen
+Ground Soy	GOOD	Frozen
+Beyond Sausage	GOOD	Frozen
+Veggie Burgers	LOW	Frozen
+Ice Cream (Non-vegan)	LOW	Frozen
+Ice Cream (Vegan)	LOW	Frozen
+Walnuts	GOOD	Bulk
+Cashews	LOW	Bulk
+Peanuts	GOOD	Bulk
+Dried Chickpeas	LOW	Bulk
+Rolled Oats	GOOD	Bulk
+Quinoa	GOOD	Bulk
+Red Lentils	GOOD	Bulk
+Brown/Green Lentils	GOOD	Bulk
+Rice	GOOD	Bulk
+Chocolate Chips Dark Chocolate (Ghiradelli)	GOOD	Pantry
+Dark Chocolate	GOOD	Pantry
+Vegan PB CC cookies	OUT	Pantry
+Buns (GF) HotDog	OUT	Pantry
+GF English Muffins	OUT	Pantry
+English Muffins (non-GF)	GOOD	Pantry
+Pasta/Marinara Sauce	LOW	Pantry
+Tortilla Chips	GOOD	Pantry
+Whole/Crushed Tomatoes	GOOD	Pantry
+Bread	GOOD	Pantry
+Pasta (GF)	GOOD	Pantry
+Pasta (non-GF)	GOOD	Pantry
+Maple Syrup	GOOD	Pantry
+Vegetable Stock	GOOD	Pantry
+Dried Cranberries 	OUT	Pantry
+Peanut Butter	GOOD	Pantry
+Canned Chickpeas	GOOD	Pantry
+Coconut Milk	GOOD	Pantry
+Diced Tomatoes	GOOD	Pantry
+Tomato Paste	GOOD	Pantry
+Honey	GOOD	Pantry
+Black Beans	GOOD	Pantry
+Pinto Beans	OUT	Pantry
+Amy's Spicy Chili	GOOD	Pantry
+Annie's Mac & Cheese	GOOD	Pantry
+Tofu	GOOD	Fridge
+Earth Balance Organic	GOOD	Fridge
+Butter	GOOD	Fridge
+Eggs	GOOD	Fridge
+Tumeric	GOOD	Spices
+Peppercorn	GOOD	Spices
+Basil	GOOD	Herbs
+Oregano	GOOD	Herbs
+Cayenne	GOOD	Spices
+Ginger Ground	GOOD	Spices
+Nutmeg	GOOD	Spices
+Mustard	GOOD	Spices
+Garlic Salt	GOOD	Spices
+Cumin	GOOD	Spices
+Crushed Red Pepper	GOOD	Spices
+Coriander	GOOD	Spices
+Cinnamon	GOOD	Spices
+Herb de Provence	GOOD	Spices
+Cardmom Seed	GOOD	Spices
+Garlic Powder	GOOD	Spices
+Curry Powder	GOOD	Spices
+Garam Masala	GOOD	Spices
+Paprika	GOOD	Spices
+Chili Powder	GOOD	Spices
+Sea Salt	GOOD	Spices
+Kosher Salt	GOOD	Spices
+Nutritional Yeast	LOW	Spices
+Sugar	GOOD	Spices
+Thyme	GOOD	Herbs
+Rosemary	GOOD	Herbs
+All Purpose Flour	GOOD	Baking
+Instant Yeast	OUT	Baking
+Apple Cider Vinegar	GOOD	Oils
+Olive Oil	GOOD	Oils
+Coconut Oil	GOOD	Oils
+Sesame OIl	GOOD	Oils
+White Balsamic Vinegar 	GOOD	Oils
+Balsamic Vinegar	GOOD	Oils
+Tahini	GOOD	Condiments
+Lemon Juice	GOOD	Condiments
+Lime Juice	GOOD	Condiments
+Hot Sauce	GOOD	Condiments
+Tamari / Soy Sauce	GOOD	Condiments
+Mustard	GOOD	Condiments
+Hand Soap	GOOD	Household
+Toilet Paper	GOOD	Household
+Paper Towels	LOW	Household
+Dish Soap	GOOD	Household
+Sponges	GOOD	Household

@@ -1,0 +1,67 @@
+body {
+  font-size: 4vw;
+  background-color: #222;
+  color: rgb(180, 180, 180);
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+p {
+  padding: 3vw;
+  margin: 2vw 2vw 2vw 0vw;
+}
+
+/* establish vertical column */
+#groceryTable {
+  display: flex;
+  flex-flow: column nowrap;
+  flex-grow: 1;
+  margin: 0;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+
+/* establish inline row */
+.groceryRow {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  flex-grow: 1;
+  margin: 0;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.groceryRow div {
+  padding: 0;
+  border: 0.25vw solid rgba(255, 255, 255, 0);
+  border-radius: 5px;
+  margin: 0.2vw;
+}
+
+.groceryCategory {
+  width: 30%;
+}
+
+.groceryItem {
+  width: 70%;
+}
+.low {
+  background-color: #FFDC00;
+  color: rgba(102, 88, 0, 1);
+  border: 0.25vw solid rgba(102, 88, 0, 0.25) !important;
+}
+.out {
+  background-color: #FF4136;
+  color: rgba(128, 6, 0, 1);
+  border: 0.25vw solid rgba(128, 6, 0, 0.25) !important;
+}
+.good {
+  background-color: #2ECC40;
+  color: rgba(14, 62, 20, 1);
+  border: 0.25vw solid rgba(14, 62, 20, 0.25) !important;
+}
+
+.groceryItem:hover {
+  filter: brightness(103%);
+}
+.groceryItem:active {
+  filter: brightness(98%);
+}
