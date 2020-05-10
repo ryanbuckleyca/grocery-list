@@ -7,7 +7,10 @@ var path = require('path')
 app.use(express.static('public'))
 
 app.get('/', async function(req, res) {
-  // res.sendFile(path.join(__dirname + '/index.html'))
+  res.sendFile(path.join(__dirname + '/index.html'))
+});
+
+app.get('/foodItems', async function(req, res) {
   const foodItems = await db.FoodItem.findAll()
   return res.send(foodItems)
 });

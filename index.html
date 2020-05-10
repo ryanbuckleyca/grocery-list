@@ -10,18 +10,19 @@
 
       let data = null;
       let xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", "groceryList.txt", false);
+      xmlhttp.open("GET", "/foodItems", false);
       xmlhttp.send();
       if (xmlhttp.status==200) { data = xmlhttp.responseText; }
-      let list = data.split('\n');
+      
+      let print = JSON.parse(data);      
 
       let node = document.createElement("div");
       node.id = "groceryTable";
       document.getElementsByTagName("body")[0].appendChild(node);
 
       //print each line of the list
-      for(let i = 0; i < list.length; i++) { 
-        itemData = list[i].split('\t');
+      for(let i = 0; i < print.length; i++) { 
+        itemData = print[i];
 
         node = document.createElement("div");
         node.id = "row" + i;
@@ -31,20 +32,20 @@
         //add Item name and render based on Status
         node = document.createElement("div");
         node.id = "item" + i + "name";
-        switch(itemData[1]){
+        switch(itemData.status){
           case "GOOD": node.className = "groceryItem good"; break;
           case "LOW": node.className = "groceryItem low"; break;
           case "OUT": node.className = "groceryItem out"; break;
           default: node.className = "groceryItem"; break;
         }
-        node.innerHTML = "<p>"+itemData[0]+"</p>";
+        node.innerHTML = "<p>"+itemData.name+"</p>";
         document.getElementById("row" + i).appendChild(node);
 
         //add Item category
         node = document.createElement("div");
         node.id = "item" + i + "category";
         node.className = "groceryCategory";
-        node.innerHTML = "<p>"+itemData[2]+"</p>";
+        node.innerHTML = "<p>"+itemData.category+"</p>";
         document.getElementById("row" + i).appendChild(node);
       }  
       </script>  
