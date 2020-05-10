@@ -4,17 +4,34 @@
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
     <link type="text/css" rel="stylesheet" href="style.css" />
-  </head>
+    <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
+    </head>
   <body>
     <script type="text/javascript">
 
-      let data = null;
-      let xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", "/foodItems", false);
-      xmlhttp.send();
-      if (xmlhttp.status==200) { data = xmlhttp.responseText; }
+      function editItem(itemID, text) {
+        alert("ItemID " + itemID + " can't be edited yet because this function is not yet written");
+        prompt('Enter the new name below:', unescape(text));
+      }
+
+      function deleteItem(itemID) {
+        alert("ItemID " + itemID + " can't be deleted yet because this function is not yet written");
+      }
+
+      function addItem() {
+        alert("Can't add new item yet because this function is not yet written");
+      }
+
+      function getList() {
+        let data = null;
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/foodItems", false);
+        xmlhttp.send();
+        if (xmlhttp.status==200) { data = xmlhttp.responseText; }
+        return JSON.parse(data)
+      }
       
-      let print = JSON.parse(data);      
+      let print = getList();
 
       let node = document.createElement("div");
       node.id = "groceryTable";
@@ -24,6 +41,7 @@
       for(let i = 0; i < print.length; i++) { 
         itemData = print[i];
 
+        //set up the table and rows
         node = document.createElement("div");
         node.id = "row" + i;
         node.className = "groceryRow";
@@ -41,13 +59,36 @@
         node.innerHTML = "<p>"+itemData.name+"</p>";
         document.getElementById("row" + i).appendChild(node);
 
+        //add Delete button
+        node = document.createElement("div");
+        node.id = "delItem" + i;
+        node.className = "delItem";
+        node.innerHTML = `<button onclick='deleteItem(${itemData.id})'><i class='far fa-trash-alt'></i></button>`;
+        document.getElementById("row" + i).appendChild(node);
+       
+        //add Edit button
+        node = document.createElement("div");
+        node.id = "editItem" + i;
+        node.className = "editItem";
+        node.innerHTML = `<button onclick="editItem(${itemData.id}, '${escape(itemData.name)}')"><i class="far fa-edit"></i></button>`;
+        document.getElementById("row" + i).appendChild(node);
+
         //add Item category
         node = document.createElement("div");
         node.id = "item" + i + "category";
         node.className = "groceryCategory";
         node.innerHTML = "<p>"+itemData.category+"</p>";
         document.getElementById("row" + i).appendChild(node);
+
       }  
+      
+      //tack on the Add Item button
+      node = document.createElement("div");
+      node.className = "addItem";
+      node.innerHTML = "<button onclick='addItem()'> <i class='fas fa-plus-square'></i> Add new item to list</button>";
+      document.getElementById("groceryTable").appendChild(node);
+
       </script>  
+      
   </body>
 </html>

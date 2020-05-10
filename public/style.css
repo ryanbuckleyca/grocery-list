@@ -41,7 +41,7 @@ p {
 }
 
 .groceryItem {
-  width: 70%;
+  width: 60%;
 }
 .low {
   background-color: #FFDC00;
@@ -57,6 +57,46 @@ p {
   background-color: #2ECC40;
   color: rgba(14, 62, 20, 1);
   border: 0.25vw solid rgba(14, 62, 20, 0.25) !important;
+}
+
+.delItem button {
+  color: rgba(128, 6, 0, 1);
+  border: 0;
+  background: none;
+  font-size: 120%;
+  margin: 0;
+  padding: 0 0 0 3vw;
+}
+.delItem button:hover {
+  filter: brightness(150%);
+}
+.editItem button {
+  color: #335e78;
+  border: 0;
+  background: none;
+  font-size: 120%;
+  margin: 0;
+  padding: 0 0 0 3vw;
+}
+.editItem button:hover {
+  filter: brightness(150%);
+}
+
+.addItem button {
+  color: #999;
+  padding: 3vw;
+  margin: 2vw 2vw 2vw 0vw;
+  border: 0;
+  background: #222;
+  width: 100%;
+  font-size: 120%;
+  border: 0.25vw solid rgba(255, 255, 255, 0);
+  border-radius: 5px;
+  margin: 0.2vw;
+
+}
+.addItem button:hover {
+  filter: brightness(150%);
 }
 
 .groceryItem:hover {
