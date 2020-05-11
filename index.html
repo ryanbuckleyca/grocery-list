@@ -3,24 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="style.css" />
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
-    </head>
+  </head>
   <body>
     <script type="text/javascript">
-
-      function editItem(itemID, text) {
-        alert("ItemID " + itemID + " can't be edited yet because this function is not yet written");
-        prompt('Enter the new name below:', unescape(text));
-      }
-
-      function deleteItem(itemID) {
-        alert("ItemID " + itemID + " can't be deleted yet because this function is not yet written");
-      }
-
-      function addItem() {
-        alert("Can't add new item yet because this function is not yet written");
-      }
 
       function getList() {
         let data = null;
@@ -31,62 +19,148 @@
         return JSON.parse(data)
       }
       
-      let print = getList();
+      const foodItems = getList();
+      let node;
 
-      let node = document.createElement("div");
-      node.id = "groceryTable";
-      document.getElementsByTagName("body")[0].appendChild(node);
+
+      function editItem(itemID, text) {
+        alert("ItemID " + itemID + " can't be edited yet because this function is not yet written");
+        prompt('Enter the new name below:', unescape(text));
+      }
+
+      function deleteItem(itemID) {
+        alert("ItemID " + itemID + " can't be deleted yet because this function is not yet written");
+      }
+
+      function addItem(prompt) {
+        alert("Can't add new item yet because this function is not yet written");
+        console.log(prompt);
+      }
+
+      function toggleStatus(id) {
+        var xmlhttp = new XMLHttpRequest(); 
+        xmlhttp.open("PUT", "/foodItems/" + id);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        let newStatus = document.getElementById("statusButton-" + id).className;
+        console.log(newStatus);
+        switch(newStatus) {
+          case "groceryItem out": 
+            newStatus = "GOOD"; 
+            document
+              .getElementById("statusButton-" + id)
+              .className = "groceryItem good";
+            break;
+          case "groceryItem good": 
+            newStatus = "LOW"; 
+            document
+              .getElementById("statusButton-" + id)
+              .className = "groceryItem low";
+            break;
+          case "groceryItem low": 
+            newStatus = "OUT"; 
+            document
+              .getElementById("statusButton-" + id)
+              .className = "groceryItem out";
+            break;
+        }
+        xmlhttp.send(JSON.stringify({ "status": newStatus}));
+      }
+
 
       //print each line of the list
-      for(let i = 0; i < print.length; i++) { 
-        itemData = print[i];
+      for(let i = 0; i < foodItems.length; i++) { 
+        let itemData = foodItems[i];
 
-        //set up the table and rows
+        //<div id="groceryRow" class="groceryRow">
         node = document.createElement("div");
-        node.id = "row" + i;
-        node.className = "groceryRow";
-        document.getElementById("groceryTable").appendChild(node);
+        node.id = "groceryRow-" + itemData.id;
+        node.className = "groceryRow row no-gutters text-center";
+        document.getElementsByTagName("body")[0].appendChild(node);
 
-        //add Item name and render based on Status
-        node = document.createElement("div");
-        node.id = "item" + i + "name";
-        switch(itemData.status){
-          case "GOOD": node.className = "groceryItem good"; break;
-          case "LOW": node.className = "groceryItem low"; break;
-          case "OUT": node.className = "groceryItem out"; break;
-          default: node.className = "groceryItem"; break;
-        }
-        node.innerHTML = "<p>"+itemData.name+"</p>";
-        document.getElementById("row" + i).appendChild(node);
+          //<div id="delItem0" class="delItem">
+          node = document.createElement("div");
+          node.id = "delItem-" + itemData.id;
+          node.className = "delItem col-1 text-center align-self-center";
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
 
-        //add Delete button
-        node = document.createElement("div");
-        node.id = "delItem" + i;
-        node.className = "delItem";
-        node.innerHTML = `<button onclick='deleteItem(${itemData.id})'><i class='far fa-trash-alt'></i></button>`;
-        document.getElementById("row" + i).appendChild(node);
-       
-        //add Edit button
-        node = document.createElement("div");
-        node.id = "editItem" + i;
-        node.className = "editItem";
-        node.innerHTML = `<button onclick="editItem(${itemData.id}, '${escape(itemData.name)}')"><i class="far fa-edit"></i></button>`;
-        document.getElementById("row" + i).appendChild(node);
+            //<button onclick="deleteItem(22)">
+            node = document.createElement('button');
+            node.id = "delButton-" + itemData.id;
+            node.onclick = function(){deleteItem(itemData.id)};
+            document.getElementById("delItem-" + itemData.id).appendChild(node);
 
-        //add Item category
-        node = document.createElement("div");
-        node.id = "item" + i + "category";
-        node.className = "groceryCategory";
-        node.innerHTML = "<p>"+itemData.category+"</p>";
-        document.getElementById("row" + i).appendChild(node);
+              //<i class="far fa-trash-alt" aria-hidden="true"></i>
+              node = document.createElement('li');
+              node.className = "far fa-trash-alt";
+              node.ariaHidden = true;
+              document.getElementById("delButton-" + itemData.id).appendChild(node);
 
-      }  
+
+          //<div id="editItem0" class="editItem">
+          node = document.createElement("div");
+          node.id = "editItem-" + itemData.id;
+          node.className = "editItem col-1 text-center align-self-center";
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+
+            //<button id="editButton1" onclick="editItem(22, 'Soy%20Milk')">
+            node = document.createElement('button');
+            node.id = "editButton-" + itemData.id;
+            node.onclick = function(){editItem(itemData.id, itemData.name)};
+            document.getElementById("editItem-" + itemData.id).appendChild(node);
+            
+              //<i class="far fa-edit" aria-hidden="true"></i>
+              node = document.createElement('li');
+              node.className = "far fa-edit";
+              node.ariaHidden = true;
+              document.getElementById("editButton-" + itemData.id).appendChild(node);
+
+          //GROCERY NAME
+          //<div id="item0name" class="groceryName">
+          node = document.createElement("div");
+          node.id = "itemName-" + itemData.id;
+          node.className = "groceryName col-8 p-2 align-self-center";
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+
+            //<button id="item0name" class="groceryItem out">
+              //<p>Soy Milk</p>
+            node = document.createElement("button");
+            node.id = "statusButton-" + itemData.id;
+            switch(itemData.status){
+              case "GOOD": node.className = "groceryItem good"; break;
+              case "LOW": node.className = "groceryItem low"; break;
+              case "OUT": node.className = "groceryItem out"; break;
+              default: node.className = "groceryItem"; break;
+            }
+            node.onclick = function(){
+              toggleStatus(itemData.id, itemData.status)
+              };
+            node.innerHTML = "<p>" + itemData.name + "</p>";
+            document.getElementById("itemName-" + itemData.id).appendChild(node);
+
+          //<div id="item0category" class="groceryCategory">
+          node = document.createElement("div");
+          node.id = "itemCategory-" + itemData.id;
+          node.className = "groceryCategory col-2 align-self-center";
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+
+            //<button onclick="updateCat()">
+              //<p>Beverages</p>
+            node = document.createElement('button');
+            node.id = "updateButton-" + itemData.id;
+            node.addEventListener('click', function(){
+              editItem(itemData.id, itemData.category)
+              });
+            node.innerHTML = "<p>" + itemData.category + "</p>";
+            document.getElementById("itemCategory-" + itemData.id).appendChild(node);
+      }
       
       //tack on the Add Item button
       node = document.createElement("div");
+      node.id = "addItem";
       node.className = "addItem";
-      node.innerHTML = "<button onclick='addItem()'> <i class='fas fa-plus-square'></i> Add new item to list</button>";
-      document.getElementById("groceryTable").appendChild(node);
+      node.onclick = function(){addItem(prompt())};
+      node.innerHTML = "<button class=\"bg-info\"><i class=\"fas fa-cart-plus\"></i></button>";
+      document.getElementsByTagName("body")[0].appendChild(node);
 
       </script>  
       

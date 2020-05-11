@@ -12,7 +12,12 @@ app.get('/', async function(req, res) {
 });
 
 app.get('/foodItems', async function(req, res) {
-  const foodItems = await db.FoodItem.findAll()
+  const foodItems = await db.FoodItem.findAll(
+    {order: [
+      ['category', 'DESC'],
+      ['status', 'DESC']
+    ]}
+  )
   return res.send(foodItems)
 })
 
@@ -33,10 +38,12 @@ app.get('/foodItems/:id', async function (req, res) {
 
 app.put('/foodItems/:id', async function (req, res) {
   const id = req.params.id
+  console.log(id);
   const { name, category, status, notes } = req.body
   const foodItem = await db.FoodItem.findOne({ where: { id } })
   if (name) foodItem.name = name
   if (category) foodItem.category = category
+  console.log(req.body);
   if (status) foodItem.status = status
   if (notes) foodItem.notes = notes
   await foodItem.save()
