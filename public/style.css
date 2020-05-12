@@ -9,7 +9,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 p {
   padding: 1vw;
   margin: 1vw;
@@ -71,6 +70,12 @@ p {
   background-color: #2ECC40;
   color: rgba(14, 62, 20, 1);
   border: 0.25vw solid rgba(14, 62, 20, 0.25) !important;
+}
+.edit {
+  background-color: #333;
+  color: #ececec;
+  box-shadow: inset 0px 0px 4px 0px white;
+  border: 0.25vw solid rgba(255, 255, 255, 1.25) !important;
 }
 
 

@@ -16,167 +16,201 @@
     <script type="text/javascript">
 
       function getList() {
-        let data = null;
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "/foodItems", false);
-        xmlhttp.send();
-        if (xmlhttp.status==200) { data = xmlhttp.responseText; }
+        let data = null
+        let xmlhttp = new XMLHttpRequest()
+        xmlhttp.open("GET", "/foodItems", false)
+        xmlhttp.send()
+        if (xmlhttp.status==200) { data = xmlhttp.responseText }
         return JSON.parse(data)
-      }
-      
-      const foodItems = getList();
-      let node;
-
-
-      function editItem(itemID, text) {
-        alert("ItemID " + itemID + " can't be edited yet because this function is not yet written");
-        prompt('Enter the new name below:', unescape(text));
       }
 
       //TODO: extract function and refactor
       function deleteItem(itemID) {
-        let check = confirm("Delete?");
-        if(!check) return; 
-        var xmlhttp = new XMLHttpRequest(); 
-        xmlhttp.open("DELETE", "/foodItems/" + itemID);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(JSON.stringify({ "id": itemID}));
+        let check = confirm("Delete?")
+        if(!check) return 
+        var xmlhttp = new XMLHttpRequest() 
+        xmlhttp.open("DELETE", "/foodItems/" + itemID)
+        xmlhttp.setRequestHeader("Content-Type", "application/json")
+        xmlhttp.send(JSON.stringify({ "id": itemID}))
 
-        let element = document.getElementById("groceryRow-" + itemID);
-        element.parentNode.removeChild(element);
-      }
-
-      function addItem(prompt) {
-        alert("Can't add new item yet because this function is not yet written");
-        console.log(prompt);
+        let element = document.getElementById("groceryRow-" + itemID)
+        element.parentNode.removeChild(element)
       }
 
       function toggleStatus(id) {
-        var xmlhttp = new XMLHttpRequest(); 
-        xmlhttp.open("PUT", "/foodItems/" + id);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        let newStatus = document.getElementById("statusButton-" + id).className;
-        console.log(newStatus);
+        if(document.getElementById("statusButton-" + id)
+          .contentEditable === "true") //attribute value is string, not boolean
+          return //do not toggle status...user is editing value
+
+        console.log("this shoulnd't print")
+        //quit if Name is being edited
+        var xmlhttp = new XMLHttpRequest() 
+        xmlhttp.open("PUT", "/foodItems/" + id)
+        xmlhttp.setRequestHeader("Content-Type", "application/json")
+        let newStatus = document.getElementById("statusButton-" + id).className
         switch(newStatus) {
           case "groceryItem out": 
-            newStatus = "GOOD"; 
+            newStatus = "GOOD" 
             document
               .getElementById("statusButton-" + id)
-              .className = "groceryItem good";
-            break;
+              .classList.replace("out", "good")
+            break
           case "groceryItem good": 
-            newStatus = "LOW"; 
+            newStatus = "LOW" 
             document
               .getElementById("statusButton-" + id)
-              .className = "groceryItem low";
-            break;
+              .classList.replace("good", "low")
+            break
           case "groceryItem low": 
-            newStatus = "OUT"; 
+            newStatus = "OUT" 
             document
               .getElementById("statusButton-" + id)
-              .className = "groceryItem out";
-            break;
+              .classList.replace("low", "out")
+            break
         }
-        xmlhttp.send(JSON.stringify({ "status": newStatus}));
+        xmlhttp.send(JSON.stringify({ "status": newStatus}))
       }
 
+      function editItem(itemID) {
+        //make element editable and put cursor inside
+        document.getElementById("statusButton-" + itemID)
+          .setAttribute("contentEditable", true)
+        document.getElementById("statusButton-" + itemID)
+          .focus()
+        document.getElementById("statusButton-" + itemID)
+          .classList.add("edit")
+
+      }
+
+      function sendEditedItem(itemID) {
+        document.getElementById("statusButton-" + itemID)
+          .setAttribute("contentEditable", false)
+        document.getElementById("statusButton-" + itemID)
+          .classList.remove("edit")
+
+
+        var xmlhttp = new XMLHttpRequest() 
+        xmlhttp.open("PUT", "/foodItems/" + itemID)
+        xmlhttp.setRequestHeader("Content-Type", "application/json")
+        let newName = document.getElementById("itemName-" + itemID + "p").innerText
+        
+        xmlhttp.send(JSON.stringify({ "id": itemID, "name": newName}))
+      }
+
+      function addItem() {
+        var name = prompt("Enter the name of the item:")
+        var cat = prompt("Enter the category for " + name)
+
+        var xmlhttp = new XMLHttpRequest() 
+        xmlhttp.open("POST", "/foodItems")
+        xmlhttp.setRequestHeader("Content-Type", "application/json")
+
+        xmlhttp.send(JSON.stringify({ "name": name, "category": cat}))
+
+      }
+
+      const foodItems = getList()
+
       //<div id="groceryRow" class="groceryRow">
-      node = document.createElement("div");
-      node.id = "groceryList";
-      node.className = "container-fluid p-0";
-      document.getElementsByTagName("body")[0].appendChild(node);
+      let node = document.createElement("div")
+      node.id = "groceryList"
+      node.className = "container-fluid p-0"
+      document.getElementsByTagName("body")[0].appendChild(node)
 
 
-      let lastCat = "";
+      let lastCat = ""
       //print each line of the list
       for(let i = 0; i < foodItems.length; i++) { 
-        let itemData = foodItems[i];
+        let itemData = foodItems[i]
         //print a category header    
         if (itemData.category !== lastCat) {
-          node = document.createElement("div");
-          node.id = itemData.category;
-          node.className = "groceryHeader row no-gutters text-center";
-          node.innerHTML = "<div class=\"col-12\">" + itemData.category +"</div>";
-          document.getElementById("groceryList").appendChild(node);
-        } lastCat = itemData.category;
+          node = document.createElement("div")
+          node.id = itemData.category
+          node.className = "groceryHeader row no-gutters text-center"
+          node.innerHTML = "<div class=\"col-12\">" + itemData.category +"</div>"
+          document.getElementById("groceryList").appendChild(node)
+        } 
+        lastCat = itemData.category
 
         //<div id="groceryRow" class="groceryRow">
-        node = document.createElement("div");
-        node.id = "groceryRow-" + itemData.id;
-        node.className = "groceryRow row no-gutters text-center";
-        document.getElementById("groceryList").appendChild(node);
+        node = document.createElement("div")
+        node.id = "groceryRow-" + itemData.id
+        node.className = "groceryRow row no-gutters text-center"
+        document.getElementById("groceryList").appendChild(node)
 
         //DEL ITEM
           //<div id="delItem0" class="delItem">
-          node = document.createElement("div");
-          node.id = "delItem-" + itemData.id;
-          node.className = "delItem col-1 text-center align-self-center";
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+          node = document.createElement("div")
+          node.id = "delItem-" + itemData.id
+          node.className = "delItem col-1 text-center align-self-center"
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button onclick="deleteItem(22)">
-            node = document.createElement('button');
-            node.id = "delButton-" + itemData.id;
-            node.onclick = function(){deleteItem(itemData.id)};
-            document.getElementById("delItem-" + itemData.id).appendChild(node);
+            node = document.createElement('button')
+            node.id = "delButton-" + itemData.id
+            node.onclick = function(){deleteItem(itemData.id)}
+            document.getElementById("delItem-" + itemData.id).appendChild(node)
 
               //<i class="far fa-trash-alt" aria-hidden="true"></i>
-              node = document.createElement('li');
-              node.className = "far fa-trash-alt";
-              node.ariaHidden = true;
-              document.getElementById("delButton-" + itemData.id).appendChild(node);
+              node = document.createElement('li')
+              node.className = "far fa-trash-alt"
+              node.ariaHidden = true
+              document.getElementById("delButton-" + itemData.id).appendChild(node)
 
         //GROCERY NAME
         //TODO: figure out why this is getting pushed left into preceding column
           //<div id="itemName:id" class="groceryName ...">
-          node = document.createElement("div");
-          node.id = "itemName-" + itemData.id;
-          node.className = "groceryName col-10 p-2 text-center align-self-center";
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+          node = document.createElement("div")
+          node.id = "itemName-" + itemData.id
+          node.className = "groceryName col-10 p-2 text-center align-self-center"
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="item0name" class="groceryItem out">
               //<p>Soy Milk</p>
-            node = document.createElement("button");
-            node.id = "statusButton-" + itemData.id;
+            node = document.createElement("button")
+            node.id = "statusButton-" + itemData.id
+            node.onblur = function(){sendEditedItem(itemData.id)}
+            node.contentEditable = false
             switch(itemData.status){
-              case "GOOD": node.className = "groceryItem good"; break;
-              case "LOW": node.className = "groceryItem low"; break;
-              case "OUT": node.className = "groceryItem out"; break;
-              default: node.className = "groceryItem out"; break;
+              case "GOOD": node.className = "groceryItem good"; break
+              case "LOW": node.className = "groceryItem low"; break
+              case "OUT": node.className = "groceryItem out"; break
+              default: node.className = "groceryItem out"; break
             }
             node.onclick = function(){
               toggleStatus(itemData.id, itemData.status)
-              };
-            node.innerHTML = "<p>" + itemData.name + "</p>";
-            document.getElementById("itemName-" + itemData.id).appendChild(node);
+              }
+            node.innerHTML = "<p id=\"itemName-" + itemData.id+ "p\">" + itemData.name + "</p>"
+            document.getElementById("itemName-" + itemData.id).appendChild(node)
 
         //EDIT ITEM
           //<div id="editItem0" class="editItem">
-          node = document.createElement("div");
-          node.id = "editItem-" + itemData.id;
-          node.className = "editItem col-1 text-center align-self-center";
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
+          node = document.createElement("div")
+          node.id = "editItem-" + itemData.id
+          node.className = "editItem col-1 text-center align-self-center"
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="editButton1" onclick="editItem(22, 'Soy%20Milk')">
-            node = document.createElement('button');
-            node.id = "editButton-" + itemData.id;
-            node.onclick = function(){editItem(itemData.id, itemData.name)};
-            document.getElementById("editItem-" + itemData.id).appendChild(node);
+            node = document.createElement('button')
+            node.id = "editButton-" + itemData.id
+            node.onclick = function(){editItem(itemData.id)}
+            document.getElementById("editItem-" + itemData.id).appendChild(node)
             
               //<i class="far fa-edit" aria-hidden="true"></i>
-              node = document.createElement('li');
-              node.className = "far fa-edit";
-              node.ariaHidden = true;
-              document.getElementById("editButton-" + itemData.id).appendChild(node);
+              node = document.createElement('li')
+              node.className = "far fa-edit"
+              node.ariaHidden = true
+              document.getElementById("editButton-" + itemData.id).appendChild(node)
 
       }
       
       //tack on the Add Item button
-      node = document.createElement("div");
-      node.id = "addItem";
-      node.className = "addItem";
-      node.onclick = function(){addItem(prompt())};
-      node.innerHTML = "<button><i class=\"fas fa-cart-plus\"></i></button>";
-      document.getElementsByTagName("body")[0].appendChild(node);
+      node = document.createElement("div")
+      node.id = "addItem"
+      node.className = "addItem"
+      node.onclick = function(){addItem()}
+      node.innerHTML = "<button><i class=\"fas fa-cart-plus\"></i></button>"
+      document.getElementsByTagName("body")[0].appendChild(node)
 
       </script>  
       

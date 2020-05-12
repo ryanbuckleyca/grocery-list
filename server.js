@@ -43,7 +43,6 @@ app.put('/foodItems/:id', async function (req, res) {
   const foodItem = await db.FoodItem.findOne({ where: { id } })
   if (name) foodItem.name = name
   if (category) foodItem.category = category
-  console.log(req.body);
   if (status) foodItem.status = status
   if (notes) foodItem.notes = notes
   await foodItem.save()
