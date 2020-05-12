@@ -1,12 +1,48 @@
+html {
+  padding:0;
+  margin:0;
+}
 body {
   background-color: #222;
   font-size: 4vw;
   font-family: Verdana, Geneva, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 p {
   padding: 1vw;
   margin: 1vw;
+}
+
+
+.delItem button {
+  color: #FF4136;
+  border: 0;
+  background: none;
+  font-size: 5vw;
+}
+.delItem button:hover {
+  filter: brightness(150%);
+}
+.editItem button {
+  color: #17a2b8;
+  border: 0;
+  background: none;
+  font-size: 5vw;
+  margin-right: 1vw;
+}
+.editItem button:hover {
+  filter: brightness(150%);
+}
+
+.groceryHeader {
+  position: sticky;
+  z-index:1 ;
+  padding: 1vw;
+  top: 0;
+  color: white;
+  background-color: #222;
 }
 
 .groceryName button {
@@ -15,25 +51,12 @@ p {
   border-radius: 5px;
   width: 100%;
 }
-.groceryCategory button {
-  padding: 0;
-  border: none;
-  border-radius: 5px;
-  margin: 0.2vw;
-  width: 100%;
-  background-color: #222;
-  text-align: left;
-  font-size: 2vw;
-  color: rgb(180, 180, 180);
-}
 .groceryName:hover {
   filter: brightness(103%);
 }
 .groceryName:active {
   filter: brightness(98%);
 }
-
-
 .low {
   background-color: #FFDC00;
   color: rgba(102, 88, 0, 1);
@@ -50,30 +73,12 @@ p {
   border: 0.25vw solid rgba(14, 62, 20, 0.25) !important;
 }
 
-.delItem button {
-  color: rgba(128, 6, 0, 1);
-  border: 0;
-  background: none;
-  font-size: 5vw;
-}
-.delItem button:hover {
-  filter: brightness(150%);
-}
-.editItem button {
-  color: #335e78;
-  border: 0;
-  background: none;
-  font-size: 5vw;
-  margin-right: 1vw;
-}
-.editItem button:hover {
-  filter: brightness(150%);
-}
 
 .addItem {
   position: fixed;
   bottom: 1vw;
   right: 1.5vw;
+  z-index: 3;
 }
 .addItem button {
   width: 12vw;
@@ -82,7 +87,7 @@ p {
   padding: 0;
   margin: 2vw 2vw 2vw 0vw;
   border: 0;
-  background: blue;
+  background:#17a2b8;
   font-size: 5vw;
   border: 0.25vw solid rgba(255, 255, 255, 0);
   border-radius: 50%;

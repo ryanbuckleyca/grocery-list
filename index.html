@@ -1,3 +1,8 @@
+<!-- 
+  TODO: 
+  - Add sort headers and remove category column
+ -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,8 +33,17 @@
         prompt('Enter the new name below:', unescape(text));
       }
 
+      //TODO: extract function and refactor
       function deleteItem(itemID) {
-        alert("ItemID " + itemID + " can't be deleted yet because this function is not yet written");
+        let check = confirm("Delete?");
+        if(!check) return; 
+        var xmlhttp = new XMLHttpRequest(); 
+        xmlhttp.open("DELETE", "/foodItems/" + itemID);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify({ "id": itemID}));
+
+        let element = document.getElementById("groceryRow-" + itemID);
+        element.parentNode.removeChild(element);
       }
 
       function addItem(prompt) {
@@ -66,17 +80,33 @@
         xmlhttp.send(JSON.stringify({ "status": newStatus}));
       }
 
+      //<div id="groceryRow" class="groceryRow">
+      node = document.createElement("div");
+      node.id = "groceryList";
+      node.className = "container-fluid p-0";
+      document.getElementsByTagName("body")[0].appendChild(node);
 
+
+      let lastCat = "";
       //print each line of the list
       for(let i = 0; i < foodItems.length; i++) { 
         let itemData = foodItems[i];
+        //print a category header    
+        if (itemData.category !== lastCat) {
+          node = document.createElement("div");
+          node.id = itemData.category;
+          node.className = "groceryHeader row no-gutters text-center";
+          node.innerHTML = "<div class=\"col-12\">" + itemData.category +"</div>";
+          document.getElementById("groceryList").appendChild(node);
+        } lastCat = itemData.category;
 
         //<div id="groceryRow" class="groceryRow">
         node = document.createElement("div");
         node.id = "groceryRow-" + itemData.id;
         node.className = "groceryRow row no-gutters text-center";
-        document.getElementsByTagName("body")[0].appendChild(node);
+        document.getElementById("groceryList").appendChild(node);
 
+        //DEL ITEM
           //<div id="delItem0" class="delItem">
           node = document.createElement("div");
           node.id = "delItem-" + itemData.id;
@@ -95,7 +125,31 @@
               node.ariaHidden = true;
               document.getElementById("delButton-" + itemData.id).appendChild(node);
 
+        //GROCERY NAME
+        //TODO: figure out why this is getting pushed left into preceding column
+          //<div id="itemName:id" class="groceryName ...">
+          node = document.createElement("div");
+          node.id = "itemName-" + itemData.id;
+          node.className = "groceryName col-10 p-2 text-center align-self-center";
+          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
 
+            //<button id="item0name" class="groceryItem out">
+              //<p>Soy Milk</p>
+            node = document.createElement("button");
+            node.id = "statusButton-" + itemData.id;
+            switch(itemData.status){
+              case "GOOD": node.className = "groceryItem good"; break;
+              case "LOW": node.className = "groceryItem low"; break;
+              case "OUT": node.className = "groceryItem out"; break;
+              default: node.className = "groceryItem out"; break;
+            }
+            node.onclick = function(){
+              toggleStatus(itemData.id, itemData.status)
+              };
+            node.innerHTML = "<p>" + itemData.name + "</p>";
+            document.getElementById("itemName-" + itemData.id).appendChild(node);
+
+        //EDIT ITEM
           //<div id="editItem0" class="editItem">
           node = document.createElement("div");
           node.id = "editItem-" + itemData.id;
@@ -114,44 +168,6 @@
               node.ariaHidden = true;
               document.getElementById("editButton-" + itemData.id).appendChild(node);
 
-          //GROCERY NAME
-          //<div id="item0name" class="groceryName">
-          node = document.createElement("div");
-          node.id = "itemName-" + itemData.id;
-          node.className = "groceryName col-8 p-2 align-self-center";
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
-
-            //<button id="item0name" class="groceryItem out">
-              //<p>Soy Milk</p>
-            node = document.createElement("button");
-            node.id = "statusButton-" + itemData.id;
-            switch(itemData.status){
-              case "GOOD": node.className = "groceryItem good"; break;
-              case "LOW": node.className = "groceryItem low"; break;
-              case "OUT": node.className = "groceryItem out"; break;
-              default: node.className = "groceryItem"; break;
-            }
-            node.onclick = function(){
-              toggleStatus(itemData.id, itemData.status)
-              };
-            node.innerHTML = "<p>" + itemData.name + "</p>";
-            document.getElementById("itemName-" + itemData.id).appendChild(node);
-
-          //<div id="item0category" class="groceryCategory">
-          node = document.createElement("div");
-          node.id = "itemCategory-" + itemData.id;
-          node.className = "groceryCategory col-2 align-self-center";
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node);
-
-            //<button onclick="updateCat()">
-              //<p>Beverages</p>
-            node = document.createElement('button');
-            node.id = "updateButton-" + itemData.id;
-            node.addEventListener('click', function(){
-              editItem(itemData.id, itemData.category)
-              });
-            node.innerHTML = "<p>" + itemData.category + "</p>";
-            document.getElementById("itemCategory-" + itemData.id).appendChild(node);
       }
       
       //tack on the Add Item button
@@ -159,7 +175,7 @@
       node.id = "addItem";
       node.className = "addItem";
       node.onclick = function(){addItem(prompt())};
-      node.innerHTML = "<button class=\"bg-info\"><i class=\"fas fa-cart-plus\"></i></button>";
+      node.innerHTML = "<button><i class=\"fas fa-cart-plus\"></i></button>";
       document.getElementsByTagName("body")[0].appendChild(node);
 
       </script>  
