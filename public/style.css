@@ -19,7 +19,7 @@ p {
   color: #FF4136;
   border: 0;
   background: none;
-  font-size: 5vw;
+  font-size: 8vw;
 }
 .delItem button:hover {
   filter: brightness(150%);
@@ -28,7 +28,7 @@ p {
   color: #17a2b8;
   border: 0;
   background: none;
-  font-size: 5vw;
+  font-size: 8vw;
   margin-right: 1vw;
 }
 .editItem button:hover {

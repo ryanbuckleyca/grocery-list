@@ -1,8 +1,3 @@
-<!-- 
-  TODO: 
-  - Add sort headers and remove category column
- -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,14 +19,17 @@
         return JSON.parse(data)
       }
 
-      //TODO: extract function and refactor
-      function deleteItem(itemID) {
-        let check = confirm("Delete?")
-        if(!check) return 
+      function sendToApp(action, url, data) {
         var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open("DELETE", "/foodItems/" + itemID)
+        xmlhttp.open(action, url)
         xmlhttp.setRequestHeader("Content-Type", "application/json")
-        xmlhttp.send(JSON.stringify({ "id": itemID}))
+        
+        xmlhttp.send(JSON.stringify(data))
+      }
+
+      function deleteItem(itemID) {
+        if(!confirm("Delete?")) return 
+        sendToApp("DELETE", "/foodItems/" + itemID, { "id": itemID})
 
         let element = document.getElementById("groceryRow-" + itemID)
         element.parentNode.removeChild(element)
@@ -41,12 +39,8 @@
         if(document.getElementById("statusButton-" + id)
           .contentEditable === "true") //attribute value is string, not boolean
           return //do not toggle status...user is editing value
-
-        console.log("this shoulnd't print")
         //quit if Name is being edited
-        var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open("PUT", "/foodItems/" + id)
-        xmlhttp.setRequestHeader("Content-Type", "application/json")
+
         let newStatus = document.getElementById("statusButton-" + id).className
         switch(newStatus) {
           case "groceryItem out": 
@@ -68,13 +62,19 @@
               .classList.replace("low", "out")
             break
         }
-        xmlhttp.send(JSON.stringify({ "status": newStatus}))
+        sendToApp("PUT", "/foodItems/" + id, { "status": newStatus})
       }
 
       function editItem(itemID) {
+        //TODO: 
+        //deactivate edit button
+        //how to keep it deactive as a space to click to exit Edit box
+        //Edit box is active
+        // document.getElementById("editButton-" + itemID).onclick = null
+
         //make element editable and put cursor inside
         document.getElementById("statusButton-" + itemID)
-          .setAttribute("contentEditable", true)
+          .contentEditable = true
         document.getElementById("statusButton-" + itemID)
           .focus()
         document.getElementById("statusButton-" + itemID)
@@ -82,41 +82,48 @@
 
       }
 
+      function sendOnEnter (event, id) {
+        if (event.which == 13 || event.keyCode == 13) {
+          //enter has been pressed, send data
+          sendEditedItem(id)
+        }
+      }
+
       function sendEditedItem(itemID) {
+        //TODO:
+        //triggered when Edit box is unfocused
+        //we want mousedown to not trigger button
+        //sets button onclick active again
+        //so by the time we click on button again it's already reactivated
+        // document.getElementById("editButton-" + itemID)
+        //   .onclick = function(){editItem(itemID)}
+
+
         document.getElementById("statusButton-" + itemID)
-          .setAttribute("contentEditable", false)
+          .contentEditable = false
         document.getElementById("statusButton-" + itemID)
           .classList.remove("edit")
 
 
-        var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open("PUT", "/foodItems/" + itemID)
-        xmlhttp.setRequestHeader("Content-Type", "application/json")
         let newName = document.getElementById("itemName-" + itemID + "p").innerText
         
-        xmlhttp.send(JSON.stringify({ "id": itemID, "name": newName}))
+        sendToApp("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName})
       }
 
       function addItem() {
         var name = prompt("Enter the name of the item:")
         var cat = prompt("Enter the category for " + name)
 
-        var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open("POST", "/foodItems")
-        xmlhttp.setRequestHeader("Content-Type", "application/json")
-
-        xmlhttp.send(JSON.stringify({ "name": name, "category": cat}))
-
+        sendToApp("POST", "/foodItems", { "name": name, "category": cat})
       }
 
       const foodItems = getList()
 
-      //<div id="groceryRow" class="groceryRow">
+      //<div id="groceryList">
       let node = document.createElement("div")
       node.id = "groceryList"
       node.className = "container-fluid p-0"
       document.getElementsByTagName("body")[0].appendChild(node)
-
 
       let lastCat = ""
       //print each line of the list
@@ -142,7 +149,7 @@
           //<div id="delItem0" class="delItem">
           node = document.createElement("div")
           node.id = "delItem-" + itemData.id
-          node.className = "delItem col-1 text-center align-self-center"
+          node.className = "delItem col-2 text-center align-self-center"
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button onclick="deleteItem(22)">
@@ -162,7 +169,7 @@
           //<div id="itemName:id" class="groceryName ...">
           node = document.createElement("div")
           node.id = "itemName-" + itemData.id
-          node.className = "groceryName col-10 p-2 text-center align-self-center"
+          node.className = "groceryName col-8 p-2 text-center align-self-center"
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="item0name" class="groceryItem out">
@@ -170,24 +177,32 @@
             node = document.createElement("button")
             node.id = "statusButton-" + itemData.id
             node.onblur = function(){sendEditedItem(itemData.id)}
-            node.contentEditable = false
             switch(itemData.status){
               case "GOOD": node.className = "groceryItem good"; break
               case "LOW": node.className = "groceryItem low"; break
               case "OUT": node.className = "groceryItem out"; break
               default: node.className = "groceryItem out"; break
             }
+            node.contentEditable = false
             node.onclick = function(){
               toggleStatus(itemData.id, itemData.status)
               }
             node.innerHTML = "<p id=\"itemName-" + itemData.id+ "p\">" + itemData.name + "</p>"
+
+            node.onkeydown = function(event){
+              if (event.which == 13 || event.keyCode == 13) {
+                event.preventDefault()
+                sendEditedItem(itemData.id)
+              }
+            }
+
             document.getElementById("itemName-" + itemData.id).appendChild(node)
 
         //EDIT ITEM
           //<div id="editItem0" class="editItem">
           node = document.createElement("div")
           node.id = "editItem-" + itemData.id
-          node.className = "editItem col-1 text-center align-self-center"
+          node.className = "editItem col-2 text-center align-self-center"
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="editButton1" onclick="editItem(22, 'Soy%20Milk')">
