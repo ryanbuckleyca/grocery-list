@@ -1,54 +1,67 @@
+:root {
+  --background: #fff;
+  --foreground: #222
+}
+
 html {
   padding:0;
   margin:0;
 }
 body {
-  background-color: #222;
-  font-size: 4vw;
-  font-family: Verdana, Geneva, sans-serif;
-  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 3.5vh;
+  font-family: 'Comic Neue', Verdana;
+  margin: 0 2vh 0 1vh;
   padding: 0;
 }
 p {
-  padding: 1vw;
-  margin: 1vw;
+  padding: 0vh;
+  margin: 1vh;
 }
 
-
-.delItem button {
-  color: #FF4136;
+/* problem is icon grows beyond the div col */
+.delItem, .editItem {
   border: 0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.delItem button {
+  color: rgba(252, 136, 123, 1);
+  border: 0;
+  padding: 0;
+  margin: 0;
   background: none;
-  font-size: 8vw;
+  font-size: 120%;
 }
 .delItem button:hover {
-  filter: brightness(150%);
+  filter: brightness(115%);
 }
 .editItem button {
-  color: #17a2b8;
+  color: rgb(204, 171, 218);
+  padding: 0;
+  margin: 0;
   border: 0;
   background: none;
-  font-size: 8vw;
-  margin-right: 1vw;
+  font-size: 120%;
 }
 .editItem button:hover {
-  filter: brightness(150%);
+  filter: brightness(115%);
 }
 
 .groceryHeader {
   position: sticky;
   z-index:1 ;
-  padding: 1vw;
+  padding: 2vh;
   top: 0;
-  color: white;
-  background-color: #222;
+  background: var(--background);;
 }
 
 .groceryName button {
-  padding: 2vw;
-  border: 0.25vw solid rgba(255, 255, 255, 0);
-  border-radius: 5px;
-  width: 100%;
+  padding: 2vh;
+  border-radius: 8px;
+  width: 95%;
 }
 .groceryName:hover {
   filter: brightness(103%);
@@ -57,48 +70,45 @@ p {
   filter: brightness(98%);
 }
 .low {
-  background-color: #FFDC00;
-  color: rgba(102, 88, 0, 1);
-  border: 0.25vw solid rgba(102, 88, 0, 0.25) !important;
+  color: var(--foreground);
+  background-color:rgba(255, 221, 150, 0.5);
+  border: 0vh solid rgba(102, 88, 0, 0.25) !important;
 }
 .out {
-  background-color: #FF4136;
-  color: rgba(128, 6, 0, 1);
-  border: 0.25vw solid rgba(128, 6, 0, 0.25) !important;
+  color: var(--foreground);
+  background-color: rgba(252, 136, 123, 0.5);
+  border: 0vh solid rgba(128, 6, 0, 0.25);
 }
 .good {
-  background-color: #2ECC40;
-  color: rgba(14, 62, 20, 1);
-  border: 0.25vw solid rgba(14, 62, 20, 0.25) !important;
+  color: var(--foreground);
+  background-color: rgba(207, 230, 165, 0.5);
+  border: 0vh solid rgba(14, 62, 20, 0.25) !important;
 }
 .edit {
-  background-color: #333;
-  color: #ececec;
-  box-shadow: inset 0px 0px 4px 0px white;
-  border: 0.25vw solid rgba(255, 255, 255, 1.25) !important;
+  background-color: var(--background);
+  color: var(--foreground);
+  box-shadow: inset 0px 0px 4px 0px var(--foreground);
+  border: 0vh solid rgba(255, 255, 255, 1.25) !important;
 }
 
 
 .addItem {
   position: fixed;
-  bottom: 1vw;
-  right: 1.5vw;
+  bottom: 1vh;
+  right: 3.5vh;
   z-index: 3;
 }
 .addItem button {
-  width: 12vw;
-  height: 12vw;
+  width: 14vh;
+  height: 14vh;
   color: white;
   padding: 0;
-  margin: 2vw 2vw 2vw 0vw;
+  margin: 2vh 2vh 2vh 0vh;
+  background: #ccabda;
+  font-size: 6vh;
   border: 0;
-  background:#17a2b8;
-  font-size: 5vw;
-  border: 0.25vw solid rgba(255, 255, 255, 0);
   border-radius: 50%;
-  margin: 0.2vw;
-
 }
 .addItem button:hover {
-  filter: brightness(150%);
+  filter: brightness(120%);
 }

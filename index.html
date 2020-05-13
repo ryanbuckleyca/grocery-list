@@ -1,13 +1,20 @@
+<!-- 
+  TODO:
+  Make section to edit headers/categories
+  Allow user to create custom order
+  Swipe left to delete, right to edit? Instead of buttons
+  Drag and drop elements of list?
+ -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="style.css" />
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
     <script type="text/javascript">
 
       function getList() {
@@ -67,7 +74,7 @@
 
       function editItem(itemID) {
         //TODO: 
-        //deactivate edit button
+        //figure out why deactivate isn't working
         //how to keep it deactive as a space to click to exit Edit box
         //Edit box is active
         // document.getElementById("editButton-" + itemID).onclick = null
@@ -79,6 +86,16 @@
           .focus()
         document.getElementById("statusButton-" + itemID)
           .classList.add("edit")
+        //run again to override mobile need to click twice
+        document.getElementById("statusButton-" + itemID)
+          .contentEditable = true
+        document.getElementById("statusButton-" + itemID)
+          .focus()
+
+        //deactivate edit button... this isn't working on mobile
+        document.getElementById("statusButton-" + itemID)
+          .onclick = ""
+
 
       }
 
@@ -89,7 +106,7 @@
         }
       }
 
-      function sendEditedItem(itemID) {
+      function sendEditedItem(itemID, status) {
         //TODO:
         //triggered when Edit box is unfocused
         //we want mousedown to not trigger button
@@ -98,7 +115,11 @@
         // document.getElementById("editButton-" + itemID)
         //   .onclick = function(){editItem(itemID)}
 
-
+        //this works, but removing it in editItem() function does not.
+        document.getElementById("statusButton-" + itemID)
+          .onclick = function(){
+              toggleStatus(itemID, status)
+              }
         document.getElementById("statusButton-" + itemID)
           .contentEditable = false
         document.getElementById("statusButton-" + itemID)
@@ -117,12 +138,22 @@
         sendToApp("POST", "/foodItems", { "name": name, "category": cat})
       }
 
+    </script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
       const foodItems = getList()
 
+      let node
+      function makeElement(tag, id, className) {
+        node = document.createElement(tag)
+        node.id = id
+        node.className = className
+      }
+
       //<div id="groceryList">
-      let node = document.createElement("div")
-      node.id = "groceryList"
-      node.className = "container-fluid p-0"
+      makeElement("div", "groceryList", "container-fluid p-2")
       document.getElementsByTagName("body")[0].appendChild(node)
 
       let lastCat = ""
@@ -131,52 +162,42 @@
         let itemData = foodItems[i]
         //print a category header    
         if (itemData.category !== lastCat) {
-          node = document.createElement("div")
-          node.id = itemData.category
-          node.className = "groceryHeader row no-gutters text-center"
+          makeElement("div", itemData.category, "groceryHeader row no-gutters text-center")
           node.innerHTML = "<div class=\"col-12\">" + itemData.category +"</div>"
           document.getElementById("groceryList").appendChild(node)
         } 
         lastCat = itemData.category
 
         //<div id="groceryRow" class="groceryRow">
-        node = document.createElement("div")
-        node.id = "groceryRow-" + itemData.id
-        node.className = "groceryRow row no-gutters text-center"
+        makeElement("div", "groceryRow-" + itemData.id, "groceryRow row no-gutters text-center")
         document.getElementById("groceryList").appendChild(node)
 
         //DEL ITEM
           //<div id="delItem0" class="delItem">
-          node = document.createElement("div")
-          node.id = "delItem-" + itemData.id
-          node.className = "delItem col-2 text-center align-self-center"
+          makeElement("div", "delItem-" + itemData.id, "delItem col-1 text-center align-self-center")
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button onclick="deleteItem(22)">
-            node = document.createElement('button')
-            node.id = "delButton-" + itemData.id
+            makeElement("button", "delButton-"+itemData.id, "delItem")
             node.onclick = function(){deleteItem(itemData.id)}
             document.getElementById("delItem-" + itemData.id).appendChild(node)
 
               //<i class="far fa-trash-alt" aria-hidden="true"></i>
-              node = document.createElement('li')
-              node.className = "far fa-trash-alt"
+              makeElement("li", "delIcon-"+itemData.id, "fas fa-trash")
               node.ariaHidden = true
               document.getElementById("delButton-" + itemData.id).appendChild(node)
+
 
         //GROCERY NAME
         //TODO: figure out why this is getting pushed left into preceding column
           //<div id="itemName:id" class="groceryName ...">
-          node = document.createElement("div")
-          node.id = "itemName-" + itemData.id
-          node.className = "groceryName col-8 p-2 text-center align-self-center"
+          makeElement("div", "itemName-" + itemData.id, "groceryName col-10 p-2 text-center align-self-center")
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="item0name" class="groceryItem out">
               //<p>Soy Milk</p>
-            node = document.createElement("button")
-            node.id = "statusButton-" + itemData.id
-            node.onblur = function(){sendEditedItem(itemData.id)}
+            makeElement("button", "statusButton-" + itemData.id, "groceryItem")
+            node.onblur = function(){sendEditedItem(itemData.id, itemData.status)}
             switch(itemData.status){
               case "GOOD": node.className = "groceryItem good"; break
               case "LOW": node.className = "groceryItem low"; break
@@ -184,11 +205,8 @@
               default: node.className = "groceryItem out"; break
             }
             node.contentEditable = false
-            node.onclick = function(){
-              toggleStatus(itemData.id, itemData.status)
-              }
+            node.onclick = function() { toggleStatus(itemData.id) }
             node.innerHTML = "<p id=\"itemName-" + itemData.id+ "p\">" + itemData.name + "</p>"
-
             node.onkeydown = function(event){
               if (event.which == 13 || event.keyCode == 13) {
                 event.preventDefault()
@@ -200,29 +218,23 @@
 
         //EDIT ITEM
           //<div id="editItem0" class="editItem">
-          node = document.createElement("div")
-          node.id = "editItem-" + itemData.id
-          node.className = "editItem col-2 text-center align-self-center"
+            makeElement("div", "editItem-" + itemData.id, "editItem col-1 text-center align-self-center")
           document.getElementById("groceryRow-" + itemData.id).appendChild(node)
 
             //<button id="editButton1" onclick="editItem(22, 'Soy%20Milk')">
-            node = document.createElement('button')
-            node.id = "editButton-" + itemData.id
+            makeElement("button", "editButton-"+itemData.id, "editButton")
             node.onclick = function(){editItem(itemData.id)}
             document.getElementById("editItem-" + itemData.id).appendChild(node)
             
               //<i class="far fa-edit" aria-hidden="true"></i>
-              node = document.createElement('li')
-              node.className = "far fa-edit"
+              makeElement("li", "editIcon"+itemData.id, "fas fa-pen")
               node.ariaHidden = true
               document.getElementById("editButton-" + itemData.id).appendChild(node)
 
       }
       
       //tack on the Add Item button
-      node = document.createElement("div")
-      node.id = "addItem"
-      node.className = "addItem"
+      makeElement("div", "addButton", "addItem")
       node.onclick = function(){addItem()}
       node.innerHTML = "<button><i class=\"fas fa-cart-plus\"></i></button>"
       document.getElementsByTagName("body")[0].appendChild(node)
