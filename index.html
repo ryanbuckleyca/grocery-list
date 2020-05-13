@@ -14,10 +14,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/reef.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
-      function getList() {
+      function getFoodItems() {
         let data = null
         let xmlhttp = new XMLHttpRequest()
         xmlhttp.open("GET", "/foodItems", false)
@@ -102,6 +104,7 @@
       function sendOnEnter (event, id) {
         if (event.which == 13 || event.keyCode == 13) {
           //enter has been pressed, send data
+          event.preventDefault()
           sendEditedItem(id)
         }
       }
@@ -138,108 +141,69 @@
         sendToApp("POST", "/foodItems", { "name": name, "category": cat})
       }
 
+      function getNewStatus(status) {
+        switch(status){
+          case "GOOD": return "groceryItem good"; break
+          case "LOW": return "groceryItem low"; break
+          case "OUT": return "groceryItem out"; break
+          default: return "groceryItem out"; break
+        }
+      }
+
     </script>
   </head>
   <body>
+    <div id="app"></div>
+
     <script type="text/javascript">
+      let app = new Reef('#app', {
+        data: { 
+          foodItems: getFoodItems() 
+        },
+        template: function (props) { 
+          let foodItemsByCategory = _.groupBy(props.foodItems, "category")
+          return `
+                  <div id="groceryList" class="container-fluid p-2">
+                    ${_.map(foodItemsByCategory, (foodItems, category) => {
+                      return `
+                        <div id="${category}" class="groceryHeader row no-gutters text-center">
+                          <div class="col-12">
+                            ${category}
+                          </div>
+                        </div>
 
-      const foodItems = getList()
+                        ${_.map(foodItems, foodItem => {
+                          return `
+                            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+                              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                                <button id="delButton-${foodItem.id}" class="delItem" onclick="deleteItem(${foodItem.id})"}>
+                                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
+                                </button>
+                              </div>
+                              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                                <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="sendEditedItem(${foodItem.id}, '${foodItem.status}')" contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="sendOnEnter(event, ${foodItem.id})">
+                                  <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
+                                </button>
+                              </div>
+                              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                                <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
+                                  <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
+                                </button>
+                              </div>
+                            </div>`
+                        }).join('')}`
+                    }).join('')}
+                  </div>
+                  <div id="addButton" class="addItem">
+                    <button onclick="addItem()">
+                      <i class="fas fa-cart-plus"></i>
+                    </button>
+                  </div>`
+        }
+      })
 
-      let node
-      function makeElement(tag, id, className) {
-        node = document.createElement(tag)
-        node.id = id
-        node.className = className
-      }
-
-      //<div id="groceryList">
-      makeElement("div", "groceryList", "container-fluid p-2")
-      document.getElementsByTagName("body")[0].appendChild(node)
-
-      let lastCat = ""
-      //print each line of the list
-      for(let i = 0; i < foodItems.length; i++) { 
-        let itemData = foodItems[i]
-        //print a category header    
-        if (itemData.category !== lastCat) {
-          makeElement("div", itemData.category, "groceryHeader row no-gutters text-center")
-          node.innerHTML = "<div class=\"col-12\">" + itemData.category +"</div>"
-          document.getElementById("groceryList").appendChild(node)
-        } 
-        lastCat = itemData.category
-
-        //<div id="groceryRow" class="groceryRow">
-        makeElement("div", "groceryRow-" + itemData.id, "groceryRow row no-gutters text-center")
-        document.getElementById("groceryList").appendChild(node)
-
-        //DEL ITEM
-          //<div id="delItem0" class="delItem">
-          makeElement("div", "delItem-" + itemData.id, "delItem col-1 text-center align-self-center")
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
-
-            //<button onclick="deleteItem(22)">
-            makeElement("button", "delButton-"+itemData.id, "delItem")
-            node.onclick = function(){deleteItem(itemData.id)}
-            document.getElementById("delItem-" + itemData.id).appendChild(node)
-
-              //<i class="far fa-trash-alt" aria-hidden="true"></i>
-              makeElement("li", "delIcon-"+itemData.id, "fas fa-trash")
-              node.ariaHidden = true
-              document.getElementById("delButton-" + itemData.id).appendChild(node)
-
-
-        //GROCERY NAME
-        //TODO: figure out why this is getting pushed left into preceding column
-          //<div id="itemName:id" class="groceryName ...">
-          makeElement("div", "itemName-" + itemData.id, "groceryName col-10 p-2 text-center align-self-center")
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
-
-            //<button id="item0name" class="groceryItem out">
-              //<p>Soy Milk</p>
-            makeElement("button", "statusButton-" + itemData.id, "groceryItem")
-            node.onblur = function(){sendEditedItem(itemData.id, itemData.status)}
-            switch(itemData.status){
-              case "GOOD": node.className = "groceryItem good"; break
-              case "LOW": node.className = "groceryItem low"; break
-              case "OUT": node.className = "groceryItem out"; break
-              default: node.className = "groceryItem out"; break
-            }
-            node.contentEditable = false
-            node.onclick = function() { toggleStatus(itemData.id) }
-            node.innerHTML = "<p id=\"itemName-" + itemData.id+ "p\">" + itemData.name + "</p>"
-            node.onkeydown = function(event){
-              if (event.which == 13 || event.keyCode == 13) {
-                event.preventDefault()
-                sendEditedItem(itemData.id)
-              }
-            }
-
-            document.getElementById("itemName-" + itemData.id).appendChild(node)
-
-        //EDIT ITEM
-          //<div id="editItem0" class="editItem">
-            makeElement("div", "editItem-" + itemData.id, "editItem col-1 text-center align-self-center")
-          document.getElementById("groceryRow-" + itemData.id).appendChild(node)
-
-            //<button id="editButton1" onclick="editItem(22, 'Soy%20Milk')">
-            makeElement("button", "editButton-"+itemData.id, "editButton")
-            node.onclick = function(){editItem(itemData.id)}
-            document.getElementById("editItem-" + itemData.id).appendChild(node)
-            
-              //<i class="far fa-edit" aria-hidden="true"></i>
-              makeElement("li", "editIcon"+itemData.id, "fas fa-pen")
-              node.ariaHidden = true
-              document.getElementById("editButton-" + itemData.id).appendChild(node)
-
-      }
-      
-      //tack on the Add Item button
-      makeElement("div", "addButton", "addItem")
-      node.onclick = function(){addItem()}
-      node.innerHTML = "<button><i class=\"fas fa-cart-plus\"></i></button>"
-      document.getElementsByTagName("body")[0].appendChild(node)
-
-      </script>  
-      
+      app.render()
+      Reef.debug(true)
+    </script>
   </body>
 </html>
