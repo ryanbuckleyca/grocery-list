@@ -30,28 +30,29 @@ const toggleStatus = (id) => {
   apiRequest("PUT", "/foodItems/" + id, { "status": newStatus})
 }
 
-const editItem = (itemID) => {
-  //TODO: 
-  //figure out why deactivate isn't working
-  //how to keep it deactive as a space to click to exit Edit box
-  //Edit box is active
-  // document.getElementById("editButton-" + itemID).onclick = null
-
-  //make element editable and put cursor inside
+const editItem = (event, itemID) => {
   let element = document.getElementById("statusButton-" + itemID)
 
-  element.contentEditable = true
-  element.focus()
-  element.classList.add("edit")
-  //run again to override mobile need to click twice
-  element.contentEditable = true
-  element.focus()
+  if (element.contentEditable === "true") {
+    element.contentEditable = false
+    element.classList.remove("edit")
+  } else {
+    element.onclick = ""
+    element.contentEditable = true
+    element.focus()
+    element.classList.add("edit")
+    event.preventDefault()
+  }
+}
 
-  //deactivate edit button... this isn't working on mobile
-  element.onclick = ""
+const handleOnBlurEdit = (itemID, status) => {
+  let element = document.getElementById("statusButton-" + itemID)
+  element.onclick = () => toggleStatus(itemID, status)
+  element.contentEditable = false
+  element.classList.remove("edit")
 
-  let editButton = document.getElementById("editButton-" + itemID)
-  editButton.onclick = ""
+  let newName = document.getElementById("itemName-" + itemID + "p").innerText
+  apiRequest("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName })
 }
 
 const handleOnEnterEdit = (event, id) => {
@@ -59,25 +60,6 @@ const handleOnEnterEdit = (event, id) => {
     event.preventDefault()
     handleOnBlurEdit(id)
   }
-}
-
-const handleOnBlurEdit = (itemID, status) => {
-  //TODO:
-  //triggered when Edit box is unfocused
-  //we want mousedown to not trigger button
-  //sets button onclick active again
-  //so by the time we click on button again it's already reactivated
-  // document.getElementById("editButton-" + itemID)
-  //   .onclick = function(){editItem(itemID)}
-
-  //this works, but removing it in editItem() function does not.
-  let element = document.getElementById("statusButton-" + itemID)
-  element.onclick = () => { toggleStatus(itemID, status) }
-  element.contentEditable = false
-  element.classList.remove("edit")
-
-  let newName = document.getElementById("itemName-" + itemID + "p").innerText
-  apiRequest("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName })
 }
 
 const addItem = () => {
@@ -183,7 +165,7 @@ let app = new Reef('#app', {
                     </button>
                   </div>
                   <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                    <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
+                    <button id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
                       <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
                     </button>
                   </div>
@@ -199,8 +181,4 @@ let app = new Reef('#app', {
   }
 })
 
-const startApp = async () => {
-  app.render()
-}
-
-startApp()
+app.render()
