@@ -4,6 +4,7 @@
   Allow user to create custom order
   Swipe left to delete, right to edit? Instead of buttons
   Drag and drop elements of list?
+  Overlay form for creating new FoodItem instead of prompt*2
  -->
 
 <!DOCTYPE html>
@@ -28,20 +29,21 @@
         return JSON.parse(data)
       }
 
-      function sendToApp(action, url, data) {
-        var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open(action, url)
-        xmlhttp.setRequestHeader("Content-Type", "application/json")
+      // function apiRequest(action, url, data) {
+      //   var xmlhttp = new XMLHttpRequest() 
+      //   xmlhttp.open(action, url)
+      //   xmlhttp.setRequestHeader("Content-Type", "application/json")
         
-        xmlhttp.send(JSON.stringify(data))
-      }
+      //   xmlhttp.send(JSON.stringify(data))
+      // }
 
-      function deleteItem(itemID) {
-        if(!confirm("Delete?")) return 
-        sendToApp("DELETE", "/foodItems/" + itemID, { "id": itemID})
-
-        let element = document.getElementById("groceryRow-" + itemID)
-        element.parentNode.removeChild(element)
+      const apiRequest = async (action, url, data) => {
+        const response = await fetch(url, {
+          method: action,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        return response.json()
       }
 
       function toggleStatus(id) {
@@ -71,7 +73,7 @@
               .classList.replace("low", "out")
             break
         }
-        sendToApp("PUT", "/foodItems/" + id, { "status": newStatus})
+        apiRequest("PUT", "/foodItems/" + id, { "status": newStatus})
       }
 
       function editItem(itemID) {
@@ -131,14 +133,14 @@
 
         let newName = document.getElementById("itemName-" + itemID + "p").innerText
         
-        sendToApp("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName})
+        apiRequest("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName})
       }
 
       function addItem() {
         var name = prompt("Enter the name of the item:")
         var cat = prompt("Enter the category for " + name)
 
-        sendToApp("POST", "/foodItems", { "name": name, "category": cat})
+        apiRequest("POST", "/foodItems", { "name": name, "category": cat})
       }
 
       function getNewStatus(status) {
@@ -156,49 +158,84 @@
     <div id="app"></div>
 
     <script type="text/javascript">
-      let app = new Reef('#app', {
-        data: { 
-          foodItems: getFoodItems() 
+      let store = new Reef.Store({
+        data: {
+          foodItems: getFoodItems()
         },
-        template: function (props) { 
+        setters: {
+          removeFoodItem: (props, id) => {
+            if(!confirm("Delete?")) return 
+            apiRequest("DELETE", "/foodItems/" + id, { "id": id })
+            _.remove(props.foodItems, { id })
+          },
+          addFoodItem: async (props) => {
+            let name = prompt("Enter the name of the item:")
+            let category = prompt("Enter the category for " + name)
+            let newItem = await apiRequest("POST", "/foodItems", { name, category })
+            props.foodItems.push(newItem)
+            app.render()
+          },
+          editFoodItem: (props, id) => {
+            let element = document.getElementById(`statusButton-${id}`)
+            element.contentEditable = true
+            element.focus()
+            element.classList.add("edit")
+            //run again to override mobile need to click twice
+            element.contentEditable = true
+            element.focus()
+
+            //deactivate edit button... this isn't working on mobile
+            element.onclick = ""
+            _.find(props.foodItems, { id })
+          }
+        }
+      })
+
+      let app = new Reef('#app', {
+        store: store,
+        template: function (props) {
+          document.addEventListener('render', function (event) {
+            console.log(event.detail);
+          }, false)
           let foodItemsByCategory = _.groupBy(props.foodItems, "category")
           return `
-                  <div id="groceryList" class="container-fluid p-2">
-                    ${_.map(foodItemsByCategory, (foodItems, category) => {
-                      return `
-                        <div id="${category}" class="groceryHeader row no-gutters text-center">
-                          <div class="col-12">
-                            ${category}
-                          </div>
-                        </div>
-
-                        ${_.map(foodItems, foodItem => {
-                          return `
-                            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-                              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                                <button id="delButton-${foodItem.id}" class="delItem" onclick="deleteItem(${foodItem.id})"}>
-                                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
-                                </button>
-                              </div>
-                              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                                <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="sendEditedItem(${foodItem.id}, '${foodItem.status}')" contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="sendOnEnter(event, ${foodItem.id})">
-                                  <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
-                                </button>
-                              </div>
-                              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                                <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
-                                  <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
-                                </button>
-                              </div>
-                            </div>`
-                        }).join('')}`
-                    }).join('')}
+            <div id="groceryList" class="container-fluid p-2">
+              ${_.map(foodItemsByCategory, (foodItems, category) => {
+                return `
+                  <div id="${category}" class="groceryHeader row no-gutters text-center">
+                    <div class="col-12">
+                      ${category}
+                    </div>
                   </div>
-                  <div id="addButton" class="addItem">
-                    <button onclick="addItem()">
-                      <i class="fas fa-cart-plus"></i>
-                    </button>
-                  </div>`
+
+                  ${_.map(foodItems, foodItem => {
+                    return `
+                      <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+                        <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                          <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                            <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
+                          </button>
+                        </div>
+                        <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                          <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="sendEditedItem(${foodItem.id}, '${foodItem.status}')" 
+                                  contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="sendOnEnter(event, ${foodItem.id})">
+                            <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
+                          </button>
+                        </div>
+                        <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                          <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
+                            <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
+                          </button>
+                        </div>
+                      </div>`
+                  }).join('')}`
+              }).join('')}
+            </div>
+            <div id="addButton" class="addItem">
+              <button onclick="store.do('addFoodItem')">
+                <i class="fas fa-cart-plus"></i>
+              </button>
+            </div>`
         }
       })
 
