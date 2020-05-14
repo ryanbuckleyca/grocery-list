@@ -1,0 +1,206 @@
+Reef.debug(true) 
+
+const toggleStatus = (id) => {
+  const element = document.getElementById("statusButton-" + id)
+  console.log("Element: ", element)
+  if(element.contentEditable === "true")
+    return
+
+  let newStatus = element.className
+  switch(newStatus) {
+    case "groceryItem out": 
+      newStatus = "GOOD" 
+      document
+        .getElementById("statusButton-" + id)
+        .classList.replace("out", "good")
+      break
+    case "groceryItem good": 
+      newStatus = "LOW" 
+      document
+        .getElementById("statusButton-" + id)
+        .classList.replace("good", "low")
+      break
+    case "groceryItem low": 
+      newStatus = "OUT" 
+      document
+        .getElementById("statusButton-" + id)
+        .classList.replace("low", "out")
+      break
+  }
+  apiRequest("PUT", "/foodItems/" + id, { "status": newStatus})
+}
+
+const editItem = (itemID) => {
+  //TODO: 
+  //figure out why deactivate isn't working
+  //how to keep it deactive as a space to click to exit Edit box
+  //Edit box is active
+  // document.getElementById("editButton-" + itemID).onclick = null
+
+  //make element editable and put cursor inside
+  let element = document.getElementById("statusButton-" + itemID)
+
+  element.contentEditable = true
+  element.focus()
+  element.classList.add("edit")
+  //run again to override mobile need to click twice
+  element.contentEditable = true
+  element.focus()
+
+  //deactivate edit button... this isn't working on mobile
+  element.onclick = ""
+
+  let editButton = document.getElementById("editButton-" + itemID)
+  editButton.onclick = ""
+}
+
+const handleOnEnterEdit = (event, id) => {
+  if (event.which == 13 || event.keyCode == 13) {
+    event.preventDefault()
+    handleOnBlurEdit(id)
+  }
+}
+
+const handleOnBlurEdit = (itemID, status) => {
+  //TODO:
+  //triggered when Edit box is unfocused
+  //we want mousedown to not trigger button
+  //sets button onclick active again
+  //so by the time we click on button again it's already reactivated
+  // document.getElementById("editButton-" + itemID)
+  //   .onclick = function(){editItem(itemID)}
+
+  //this works, but removing it in editItem() function does not.
+  let element = document.getElementById("statusButton-" + itemID)
+  element.onclick = () => { toggleStatus(itemID, status) }
+  element.contentEditable = false
+  element.classList.remove("edit")
+
+  let newName = document.getElementById("itemName-" + itemID + "p").innerText
+  apiRequest("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName })
+}
+
+const addItem = () => {
+  let name = prompt("Enter the name of the item:")
+  let cat = prompt("Enter the category for " + name)
+
+  apiRequest("POST", "/foodItems", { "name": name, "category": cat})
+}
+
+const getNewStatus = (status) => {
+  switch(status){
+    case "GOOD": return "groceryItem good"; break
+    case "LOW": return "groceryItem low"; break
+    case "OUT": return "groceryItem out"; break
+    default: return "groceryItem out"; break
+  }
+}
+
+const getFoodItems = () => {
+  let request = new XMLHttpRequest() 
+  request.open('GET', '/foodItems', false)
+  request.setRequestHeader("Content-Type", "application/json")
+  request.send()
+  return JSON.parse(request.responseText)
+}
+
+const apiRequest = async (action, url, data) => {
+  const response = await fetch(url, {
+    method: action,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  if (['GET', 'POST'].includes(action)) {
+    const parsedResponse = await response.json()
+    return parsedResponse
+  }
+  return response
+}
+
+let store = new Reef.Store({
+  data: {
+    foodItems: getFoodItems()
+  },
+  setters: {
+    removeFoodItem: (props, id) => {
+      if(!confirm("Delete?")) return 
+      apiRequest("DELETE", "/foodItems/" + id, { "id": id })
+      _.remove(props.foodItems, { id })
+    },
+    addFoodItem: async (props) => {
+      let name = prompt("Enter the name of the item:")
+      let category = prompt("Enter the category for " + name)
+      let newItem = await apiRequest("POST", "/foodItems", { name, category })
+      props.foodItems.push(newItem)
+      app.render()
+    },
+    editFoodItem: (props, id) => {
+      let element = document.getElementById(`statusButton-${id}`)
+      element.contentEditable = true
+      element.focus()
+      element.classList.add("edit")
+      //run again to override mobile need to click twice
+      element.contentEditable = true
+      element.focus()
+
+      //deactivate edit button... this isn't working on mobile
+      element.onclick = ""
+      _.find(props.foodItems, { id })
+    }
+  }
+})
+
+let app = new Reef('#app', {
+  store: store,
+  template: (props) => {
+    document.addEventListener('render', function (event) {
+      console.log("RENDERING")
+    }, false)
+    console.log("STORE: ", props.foodItems)
+    let foodItemsByCategory = _.groupBy(props.foodItems, "category")
+    return `
+      <div id="groceryList" class="container-fluid p-2">
+        ${_.map(foodItemsByCategory, (foodItems, category) => {
+          return `
+            <div id="${category}" class="groceryHeader row no-gutters text-center">
+              <div class="col-12">
+                ${category}
+              </div>
+            </div>
+
+            ${_.map(foodItems, foodItem => {
+              return `
+                <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+                  <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                    <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                      <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
+                    </button>
+                  </div>
+                  <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                    <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
+                            contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                      <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
+                    </button>
+                  </div>
+                  <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                    <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
+                      <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
+                    </button>
+                  </div>
+                </div>`
+            }).join('')}`
+        }).join('')}
+      </div>
+      <div id="addButton" class="addItem">
+        <button onclick="store.do('addFoodItem')">
+          <i class="fas fa-cart-plus"></i>
+        </button>
+      </div>`
+  }
+})
+
+const startApp = async () => {
+  app.render()
+}
+
+startApp()
