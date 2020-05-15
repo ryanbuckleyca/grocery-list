@@ -65,6 +65,7 @@ app.delete('/foodItems/:id', async function (req, res) {
 app.post('/debug', function (req, res) {
   const { msg } = req.body
   console.log("FRONTEND DEBUG: ", msg)
+  res.sendStatus(200)
 })
 
 app.listen(port, () => console.log(`Grocery List app listening at http://localhost:${port}`))
