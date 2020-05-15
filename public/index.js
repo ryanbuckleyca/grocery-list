@@ -152,7 +152,7 @@ let store = new Reef.Store({
   }
 })
 
-let app = new Reef('#groceries', {
+let app = new Reef('#stock', {
   store: store,
   template: (props) => {
     document.addEventListener('render', function (event) {
@@ -161,25 +161,6 @@ let app = new Reef('#groceries', {
     console.log("STORE: ", props.foodItems)
     let foodItemsByCategory = _.groupBy(props.foodItems, "category")
     return `
-      <div id="groceryList" class="container-fluid">
-        <div id="groceryMenu" class="row no-gutters text-center align-top">
-          <button class="menuButton col-1" onclick="showMenu()">
-            <i class="fas fa-hamburger"></i>
-          </button>
-        </a>
-          <div class="col-10">
-          <h1>Grocery List</h1>
-            <div id="dropdown">
-              <a href="#news">News</a>
-              <a href="#contact">Contact</a>
-              <a href="#about">About</a>
-            </div>
-          </div>
-          <button class="scrollButton col-1" onclick="window.scroll(0,0)">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-        </div>
-        <hr />
 
       ${_.map(foodItemsByCategory, (foodItems, category) => {
         return `
@@ -189,27 +170,27 @@ let app = new Reef('#groceries', {
             </div>
           </div>
 
-      ${_.map(foodItems, foodItem => {
-        return `
-          <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-            <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-              <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
-                <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
-              </button>
-            </div>
-            <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-              <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
-                      contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
-                <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
-              </button>
-            </div>
-            <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-              <button id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
-                <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
-              </button>
-            </div>
-          </div>`
-        }).join('')}`
+          ${_.map(foodItems, foodItem => {
+            return `
+              <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+                <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                  <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                    <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
+                  </button>
+                </div>
+                <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                  <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
+                          contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                    <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
+                  </button>
+                </div>
+                <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                  <button id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
+                    <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
+                  </button>
+                </div>
+              </div>`
+            }).join('')}`
 
         }).join('')}
       </div>

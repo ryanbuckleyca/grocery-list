@@ -20,7 +20,7 @@ p {
   margin: 1vh;
 }
 hr {
-  margin-top: 4vh;
+  margin: 1vh 0;
 }
 
 #groceryMenu {
@@ -44,7 +44,7 @@ hr {
   background: var(--background);
   width: 100%;
   top: 2vh;
-  padding: 2vh 4vh 4vh;
+  padding: 2vh 3vh;
 }
 #groceryMenu a {
   color: black;
