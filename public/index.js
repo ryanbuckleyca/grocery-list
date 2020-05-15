@@ -34,9 +34,9 @@ const editItem = (event, itemID) => {
   }
 }
 
-const handleOnBlurEdit = (itemID, props) => {
+const handleOnBlurEdit = (itemID) => {
   let element = document.getElementById("statusButton-" + itemID)
-  element.onclick = () => props.do("toggleStatus", itemID)
+  element.onclick = () => store.do("toggleStatus", itemID)
   element.contentEditable = false
   element.classList.remove("edit")
 
@@ -83,7 +83,7 @@ let store = new Reef.Store({
       _.remove(props.foodItems, { id })
     },
     addFoodItem: async (props) => {
-      let name = prompt("Enter the name of the item:")
+      let name = titleCase(prompt("Enter the name of the item:"))
       let category = titleCase(prompt("Enter the category for " + name))
       let newItem = await apiRequest("POST", "/foodItems", { name, category, status: "OUT" })
       props.foodItems.push(newItem)
@@ -137,7 +137,7 @@ let app = new Reef('#stock', {
               ${category}
             </div>
           </div>
-          ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
+          ${_(foodItems).sortBy(foodItem => foodItem.createdAt).map(foodItem => {
             return `
               <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
                 <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
@@ -146,7 +146,7 @@ let app = new Reef('#stock', {
                   </button>
                 </div>
                 <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                  <button id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id}, props)" 
+                  <button id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id})" 
                           contentEditable=false onclick="store.do('toggleStatus', ${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
                     <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
                   </button>
