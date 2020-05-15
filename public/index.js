@@ -1,35 +1,5 @@
 Reef.debug(true) 
 
-const toggleStatus = (id) => {
-  const element = document.getElementById("statusButton-" + id)
-  console.log("Element: ", element)
-  if(element.contentEditable === "true")
-    return
-
-  let newStatus = element.className
-  switch(newStatus) {
-    case "groceryItem out": 
-      newStatus = "GOOD" 
-      document
-        .getElementById("statusButton-" + id)
-        .classList.replace("out", "good")
-      break
-    case "groceryItem good": 
-      newStatus = "LOW" 
-      document
-        .getElementById("statusButton-" + id)
-        .classList.replace("good", "low")
-      break
-    case "groceryItem low": 
-      newStatus = "OUT" 
-      document
-        .getElementById("statusButton-" + id)
-        .classList.replace("low", "out")
-      break
-  }
-  apiRequest("PUT", "/foodItems/" + id, { "status": newStatus})
-}
-
 const editItem = (event, itemID) => {
   let element = document.getElementById("statusButton-" + itemID)
 
@@ -45,9 +15,9 @@ const editItem = (event, itemID) => {
   }
 }
 
-const handleOnBlurEdit = (itemID, status) => {
+const handleOnBlurEdit = (itemID, props) => {
   let element = document.getElementById("statusButton-" + itemID)
-  element.onclick = () => toggleStatus(itemID, status)
+  element.onclick = () => props.do("toggleStatus", itemID)
   element.contentEditable = false
   element.classList.remove("edit")
 
@@ -59,22 +29,6 @@ const handleOnEnterEdit = (event, id) => {
   if (event.which == 13 || event.keyCode == 13) {
     event.preventDefault()
     handleOnBlurEdit(id)
-  }
-}
-
-const addItem = () => {
-  let name = prompt("Enter the name of the item:")
-  let cat = prompt("Enter the category for " + name)
-
-  apiRequest("POST", "/foodItems", { "name": name, "category": cat})
-}
-
-const getNewStatus = (status) => {
-  switch(status){
-    case "GOOD": return "groceryItem good"; break
-    case "LOW": return "groceryItem low"; break
-    case "OUT": return "groceryItem out"; break
-    default: return "groceryItem out"; break
   }
 }
 
@@ -112,7 +66,7 @@ let store = new Reef.Store({
     addFoodItem: async (props) => {
       let name = prompt("Enter the name of the item:")
       let category = prompt("Enter the category for " + name)
-      let newItem = await apiRequest("POST", "/foodItems", { name, category })
+      let newItem = await apiRequest("POST", "/foodItems", { name, category, status: "OUT" })
       props.foodItems.push(newItem)
       app.render()
     },
@@ -128,6 +82,23 @@ let store = new Reef.Store({
       //deactivate edit button... this isn't working on mobile
       element.onclick = ""
       _.find(props.foodItems, { id })
+    },
+    toggleStatus: (props, id) => {
+      const newStatus = {
+        GOOD: "LOW",
+        LOW: "OUT",
+        OUT: "GOOD"
+      }
+
+      props.foodItems = props.foodItems.map(foodItem => {
+        if (foodItem.id === id) {
+          apiRequest("PUT", "/foodItems/" + id, { "status": newStatus[foodItem.status] })
+          return { ...foodItem, status: newStatus[foodItem.status] }
+        } else {
+          return foodItem
+        }
+      })
+      app.render()
     }
   }
 })
@@ -138,7 +109,6 @@ let app = new Reef('#app', {
     document.addEventListener('render', function (event) {
       console.log("RENDERING")
     }, false)
-    console.log("STORE: ", props.foodItems)
     let foodItemsByCategory = _.groupBy(props.foodItems, "category")
     return `
       <div id="groceryList" class="container-fluid p-2">
@@ -150,7 +120,7 @@ let app = new Reef('#app', {
               </div>
             </div>
 
-            ${_.map(foodItems, foodItem => {
+            ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
               return `
                 <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
                   <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
@@ -159,8 +129,8 @@ let app = new Reef('#app', {
                     </button>
                   </div>
                   <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                    <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
-                            contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                    <button id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id}, props)" 
+                            contentEditable=false onclick="store.do('toggleStatus', ${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
                       <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
                     </button>
                   </div>
