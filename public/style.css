@@ -23,7 +23,7 @@ hr {
   margin-top: 4vh;
 }
 
-.groceryMenu {
+#groceryMenu {
   position: sticky;
   z-index: 1;
   top: 0;
@@ -31,28 +31,37 @@ hr {
   padding-top: 2vh;
   overflow: hidden;
 }
-.groceryMenu button {
+#groceryMenu button {
   font-size: 120%;
   background: var(--background);
   border: 0;
   padding-bottom: 2vh;
+  margin-bottom: auto;
 }
-.groceryMenu #dropdown {
+#groceryMenu #dropdown {
   display: none;
+  position: relative;
+  background: var(--background);
+  width: 100%;
+  top: 2vh;
+  padding: 2vh 4vh 4vh;
 }
-.groceryMenu a {
+#groceryMenu a {
   color: black;
-  padding: 14px 16px;
+  width: 50%;
+  margin: 2vh auto;
   text-decoration: none;
-  font-size: 17px;
+  font-size: inherit;
   display: block;
+  z-index: 6;
 }
-.groceryMenu a:hover {
+#groceryMenu a:hover {
   color: #222;
+  background: linear-gradient(181deg, var(--background) 62%, rgba(204, 171, 218, 0.3) 51%);
 }
-.groceryMenu h1 {
+#groceryMenu h1 {
   font-size: 150%;
-  height: 52%;
+  height: 4.7vh;
   width: 66%;
   margin: auto;
   text-shadow: 0.5px 0.5px 0px;

@@ -8,10 +8,14 @@ const titleCase = (str) => {
 
 const showMenu = () => {
   var x = document.getElementById("dropdown");
+  var y = document.getElementById("groceryMenu");
   if (x.style.display === "block") {
     x.style.display = "none";
+    y.style.zIndex = 1;
+
   } else {
     x.style.display = "block";
+    y.style.zIndex = 4;
   }
 }
 
@@ -158,18 +162,19 @@ let app = new Reef('#groceries', {
     let foodItemsByCategory = _.groupBy(props.foodItems, "category")
     return `
       <div id="groceryList" class="container-fluid">
-        <div class="groceryMenu row no-gutters text-center">
-          <button class="menuButton col-1">
+        <div id="groceryMenu" class="row no-gutters text-center align-top">
+          <button class="menuButton col-1" onclick="showMenu()">
             <i class="fas fa-hamburger"></i>
           </button>
-          <!-- Navigation links (hidden by default) -->
-          <div id="dropdown">
-            <a href="#news">News</a>
-            <a href="#contact">Contact</a>
-            <a href="#about">About</a>
-          </div>
         </a>
-          <div class="col-10"><h1>Grocery List</h1></div>
+          <div class="col-10">
+          <h1>Grocery List</h1>
+            <div id="dropdown">
+              <a href="#news">News</a>
+              <a href="#contact">Contact</a>
+              <a href="#about">About</a>
+            </div>
+          </div>
           <button class="scrollButton col-1" onclick="window.scroll(0,0)">
             <i class="fas fa-arrow-up"></i>
           </button>
