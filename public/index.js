@@ -2,24 +2,25 @@ Reef.debug(true)
 
 const titleCase = (str) => {
   return str.toLowerCase().split(' ').map(function(word) {
-    return word.replace(word[0], word[0].toUpperCase());
-  }).join(' ');
+    return word.replace(word[0], word[0].toUpperCase())
+  }).join(' ')
 }
 
 const showMenu = () => {
-  var x = document.getElementById("dropdown");
-  var y = document.getElementById("groceryMenu");
+  var x = document.getElementById("dropdown")
+  var y = document.getElementById("groceryMenu")
   if (x.style.display === "block") {
-    x.style.display = "none";
-    y.style.zIndex = 1;
+    x.style.display = "none"
+    y.style.zIndex = 1
 
   } else {
-    x.style.display = "block";
-    y.style.zIndex = 4;
+    x.style.display = "block"
+    y.style.zIndex = 4
   }
 }
 
 const editItem = (event, itemID) => {
+  console.log(event)
   let element = document.getElementById("statusButton-" + itemID)
 
   if (element.contentEditable === "true") {
@@ -30,7 +31,10 @@ const editItem = (event, itemID) => {
     element.contentEditable = true
     element.focus()
     element.classList.add("edit")
+    element.contentEditable = true
+    element.focus()
     event.preventDefault()
+
   }
 }
 
