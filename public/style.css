@@ -10,8 +10,8 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-size: 3.5vh;
-  font-family: 'Comic Neue', Verdana;
+  font-size: 3.7vh;
+  font-family: 'Itim', Verdana;
   margin: 0 2vh 0 1vh;
   padding: 0;
 }
@@ -19,8 +19,47 @@ p {
   padding: 0vh;
   margin: 1vh;
 }
+hr {
+  margin-top: 4vh;
+}
 
-/* problem is icon grows beyond the div col */
+.groceryMenu {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  background: var(--background);
+  padding-top: 2vh;
+  overflow: hidden;
+}
+.groceryMenu button {
+  font-size: 120%;
+  background: var(--background);
+  border: 0;
+  padding-bottom: 2vh;
+}
+.groceryMenu #dropdown {
+  display: none;
+}
+.groceryMenu a {
+  color: black;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+.groceryMenu a:hover {
+  color: #222;
+}
+.groceryMenu h1 {
+  font-size: 150%;
+  height: 52%;
+  width: 66%;
+  margin: auto;
+  text-shadow: 0.5px 0.5px 0px;
+  color: rgba(0, 0, 0, 1);
+  background: linear-gradient(177deg, var(--background) 50%, rgba(204, 171, 218,0.5) 51%);
+}
+
 .delItem, .editItem {
   border: 0;
   margin: 0;
@@ -52,13 +91,22 @@ p {
 
 .groceryHeader {
   position: sticky;
-  z-index:1 ;
-  padding: 2vh;
+  z-index: 3;
   top: 0;
-  background: var(--background);;
+  margin: auto;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 130%;
+  text-shadow: 0.5px 0.5px 0px;
+}
+.groceryHeaderName {
+  background: var(--background);
+  padding: 1.5vh 0 2vh 0;
+  margin: auto;
 }
 
 .groceryName button {
+  z-index: 2;
   padding: 2vh;
   border-radius: 8px;
   width: 95%;
@@ -108,6 +156,7 @@ p {
   font-size: 6vh;
   border: 0;
   border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 .addItem button:hover {
   filter: brightness(120%);

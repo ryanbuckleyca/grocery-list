@@ -1,5 +1,21 @@
 Reef.debug(true) 
 
+const titleCase = (str) => {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.replace(word[0], word[0].toUpperCase());
+  }).join(' ');
+}
+
+const showMenu = () => {
+  var x = document.getElementById("dropdown");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+
 const toggleStatus = (id) => {
   const element = document.getElementById("statusButton-" + id)
   console.log("Element: ", element)
@@ -111,7 +127,7 @@ let store = new Reef.Store({
     },
     addFoodItem: async (props) => {
       let name = prompt("Enter the name of the item:")
-      let category = prompt("Enter the category for " + name)
+      let category = titleCase(prompt("Enter the category for " + name))
       let newItem = await apiRequest("POST", "/foodItems", { name, category })
       props.foodItems.push(newItem)
       app.render()
@@ -132,7 +148,7 @@ let store = new Reef.Store({
   }
 })
 
-let app = new Reef('#app', {
+let app = new Reef('#groceries', {
   store: store,
   template: (props) => {
     document.addEventListener('render', function (event) {
@@ -141,43 +157,63 @@ let app = new Reef('#app', {
     console.log("STORE: ", props.foodItems)
     let foodItemsByCategory = _.groupBy(props.foodItems, "category")
     return `
-      <div id="groceryList" class="container-fluid p-2">
-        ${_.map(foodItemsByCategory, (foodItems, category) => {
-          return `
-            <div id="${category}" class="groceryHeader row no-gutters text-center">
-              <div class="col-12">
-                ${category}
-              </div>
-            </div>
+      <div id="groceryList" class="container-fluid">
+        <div class="groceryMenu row no-gutters text-center">
+          <button class="menuButton col-1">
+            <i class="fas fa-hamburger"></i>
+          </button>
+          <!-- Navigation links (hidden by default) -->
+          <div id="dropdown">
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
+          </div>
+        </a>
+          <div class="col-10"><h1>Grocery List</h1></div>
+          <button class="scrollButton col-1" onclick="window.scroll(0,0)">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+        </div>
+        <hr />
 
-            ${_.map(foodItems, foodItem => {
-              return `
-                <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-                  <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                    <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
-                      <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
-                    </button>
-                  </div>
-                  <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                    <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
-                            contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
-                      <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
-                    </button>
-                  </div>
-                  <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                    <button id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
-                      <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
-                    </button>
-                  </div>
-                </div>`
-            }).join('')}`
+      ${_.map(foodItemsByCategory, (foodItems, category) => {
+        return `
+          <div id="${category}" class="groceryHeader row col-10 no-gutters">
+            <div class="col-10 groceryHeaderName">
+              ${category}
+            </div>
+          </div>
+
+      ${_.map(foodItems, foodItem => {
+        return `
+          <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+            <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+              <button id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
+              </button>
+            </div>
+            <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+              <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="handleOnBlurEdit(${foodItem.id}, '${foodItem.status}')" 
+                      contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
+              </button>
+            </div>
+            <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+              <button id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
+                <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
+              </button>
+            </div>
+          </div>`
+        }).join('')}`
+
         }).join('')}
       </div>
       <div id="addButton" class="addItem">
         <button onclick="store.do('addFoodItem')">
           <i class="fas fa-cart-plus"></i>
         </button>
-      </div>`
+      </div>
+    </div>`
   }
 })
 
