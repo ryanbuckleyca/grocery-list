@@ -9,7 +9,19 @@ app.use(express.json())
 
 app.get('/', async function(req, res) {
   return res.sendFile(path.join(__dirname + '/index.html'))
+})
+
+app.get('/stock', async function(req, res) {
+  return res.sendFile(path.join(__dirname + '/index.html'))
 });
+
+app.get('/shop', async function(req, res) {
+  return res.sendFile(path.join(__dirname + '/index.html'))
+});
+
+app.get('/about', async function(req, res) {
+  return res.sendFile(path.join(__dirname + '/index.html'))
+})
 
 app.get('/foodItems', async function(req, res) {
   console.log('GET /foodItems')
