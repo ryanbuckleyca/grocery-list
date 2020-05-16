@@ -207,7 +207,7 @@ const shopPage = (props) => {
 }
 
 const aboutPage = (props) => {
-  console.log("RENDERING SHOP PAGE")
+  console.log("RENDERING ABOUT PAGE")
   return `<div><p>311 is the color of our energy!</p></div>`
 }
 
