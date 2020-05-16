@@ -1,0 +1,57 @@
+<!-- for some reason, contentEditable wasn't always changing in the script.-->
+<!-- replace ("onlyButton-" + ID) with ("statusButton-${foodItem.id}")  -->
+<!-- include ("editStatus-" + ID)  -->
+<head>
+  <script>
+    function editStatus(ID, event) {
+      if(document.getElementById("editStatus-" + ID).style.display === "inline") {
+        document.getElementById("editStatus-" + ID).style.display = "none"
+        document.getElementById("onlyButton-" + ID).style.display = "inline"
+      } else {
+        //hide button
+        document.getElementById("editStatus-" + ID).style.display = "inline"
+        document.getElementById("onlyButton-" + ID).style.display = "none"
+        document.getElementById("editStatus-" + ID).focus()
+        event.preventDefault();
+      }
+    }
+
+    function save(ID, event) {
+
+      document.getElementById("editStatus-" + ID).style.display = "none"
+      document.getElementById("onlyButton-" + ID).style.display = "inline"
+
+      let textToSave = document.getElementById("editStatus-" + ID).value
+      document.getElementById("onlyButton-" + ID).innerText = textToSave
+    }
+    
+    function enterSubmit(ID, event) {
+      if (event.which == 13 || event.keyCode == 13) {
+        event.preventDefault()
+        document.getElementById("editStatus-" + ID).blur()
+      }
+    }
+
+    function toggleStatus(ID) {
+      let bg = (document.getElementById("onlyButton-" + ID).style.backgroundColor)
+      if(bg === "red") {
+        document.getElementById("onlyButton-" + ID).style.backgroundColor = "green";
+      } else if(bg === "orange") {
+        document.getElementById("onlyButton-" + ID).style.backgroundColor = "red"
+      } else {
+        document.getElementById("onlyButton-" + ID).style.backgroundColor = "orange"
+      }
+    }
+
+  </script>
+  <style>
+    button, input {
+      font-size: 16px;
+      width: 200px;
+    }
+  </style>
+</head>
+
+<button type="button" id="onlyButton-id" style="background-color: red" onclick="toggleStatus('id')">Nutritional Yeast</button>
+<input type="text" id="editStatus-id" style="display:none" onblur="save('id', event)" onkeypress="enterSubmit('id', event)" value="Nutritional Yeast" />
+<button type="button" onmousedown="editStatus('id', event)">Edit</button>
