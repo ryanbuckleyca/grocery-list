@@ -1,9 +1,13 @@
 <!-- 
   TODO:
-  Make section to edit headers/categories
-  Allow user to create custom order
+  [rb] Make section to edit headers/categories
+  [jv] Allow user to create custom order. Drag and drop elements of list?
   Swipe left to delete, right to edit? Instead of buttons
-  Drag and drop elements of list?
+  [rb] Overlay form for creating new FoodItem instead of prompt*2
+  [jv] Allow for create page in server.js
+  [rb] Create Shop page
+  Enable team shopping
+  [rb] enable dark mode
  -->
 
 <!DOCTYPE html>
@@ -11,199 +15,38 @@
   <head>
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet" />
+    <!-- Bootstrap 4: CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="light.css" />
     <link type="text/css" rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/reef.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-
-      function getFoodItems() {
-        let data = null
-        let xmlhttp = new XMLHttpRequest()
-        xmlhttp.open("GET", "/foodItems", false)
-        xmlhttp.send()
-        if (xmlhttp.status==200) { data = xmlhttp.responseText }
-        return JSON.parse(data)
-      }
-
-      function sendToApp(action, url, data) {
-        var xmlhttp = new XMLHttpRequest() 
-        xmlhttp.open(action, url)
-        xmlhttp.setRequestHeader("Content-Type", "application/json")
-        
-        xmlhttp.send(JSON.stringify(data))
-      }
-
-      function deleteItem(itemID) {
-        if(!confirm("Delete?")) return 
-        sendToApp("DELETE", "/foodItems/" + itemID, { "id": itemID})
-
-        let element = document.getElementById("groceryRow-" + itemID)
-        element.parentNode.removeChild(element)
-      }
-
-      function toggleStatus(id) {
-        if(document.getElementById("statusButton-" + id)
-          .contentEditable === "true") //attribute value is string, not boolean
-          return //do not toggle status...user is editing value
-        //quit if Name is being edited
-
-        let newStatus = document.getElementById("statusButton-" + id).className
-        switch(newStatus) {
-          case "groceryItem out": 
-            newStatus = "GOOD" 
-            document
-              .getElementById("statusButton-" + id)
-              .classList.replace("out", "good")
-            break
-          case "groceryItem good": 
-            newStatus = "LOW" 
-            document
-              .getElementById("statusButton-" + id)
-              .classList.replace("good", "low")
-            break
-          case "groceryItem low": 
-            newStatus = "OUT" 
-            document
-              .getElementById("statusButton-" + id)
-              .classList.replace("low", "out")
-            break
-        }
-        sendToApp("PUT", "/foodItems/" + id, { "status": newStatus})
-      }
-
-      function editItem(itemID) {
-        //TODO: 
-        //figure out why deactivate isn't working
-        //how to keep it deactive as a space to click to exit Edit box
-        //Edit box is active
-        // document.getElementById("editButton-" + itemID).onclick = null
-
-        //make element editable and put cursor inside
-        document.getElementById("statusButton-" + itemID)
-          .contentEditable = true
-        document.getElementById("statusButton-" + itemID)
-          .focus()
-        document.getElementById("statusButton-" + itemID)
-          .classList.add("edit")
-        //run again to override mobile need to click twice
-        document.getElementById("statusButton-" + itemID)
-          .contentEditable = true
-        document.getElementById("statusButton-" + itemID)
-          .focus()
-
-        //deactivate edit button... this isn't working on mobile
-        document.getElementById("statusButton-" + itemID)
-          .onclick = ""
-
-
-      }
-
-      function sendOnEnter (event, id) {
-        if (event.which == 13 || event.keyCode == 13) {
-          //enter has been pressed, send data
-          event.preventDefault()
-          sendEditedItem(id)
-        }
-      }
-
-      function sendEditedItem(itemID, status) {
-        //TODO:
-        //triggered when Edit box is unfocused
-        //we want mousedown to not trigger button
-        //sets button onclick active again
-        //so by the time we click on button again it's already reactivated
-        // document.getElementById("editButton-" + itemID)
-        //   .onclick = function(){editItem(itemID)}
-
-        //this works, but removing it in editItem() function does not.
-        document.getElementById("statusButton-" + itemID)
-          .onclick = function(){
-              toggleStatus(itemID, status)
-              }
-        document.getElementById("statusButton-" + itemID)
-          .contentEditable = false
-        document.getElementById("statusButton-" + itemID)
-          .classList.remove("edit")
-
-
-        let newName = document.getElementById("itemName-" + itemID + "p").innerText
-        
-        sendToApp("PUT", "/foodItems/" + itemID, { "id": itemID, "name": newName})
-      }
-
-      function addItem() {
-        var name = prompt("Enter the name of the item:")
-        var cat = prompt("Enter the category for " + name)
-
-        sendToApp("POST", "/foodItems", { "name": name, "category": cat})
-      }
-
-      function getNewStatus(status) {
-        switch(status){
-          case "GOOD": return "groceryItem good"; break
-          case "LOW": return "groceryItem low"; break
-          case "OUT": return "groceryItem out"; break
-          default: return "groceryItem out"; break
-        }
-      }
-
-    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="groceryList" class="container-fluid">
+      <div id="groceryMenu" class="row no-gutters text-center align-top">
+        <button class="menuButton col-1" onclick="showMenu()">
+          <i class="fas fa-hamburger"></i>
+        </button>
+      </a>
+        <div class="col-10">
+        <h1>Grocery List</h1>
+          <div id="dropdown">
+            <a href="#stock">Stock</a>
+            <a href="#shop">Shop</a>
+            <a href="#about">About</a>
+          </div>
+        </div>
+        <button class="scrollButton col-1" onclick="window.scroll(0,0)">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+      </div>
+      <hr />
 
-    <script type="text/javascript">
-      let app = new Reef('#app', {
-        data: { 
-          foodItems: getFoodItems() 
-        },
-        template: function (props) { 
-          let foodItemsByCategory = _.groupBy(props.foodItems, "category")
-          return `
-                  <div id="groceryList" class="container-fluid p-2">
-                    ${_.map(foodItemsByCategory, (foodItems, category) => {
-                      return `
-                        <div id="${category}" class="groceryHeader row no-gutters text-center">
-                          <div class="col-12">
-                            ${category}
-                          </div>
-                        </div>
-
-                        ${_.map(foodItems, foodItem => {
-                          return `
-                            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-                              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                                <button id="delButton-${foodItem.id}" class="delItem" onclick="deleteItem(${foodItem.id})"}>
-                                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden=true></li>
-                                </button>
-                              </div>
-                              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                                <button id="statusButton-${foodItem.id}" class="${getNewStatus(foodItem.status)}" onblur="sendEditedItem(${foodItem.id}, '${foodItem.status}')" contentEditable=false onclick="toggleStatus(${foodItem.id})" onkeydown="sendOnEnter(event, ${foodItem.id})">
-                                  <p id="itemName-${foodItem.id}p">${foodItem.name}</p>
-                                </button>
-                              </div>
-                              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                                <button id="editButton-${foodItem.id}" class="editButton" onclick=editItem(${foodItem.id})>
-                                  <li id="editIcon-${foodItem.id}" class="fas fa-pen aria-hidden=true"></li>
-                                </button>
-                              </div>
-                            </div>`
-                        }).join('')}`
-                    }).join('')}
-                  </div>
-                  <div id="addButton" class="addItem">
-                    <button onclick="addItem()">
-                      <i class="fas fa-cart-plus"></i>
-                    </button>
-                  </div>`
-        }
-      })
-
-      app.render()
-      Reef.debug(true)
-    </script>
+      <div class="row"><div id="stock" class="col-12"></div></div>
+      <div class="row"><div id="shop" class="col-12"></div></div>
+      <script src="index.js" type="application/javascript"></script>
   </body>
 </html>
