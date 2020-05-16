@@ -8,6 +8,8 @@
   [rb] Create Shop page
   Enable team shopping
   [rb] enable dark mode
+  Make collapsible categories
+  [rb] figure out why outline persists following enter key after edit
  -->
 
 <!DOCTYPE html>
@@ -34,11 +36,11 @@
         </button>
       </a>
         <div class="col-10">
-        <h1>Grocery List</h1>
+        <h1><span>Grocery List</span></h1>
           <div id="dropdown">
-            <a href="/stock">Stock</a>
-            <a href="/shop">Shop</a>
-            <a href="/about">About</a>
+            <a href="/stock"><span>Stock</span></a>
+            <a href="/shop"><span>Shop</span></a>
+            <a href="/about"><span>About</span></a>
           </div>
         </div>
         <button class="scrollButton col-1" onclick="window.scroll(0,0)">
