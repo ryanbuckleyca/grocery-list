@@ -24,7 +24,6 @@ const showMenu = () => {
 }
 
 const editItem = (event, itemID) => {
-  printToServer("editItem() press/click event: " + event)
   let element = document.getElementById("statusButton-" + itemID)
 
   if (element.contentEditable === "true") {
@@ -37,17 +36,12 @@ const editItem = (event, itemID) => {
     element.classList.add("edit")
     element.contentEditable = "true"
     element.focus()
-    
-    printToServer("onclick: " + element.onclick)
-
     event.preventDefault()
 
   }
 }
 
 const handleOnBlurEdit = (itemID) => {
-  printToServer("handleOnBlurEdit() called")
-
   let element = document.getElementById("statusButton-" + itemID)
   element.onclick = () => store.do("toggleStatus", itemID)
   element.contentEditable = "false"
@@ -59,7 +53,6 @@ const handleOnBlurEdit = (itemID) => {
 }
 
 const handleOnEnterEdit = (event, id) => {
-  printToServer("handleOnEnterEdit() press/click event: " + event)
   if (event.which == 13 || event.keyCode == 13) {
     event.preventDefault()
     handleOnBlurEdit(id)
@@ -87,6 +80,27 @@ const apiRequest = async (action, url, data) => {
   return response
 }
 
+let router = new Reef.Router({
+	routes: [
+    {
+      title: 'Stock',
+      url: '/'
+    },
+		{
+			title: 'Stock',
+			url: '/stock'
+		},
+		{
+			title: 'Shop',
+			url: '/shop'
+		},
+		{
+			title: 'About',
+			url: '/about'
+		}
+	]
+})
+
 let store = new Reef.Store({
   data: {
     foodItems: getFoodItems()
@@ -101,11 +115,10 @@ let store = new Reef.Store({
       let name = titleCase(prompt("Enter the name of the item:"))
       let category = titleCase(prompt("Enter the category for " + name))
       let newItem = await apiRequest("POST", "/foodItems", { name, category, status: "OUT" })
-      props.foodItems.push(newItem)
-      stockComponent.render()
+      props.foodItems = props.foodItems.concat([newItem])
+      app.render()
     },
     toggleStatus: (props, id) => {
-      printToServer("toggleStatus() called")
       const newStatus = {
         GOOD: "LOW",
         LOW: "OUT",
@@ -113,7 +126,6 @@ let store = new Reef.Store({
       }
 
       props.foodItems = props.foodItems.map(foodItem => {
-
         if (foodItem.id === id) {
           apiRequest("PUT", "/foodItems/" + id, { "status": newStatus[foodItem.status] })
           return { ...foodItem, status: newStatus[foodItem.status] }
@@ -121,68 +133,82 @@ let store = new Reef.Store({
           return foodItem
         }
       })
-      stockComponent.render()
     },
     updateFoodItem: (props, id, name) => {
       props.foodItems = props.foodItems.map(foodItem => {
         if (foodItem.id === id) {
           apiRequest("PUT", "/foodItems/" + id, { "id": id, "name": name })
-          console.log("Food Item: ", foodItem)
-          console.log("New name: ", name)
           return { ...foodItem, name: name }
         } else {
           return foodItem
         }
       })
-      stockComponent.render()
     }
   }
 })
 
-let stockComponent = new Reef('#stock', {
+const app = new Reef('#app', {
+  router: router,
   store: store,
-  template: (props) => {
+  template: (props, route) => {
     document.addEventListener('render', function (event) {
-      console.log("RENDERING")
+      console.log("RENDERING APP")
     }, false)
-    let foodItemsByCategory = _.groupBy(props.foodItems, "category")
-    return `
-      ${_.map(foodItemsByCategory, (foodItems, category) => {
-        return `
-          <div id="${category}" class="groceryHeader row col-10 no-gutters">
-            <div class="col-10 groceryHeaderName">
-              ${category}
-            </div>
-          </div>
-          ${_(foodItems).sortBy(foodItem => foodItem.createdAt).map(foodItem => {
-            return `
-              <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-                <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                  <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
-                    <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
-                  </button>
-                </div>
-                <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                  <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">${foodItem.name}</p>
-                </div>
-                <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                  <button type="button" id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
-                    <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
-                  </button>
-                </div>
-              </div>`
-          }).join('')}`
-        }).join('')}
-      </div>
-      <div id="addButton" class="addItem">
-        <button type="button" onclick="store.do('addFoodItem')">
-          <i class="fas fa-cart-plus"></i>
-        </button>
-      </div>
-    </div>`
+
+    if (route.url === '/stock') return stockPage(props)
+    else if (route.url === '/shop') return shopPage(props)
+    else if (route.url === '/about') return aboutPage(props)
+    else return stockPage(props)
   }
 })
 
-let storeComponent;
+const stockPage = (props) => {
+  console.log("RENDERING STOCK PAGE")
+  let foodItemsByCategory = _.groupBy(props.foodItems, "category")
+  return `
+    ${_.map(foodItemsByCategory, (foodItems, category) => {
+      return `
+        <div id="${category}" class="groceryHeader row col-10 no-gutters">
+          <div class="col-10 groceryHeaderName">
+            ${category}
+          </div>
+        </div>
+        ${_(foodItems).sortBy(foodItem => foodItem.createdAt).map(foodItem => {
+          return `
+            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
+                </button>
+              </div>
+              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">${foodItem.name}</p>
+              </div>
+              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                <button type="button" id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
+                  <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
+                </button>
+              </div>
+            </div>`
+        }).join('')}`
+      }).join('')}
+    </div>
+    <div id="addButton" class="addItem">
+      <button type="button" onclick="store.do('addFoodItem')">
+        <i class="fas fa-cart-plus"></i>
+      </button>
+    </div>
+  </div>`
+}
 
-stockComponent.render()
+const shopPage = (props) => {
+  console.log("RENDERING SHOP PAGE")
+  return `<div><p>Insert things here Ryan!</p></div>`
+}
+
+const aboutPage = (props) => {
+  console.log("RENDERING SHOP PAGE")
+  return `<div><p>311 is the color of our energy!</p></div>`
+}
+
+app.render()
