@@ -10,7 +10,7 @@ const titleCase = (str) => {
   }).join(' ')
 }
 
-const showMenu = () => {
+const toggleMenu = () => {
   var x = document.getElementById("dropdown")
   var y = document.getElementById("groceryMenu")
   if (x.style.display === "block") {
@@ -22,6 +22,21 @@ const showMenu = () => {
     y.style.zIndex = 4
   }
 }
+
+//close menu when clicking outside or on links
+window.addEventListener('click', function(e){   
+  let menuDiv = document.getElementById('dropdown').contains(e.target)
+  let menuButton = document.getElementById('menuButton').contains(e.target)
+  let menuDivDisp = document.getElementById('dropdown').style.display
+  console.log(menuDiv)
+  console.log(menuDivDisp)
+  //if user clicks outside of dropdown and it's open, close it
+  if (!menuDiv && menuDivDisp==="block" && !menuButton){
+    console.log("try to close")
+    document.getElementById('dropdown').setAttribute("style", "display: none")
+  }
+});
+
 
 const editItem = (event, itemID) => {
   printToServer("editItem() press/click event: " + event)
