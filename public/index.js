@@ -37,6 +37,11 @@ window.addEventListener('click', function(e){
   }
 });
 
+window.addEventListener('scroll', function(e){   
+  document.getElementById('dropdown').setAttribute("style", "display: none")
+});
+
+
 
 const editItem = (event, itemID) => {
   let element = document.getElementById("statusButton-" + itemID)
