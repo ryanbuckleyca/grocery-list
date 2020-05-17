@@ -46,7 +46,6 @@ hr {
   width: 100%;
   top: 2vh;
   padding: 2vh 3vh;
-  border-bottom: 2px solid black;
 }
 #groceryMenu a {
   color: rgb(var(--foreground));
@@ -138,25 +137,25 @@ hr {
 }
 .low {
   color: rgb(var(--foreground));
-  background-color: rgba(var(--low), 0.5);
-  border: 0vh solid rgb(var(--low)) !important;
+  background-color: rgba(var(--low), 1);
+  border: 0vh solid rgba(var(--low), 0.5) !important;
 }
 .out {
   color: rgb(var(--foreground));
-  background-color: rgba(var(--out), 0.5);
-  border: 0vh solid rgb(var(--out));
+  background-color: rgba(var(--out), 1);
+  border: 0vh solid rgb(var(--out), 0.5);
 }
 .good {
   color: rgb(var(--foreground));
-  background-color: rgba(var(--good), 0.5);
-  border: 0vh solid rgb(var(--good)) !important;
+  background-color: rgba(var(--good), 1);
+  border: 0vh solid rgb(var(--good), 0.5) !important;
 }
 .edit {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   outline: 0 !important;
   box-shadow: inset 0px 0px 4px 0px rgb(var(--foreground));
-  border: 0vh solid rgba(var(--foreground), 0.6) !important;
+  border: 0vh solid rgba(var(--foreground), 0.5) !important;
 }
 
 
@@ -176,7 +175,7 @@ hr {
   font-size: 6vh;
   border: 0;
   border-radius: 50%;
-  box-shadow: 2px 2px 4px rgba(var(--foreground), 0.2);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 .addItem button:hover {
   filter: brightness(120%);

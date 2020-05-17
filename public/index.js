@@ -10,32 +10,44 @@ const titleCase = (str) => {
   }).join(' ')
 }
 
+let OrigScrollPos = window.scrollY
 const toggleMenu = () => {
-  var x = document.getElementById("dropdown")
-  var y = document.getElementById("groceryMenu")
-  if (x.style.display === "block") {
-    x.style.display = "none"
-    y.style.zIndex = 1
-
+  var dropdown = document.getElementById("dropdown")
+  var groceryMenu = document.getElementById("groceryMenu")
+  if (dropdown.style.display === "block") {
+    //menu is open, close it
+    dropdown.style.display = "none"
+    groceryMenu.style.zIndex = 1
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>";
   } else {
-    x.style.display = "block"
-    y.style.zIndex = 4
+    dropdown.style.display = "block"
+    groceryMenu.style.zIndex = 4
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-times\"></i>";
+    OrigScrollPos = window.scrollY //showing div adjusts scrollY value, so reset
   }
 }
-
+//close menu when scrolling, if it's open
+window.onscroll = function() {
+  console.log("ogY: " + OrigScrollPos)
+  let vis = document.getElementById('dropdown').style.display
+  if(OrigScrollPos < window.scrollY && vis === "block")
+    toggleMenu()
+}
 //close menu when clicking outside or on links
 window.addEventListener('mousedown', function(e){   
   let menuDiv = document.getElementById('dropdown').contains(e.target)
   let menuButton = document.getElementById('menuButton').contains(e.target)
   let menuDivDisp = document.getElementById('dropdown').style.display
-  console.log(menuDiv)
-  console.log(menuDivDisp)
+
   //if user clicks outside of dropdown and it's open, close it
   if (!menuDiv && menuDivDisp==="block" && !menuButton){
     console.log("try to close")
+    document.getElementsByClassName('body')[0].setAttribute("style", "overflow: hidden")
     document.getElementById('dropdown').setAttribute("style", "display: none")
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>";
   }
 });
+
 
 
 const editItem = (event, itemID) => {
