@@ -64,7 +64,6 @@ const editItem = (event, itemID) => {
     element.contentEditable = "true"
     element.focus()
     event.preventDefault()
-
   }
 }
 
@@ -170,6 +169,17 @@ let store = new Reef.Store({
           return foodItem
         }
       })
+    },
+    buyFoodItem: (props, id)  => {
+      console.log("BUYING ITEM: ", id)
+      props.foodItems = props.foodItems.map(foodItem => {
+        if (foodItem.id === id) {
+          apiRequest("PUT", "/foodItems/" + id, { id, status: "GOOD" })
+          return { ...foodItem, status: "GOOD" }
+        } else {
+          return foodItem
+        }
+      })
     }
   }
 })
@@ -228,9 +238,44 @@ const stockPage = (props) => {
   </div>`
 }
 
+const attachSlip = () => {
+  console.log("ATTACHED")
+
+  document.querySelectorAll('.shopListCategory').forEach(item => {
+    new Slip(item)
+    item.addEventListener('slip:swipe', event => {
+      store.do("buyFoodItem", parseInt(event.target.dataset.id))
+    })
+  })
+}
+
 const shopPage = (props) => {
   console.log("RENDERING SHOP PAGE")
-  return `<div><p>Insert things here Ryan!</p></div>`
+  let foodItemsByCategory = _(props.foodItems).filter(foodItem => foodItem.status !== "GOOD").groupBy("category").value()
+
+  return `
+    ${_.map(foodItemsByCategory, (foodItems, category) => {
+      return `
+        <div id="${category}" class="groceryHeader row col-10 no-gutters">
+          <div class="col-10 groceryHeaderName">
+            ${category}
+          </div>
+        </div>
+        <ul class="shopListCategory">
+          ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
+            return `
+            <li class="shopListItem" id="shopListItem-${foodItem.id}" data-id=${foodItem.id}>
+              <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+                <div id="itemName-${foodItem.id}" class="groceryName col-12 p-2 text-center align-self-center">
+                  <p id="stockItem-${foodItem.id}" class="shopItem ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
+                </div>
+              </div>
+            </li>`
+          }).join('')}
+        </ul>`
+      }).join('')}
+    </div>
+  </div>`
 }
 
 const aboutPage = (props) => {

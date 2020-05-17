@@ -180,3 +180,7 @@ hr {
 .addItem button:hover {
   filter: brightness(120%);
 }
+
+.shopListItem {
+  list-style-type: none;
+}
