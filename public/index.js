@@ -253,6 +253,14 @@ const shopPage = (props) => {
   console.log("RENDERING SHOP PAGE")
   let foodItemsByCategory = _(props.foodItems).filter(foodItem => foodItem.status !== "GOOD").groupBy("category").value()
 
+  if (_.isEmpty(foodItemsByCategory)) {
+    return `
+      <div class="pyro">
+        <div class="before"></div>
+        <div class="after"></div>
+      </div>`
+  }
+  
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
