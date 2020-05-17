@@ -24,7 +24,7 @@ const toggleMenu = () => {
 }
 
 //close menu when clicking outside or on links
-window.addEventListener('click', function(e){   
+window.addEventListener('mousedown', function(e){   
   let menuDiv = document.getElementById('dropdown').contains(e.target)
   let menuButton = document.getElementById('menuButton').contains(e.target)
   let menuDivDisp = document.getElementById('dropdown').style.display
@@ -36,11 +36,6 @@ window.addEventListener('click', function(e){
     document.getElementById('dropdown').setAttribute("style", "display: none")
   }
 });
-
-window.addEventListener('scroll', function(e){   
-  document.getElementById('dropdown').setAttribute("style", "display: none")
-});
-
 
 
 const editItem = (event, itemID) => {
