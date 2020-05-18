@@ -4,6 +4,8 @@
 html {
   padding:0;
   margin:0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 body {
   background-color: rgb(var(--background));
@@ -12,6 +14,8 @@ body {
   font-family: var(--font);
   margin: 0 2vh 0 1vh;
   padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 p {
   padding: 0vh;
