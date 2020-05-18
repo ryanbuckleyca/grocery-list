@@ -9,7 +9,7 @@ body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   font-size: 3.7vh;
-  font-family: 'Itim', Verdana;
+  font-family: var(--font);
   margin: 0 2vh 0 1vh;
   padding: 0;
 }
@@ -110,12 +110,12 @@ hr {
   text-align: center;
   font-weight: bolder;
   font-size: 130%;
-  text-shadow: 0.5px 0.5px 0px;
 }
 .groceryHeaderName {
   background: rgb(var(--background));
   padding: 1.5vh 0 2vh 0;
   margin: auto;
+  animation: var(--flicker);
 }
 
 .groceryName button {
@@ -138,24 +138,30 @@ hr {
 .low {
   color: rgb(var(--foreground));
   background-color: rgba(var(--low), 1);
-  border: 0vh solid rgba(var(--low), 0.5) !important;
+  border: 0vh solid rgba(var(--low), 0.5);
+  box-shadow: var(--glow) rgb(var(--low)); 
+
 }
 .out {
   color: rgb(var(--foreground));
   background-color: rgba(var(--out), 1);
   border: 0vh solid rgb(var(--out), 0.5);
+  box-shadow: var(--glow) rgb(var(--out)); 
+
 }
 .good {
   color: rgb(var(--foreground));
   background-color: rgba(var(--good), 1);
-  border: 0vh solid rgb(var(--good), 0.5) !important;
+  border: 0vh solid rgb(var(--good), 0.5);
+  box-shadow: var(--glow) rgb(var(--good)); 
+
 }
 .edit {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   outline: 0 !important;
   box-shadow: inset 0px 0px 4px 0px rgb(var(--foreground));
-  border: 0vh solid rgba(var(--foreground), 0.5) !important;
+  border: 0vh solid rgba(var(--foreground), 0.5);
 }
 
 
@@ -186,4 +192,29 @@ hr {
 }
 .shopListItem {
   list-style-type: none;
+}
+
+/* Animate neon flicker */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {    
+      text-shadow:
+      0 0 1px #fff,
+      0 0 2px #fff,
+      0 0 1px rgb(var(--accent)),
+      0 0 5px rgb(var(--accent)),
+      0 0 10px rgb(var(--accent)),
+      0 0 15px rgb(var(--accent)),
+      0 0 20px rgb(var(--accent))
+  }
+  20%, 24%, 55% {        
+      text-shadow: none;
+  }    
+}
+
+body{
+  -webkit-animation: var(--strobe);
+}
+@-webkit-keyframes raveOn{
+  0%{ opacity: 1; }
+  100%{ opacity: 0.7; }
 }

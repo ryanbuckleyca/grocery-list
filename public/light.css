@@ -1,8 +1,12 @@
 :root {
+  --font: 'Itim', Verdana;
   --background: 245, 245, 235;
   --foreground: 34, 34, 34;
   --accent: 204, 171, 218;
   --low: 253, 236, 195;
   --out: 254, 193, 180;
   --good: 229, 241, 202;
+  --flicker: none;
+  --glow: none;
+  --strobe: none;
 }

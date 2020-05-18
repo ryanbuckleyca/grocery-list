@@ -1,0 +1,12 @@
+:root {
+  --font: 'Leckerli One', cursive;
+  --background: 15, 5, 5;
+  --foreground: 255, 255, 250;
+  --accent: 2, 160, 250;
+  --low: 251, 119, 28;
+  --out: 255, 0, 0;
+  --good: 11, 255, 5;
+  --flicker: flicker 3s infinite alternate; 
+  --glow: 0px 0px 15px; 
+  --strobe: raveOn .7s infinite;
+}
