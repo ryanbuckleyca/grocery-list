@@ -267,7 +267,11 @@ const attachSlip = () => {
 
 const connectWebsocket = () => {
   clientId = createUuid()
-  const url = `ws://localhost:8080?clientId=${clientId}`
+
+  const protocol = window.location.hostname === "localhost" ? "ws" : "wss"
+  const host = window.location.hostname
+  const port = window.location.port || 443
+  const url = `${protocol}://${host}:${port}/?clientId=${clientId}`
   connection = new WebSocket(url)
 
   connection.onmessage = event => {

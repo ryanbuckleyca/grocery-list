@@ -1,13 +1,13 @@
 const express = require('express')
 const WebSocket = require('ws')
+const http = require("http")
 const url = require('url')
 const db = require('./models')
 const path = require('path')
 
 const app = express()
 const port = process.env.PORT || 3000
-
-const wss = new WebSocket.Server({ port: 8080 })
+let wss
 
 app.use(express.static('public'))
 app.use(express.json())
@@ -100,13 +100,16 @@ const refreshClients = (req) => {
 }
 
 const start = () => {
+  const server = http.createServer(app)
+  server.listen(port, () => console.log(`Grocery List app listening at http://localhost:${port}`))
+
+  wss = new WebSocket.Server({ server })
   wss.on('connection', (ws, req) => {
     const { query: { clientId } } = url.parse(req.url, true)
     ws.id = clientId
     console.log(`CLIENT CONNECTED: ${ws.id}`)
   })
 
-  app.listen(port, () => console.log(`Grocery List app listening at http://localhost:${port}`))
 }
 
 start()
