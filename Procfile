@@ -1,2 +1,2 @@
-release: npx sequelize-cli db:migrate && npm run importCsv
+release: npx sequelize-cli db:migrate
 web: npm start
