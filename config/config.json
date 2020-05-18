@@ -5,6 +5,6 @@
   },
   "production": {
     "dialect": "postgres",
-    "url": "postgres://dkvemcvjwbjfvm:8e0dc1c91b60b08de38228544c17b21ea99cb43f502b4b537b00c25bb3ca2279@ec2-52-86-33-50.compute-1.amazonaws.com:5432/dfnqglrmdbed7v"
+    "use_env_variable": "DATABASE_URL"
   }
 }
