@@ -169,7 +169,7 @@ hr {
   position: fixed;
   bottom: 1vh;
   right: 3.5vh;
-  z-index: 3;
+  z-index: 5;
 }
 .addItem button {
   width: 14vh;

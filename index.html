@@ -56,25 +56,27 @@
             try {
               document.getElementsByTagName("iframe")[0].remove()
               document.getElementById("lasers").remove()
+              document.getElementById("addDisco").remove()
             }
             catch (error) {
               //do nothing
             }
           } else {
             switchTo = "rave.css"
+            //add soundcloud link
             node = document.createElement("iframe")
             node.width="100%" 
-            node.height="100"
+            node.height="300"
             node.scrolling="no"
             node.frameborder="no"
             node.allow="autoplay"
             node.src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/430387740&color=%23e6e624&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
             document.getElementsByTagName("hr")[0].after(node)
 
+            //add lasers
             node = document.createElement("span")
             node.id="lasers"
             document.getElementById("groceryList").before(node)
-
             node = document.createElement("div")
             node.className = "laser-beam-blue"
             document.getElementById("lasers").appendChild(node)
@@ -87,6 +89,20 @@
             node = document.createElement("div")
             node.className = "laser-beam-green"
             document.getElementById("lasers").appendChild(node)
+
+            document.getElementById("addButton").remove()
+            //discoball
+            node = document.createElement("div")
+            node.id="addDisco"
+            document.getElementsByTagName("body")[0].appendChild(node)
+            node = document.createElement("button")
+            node.id = "discoButton"
+            node.onclick= () => store.do('addFoodItem')
+            document.getElementById("addDisco").appendChild(node)
+            node = document.createElement("img")
+            node.src = "discoball.gif"
+            document.getElementById("discoButton").appendChild(node)
+
           }
 
           setLinkTag(switchTo)
