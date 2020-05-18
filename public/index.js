@@ -1,4 +1,4 @@
-Reef.debug(true) 
+let connection, clientId
 
 const printToServer = msg => {
   apiRequest("POST", "/debug", { msg })
@@ -8,6 +8,16 @@ const titleCase = (str) => {
   return str.toLowerCase().split(' ').map(function(word) {
     return word.replace(word[0], word[0].toUpperCase())
   }).join(' ')
+}
+
+const createUuid = () => {
+  let dt = new Date().getTime();
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = (dt + Math.random()*16)%16 | 0;
+      dt = Math.floor(dt/16);
+      return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+  })
+  return uuid
 }
 
 //close menu when clicking outside or on links
@@ -44,8 +54,7 @@ window.onscroll = function() {
   let vis = document.getElementById('dropdown').style.display
   if(OrigScrollPos < window.scrollY && vis === "block")
     toggleMenu()
-};
-
+}
 
 
 const editItem = (event, itemID) => {
@@ -98,7 +107,7 @@ const getFoodItems = () => {
 }
 
 const apiRequest = async (action, url, data) => {
-  const response = await fetch(url, {
+  const response = await fetch(`${url}?clientId=${clientId}`, {
     method: action,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -136,6 +145,9 @@ let store = new Reef.Store({
     foodItems: getFoodItems()
   },
   setters: {
+    refreshData: (props) => {
+      props.foodItems = getFoodItems()
+    },
     removeFoodItem: (props, id) => {
       if(!confirm("Delete?")) return 
       apiRequest("DELETE", "/foodItems/" + id, { "id": id })
@@ -253,6 +265,24 @@ const attachSlip = () => {
   })
 }
 
+const connectWebsocket = () => {
+  clientId = createUuid()
+  const url = `ws://localhost:8080?clientId=${clientId}`
+  connection = new WebSocket(url)
+
+  connection.onmessage = event => {
+    const message = JSON.parse(event.data)
+
+    console.log(message)
+    switch(message.type) {
+      case "refreshData":
+        console.log("REFRESHING DATA!!!")
+        store.do("refreshData")
+        break
+    }
+  }
+}
+
 const shopPage = (props) => {
   console.log("RENDERING SHOP PAGE")
   let foodItemsByCategory = _(props.foodItems).filter(foodItem => foodItem.status !== "GOOD").groupBy("category").value()
@@ -264,7 +294,7 @@ const shopPage = (props) => {
         <div class="after"></div>
       </div>`
   }
-  
+
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
@@ -296,3 +326,4 @@ const aboutPage = (props) => {
 }
 
 app.render()
+connectWebsocket()

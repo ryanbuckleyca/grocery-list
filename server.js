@@ -1,8 +1,13 @@
 const express = require('express')
+const WebSocket = require('ws')
+const url = require('url')
+const db = require('./models')
+const path = require('path')
+
 const app = express()
 const port = process.env.PORT || 3000
-const db = require('./models')
-var path = require('path')
+
+const wss = new WebSocket.Server({ port: 8080 })
 
 app.use(express.static('public'))
 app.use(express.json())
@@ -39,6 +44,7 @@ app.post('/foodItems', async function(req, res) {
   const { name, category, notes, status } = req.body
   const foodItem = await db.FoodItem.create({ name, category, notes, status })
 
+  refreshClients(req)
   return res.send(foodItem)
 })
 
@@ -62,6 +68,7 @@ app.put('/foodItems/:id', async function (req, res) {
   if (notes) foodItem.notes = notes
   await foodItem.save()
 
+  refreshClients(req)
   res.sendStatus(200)
 })
 
@@ -71,6 +78,7 @@ app.delete('/foodItems/:id', async function (req, res) {
   const foodItem = await db.FoodItem.findOne({ where: { id } })
   await foodItem.destroy()
 
+  refreshClients(req)
   res.sendStatus(200)
 })
 
@@ -80,4 +88,25 @@ app.post('/debug', function (req, res) {
   res.send({})
 })
 
-app.listen(port, () => console.log(`Grocery List app listening at http://localhost:${port}`))
+const refreshClients = (req) => {
+  const clientId = req.query.clientId
+  console.log("CURRENT CLIENT: ", clientId)
+  wss.clients.forEach(client => {
+    console.log(client.id)
+    if (client.readyState === WebSocket.OPEN && client.id !== clientId) {
+      client.send(JSON.stringify({ type: "refreshData" }))
+    }
+  })
+}
+
+const start = () => {
+  wss.on('connection', (ws, req) => {
+    const { query: { clientId } } = url.parse(req.url, true)
+    ws.id = clientId
+    console.log(`CLIENT CONNECTED: ${ws.id}`)
+  })
+
+  app.listen(port, () => console.log(`Grocery List app listening at http://localhost:${port}`))
+}
+
+start()
