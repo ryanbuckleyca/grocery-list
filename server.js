@@ -109,7 +109,6 @@ const start = () => {
     ws.id = clientId
     console.log(`CLIENT CONNECTED: ${ws.id}`)
   })
-
 }
 
 start()

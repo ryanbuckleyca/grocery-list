@@ -226,7 +226,7 @@ const stockPage = (props) => {
             ${category}
           </div>
         </div>
-        ${_(foodItems).sortBy(foodItem => foodItem.createdAt).map(foodItem => {
+        ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
           return `
             <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
               <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
@@ -235,7 +235,11 @@ const stockPage = (props) => {
                 </button>
               </div>
               <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" onkeydown="handleOnEnterEdit(event, ${foodItem.id})">${foodItem.name}</p>
+                <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" 
+                   onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" 
+                   onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                  ${foodItem.name} ${foodItem.createdAt}
+                </p>
               </div>
               <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
                 <button type="button" id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
