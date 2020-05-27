@@ -238,7 +238,7 @@ const stockPage = (props) => {
                 <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" 
                    onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" 
                    onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
-                  ${foodItem.name} ${foodItem.createdAt}
+                  ${foodItem.name}
                 </p>
               </div>
               <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
