@@ -114,11 +114,24 @@ hr {
   font-weight: bolder;
   font-size: 130%;
 }
-.groceryHeaderName {
+.groceryHeader a {
   background: rgb(var(--background));
   padding: 1.5vh 0 2vh 0;
   margin: auto;
+  color: #fff;
   animation: var(--flicker);
+}
+.groceryHeader a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+a[aria-expanded=true] .fa-chevron-right {
+  display: none;
+  transform: scale(0.7);
+}
+a[aria-expanded=false] .fa-chevron-down {
+  display: none;
+  transform: scale(0.7);
 }
 
 .groceryName button {
