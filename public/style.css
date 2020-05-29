@@ -118,12 +118,12 @@ hr {
   background: rgb(var(--background));
   padding: 1.5vh 0 2vh 0;
   margin: auto;
-  color: #fff;
+  color: rgb(var(--foreground));
   animation: var(--flicker);
 }
 .groceryHeader a:hover {
   text-decoration: underline;
-  color: #fff;
+  color: rgb(var(--foreground));
 }
 a[aria-expanded=true] .fa-chevron-right {
   display: none;
