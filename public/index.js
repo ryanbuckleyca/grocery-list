@@ -122,8 +122,12 @@ const apiRequest = async (action, url, data) => {
 let router = new Reef.Router({
 	routes: [
     {
-      title: 'Stock',
+      title: 'Home',
       url: '/'
+    },
+    {
+      title: 'Households',
+      url: '/households'
     },
 		{
 			title: 'Stock',
@@ -208,12 +212,19 @@ const app = new Reef('#app', {
       console.log("RENDERING APP")
     }, false)
 
-    if (route.url === '/stock') return stockPage(props)
+    if (route.url === '/') return determineRootPath(props)
+    else if (route.url === '/households') return householdPage(props)
+    else if (route.url === '/stock') return stockPage(props)
     else if (route.url === '/shop') return shopPage(props)
     else if (route.url === '/about') return aboutPage(props)
     else return stockPage(props)
   }
 })
+
+const determineRootPath = (props) => {
+  return readCookie("householdId") 
+    ? stockPage(props) : householdPage(props)
+}
 
 const stockPage = (props) => {
   console.log("RENDERING STOCK PAGE")

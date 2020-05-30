@@ -16,6 +16,10 @@ app.get('/', async function(req, res) {
   return res.sendFile(path.join(__dirname + '/index.html'))
 })
 
+app.get('/households', async function(req, res) {
+  return res.sendFile(path.join(__dirname + '/index.html'))
+})
+
 app.get('/stock', async function(req, res) {
   return res.sendFile(path.join(__dirname + '/index.html'))
 });
