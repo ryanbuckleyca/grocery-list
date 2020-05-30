@@ -374,12 +374,38 @@ const aboutPage = (props) => {
 const householdPage = (props) => {
   console.log("RENDERING HOUSEHOLD PAGE")
   return `
-  <div>
-    <h1>Households</h1>
+    <div id="households" class="groceryHeader row col-10 no-gutters">
+      <div class="col-10 groceryHeaderName">
+        Households
+      </div>
+    </div>
     ${_(props.households).map(household => {
-      return `<div><h2>${household.name}</h2></div>`
+      return `
+      <div id="groceryRow-${household.id}" class="groceryRow row no-gutters text-center">
+      <div id="delItem-${household.id}" class="delItem col-1 text-center align-self-center">
+        <button type="button" id="delButton-${household.id}" class="delItem" onclick="store.do('removehousehold', ${household.id})"}>
+          <li id="delIcon-${household.id}" class="fas fa-trash" aria-hidden="true"></li>
+        </button>
+      </div>
+      <div id="itemName-${household.id}" class="groceryName col-10 p-2 text-center align-self-center">
+        <p id="statusButton-${household.id}" class="groceryItem good" 
+           onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('toggleStatus', ${household.id})" 
+           onkeydown="handleOnEnterEdit(event, ${household.id})">
+          ${household.name}
+        </p>
+      </div>
+      <div id="editItem-${household.id}" class="editItem col-1 text-center align-self-center">
+        <button type="button" id="editButton-${household.id}" class="editButton" onmousedown="editItem(event, ${household.id})">
+          <li id="editIcon-${household.id}" class="fas fa-pen" aria-hidden="true"></li>
+        </button>
+      </div>
+    </div>`
     }).join('')}
-    ^ Just filler code to get you started, iterates through all the household names
+    <div id="addButton" class="addItem">
+      <button type="button" onclick="store.do('addHousehold')">
+        <i class="fas fa-home">+</i>
+      </button>
+    </div>
   </div>`
 }
 
