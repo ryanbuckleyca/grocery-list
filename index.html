@@ -15,33 +15,16 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="cookies.js" type="application/javascript"></script>
     <!-- App styles -->
     <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
     <link type="text/css" rel="stylesheet" href="style.css" />
     <link type="text/css" rel="stylesheet" href="lasers.css" />
-    <script>
-
-      function createCookie(name,value) {
-        document.cookie = name+"="+value+"; path=/"
-      }
-
-      function readCookie(name) {
-        var nameEQ = name + "="
-        var ca = document.cookie.split(';')
-        for(var i=0;i < ca.length;i++) {
-          var c = ca[i]
-          while (c.charAt(0)==' ') c = c.substring(1,c.length)
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length)
-        }
-        return null;
-      }
-
-      function eraseCookie(name) {
-        createCookie(name,"",-1)
-      }
-      
+    <script>    
       //create 311 by default, for now
-      if(readCookie("household")==="") { createCookie("household", "311")}
+      if (readCookie("householdId") == null) {
+        createCookie("householdId", "1")
+      }
 
       const linkTags = document.getElementsByTagName("link")
       let linkElToSwap
