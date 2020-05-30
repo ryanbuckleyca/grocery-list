@@ -335,5 +335,10 @@ const aboutPage = (props) => {
   return `<div><p>311 is the color of our energy!</p></div>`
 }
 
+const householdPage = (props) => {
+  console.log("RENDERING HOUSEHOLD PAGE")
+}
+
+
 app.render()
 connectWebsocket()
