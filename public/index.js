@@ -1,7 +1,7 @@
 let connection, clientId
 
 const printToServer = msg => {
-  apiRequest("POST", "/debug", { msg })
+  apiRequest("POST", "/api/debug", { msg })
 }
 
 const titleCase = (str) => {
@@ -100,7 +100,15 @@ const handleOnEnterEdit = (event, id) => {
 
 const getFoodItems = () => {
   let request = new XMLHttpRequest() 
-  request.open('GET', '/foodItems', false)
+  request.open('GET', '/api/foodItems', false)
+  request.setRequestHeader("Content-Type", "application/json")
+  request.send()
+  return JSON.parse(request.responseText)
+}
+
+const getHouseholds = () => {
+  let request = new XMLHttpRequest() 
+  request.open('GET', '/api/households', false)
   request.setRequestHeader("Content-Type", "application/json")
   request.send()
   return JSON.parse(request.responseText)
@@ -146,7 +154,8 @@ let router = new Reef.Router({
 
 let store = new Reef.Store({
   data: {
-    foodItems: getFoodItems()
+    foodItems: getFoodItems(),
+    households: getHouseholds()
   },
   setters: {
     refreshData: (props) => {
@@ -154,13 +163,17 @@ let store = new Reef.Store({
     },
     removeFoodItem: (props, id) => {
       if(!confirm("Delete?")) return 
-      apiRequest("DELETE", "/foodItems/" + id, { "id": id })
+      apiRequest("DELETE", "/api/foodItems/" + id, { "id": id })
       _.remove(props.foodItems, { id })
     },
     addFoodItem: async (props) => {
       let name = titleCase(prompt("Enter the name of the item:"))
       let category = titleCase(prompt("Enter the category for " + name))
-      let newItem = await apiRequest("POST", "/foodItems", { name, category, status: "OUT" })
+      let newItem = await apiRequest(
+        "POST",
+        "/api/foodItems",
+        { name, category, status: "OUT" }
+      )
       props.foodItems = props.foodItems.concat([newItem])
       app.render()
     },
@@ -173,7 +186,11 @@ let store = new Reef.Store({
 
       props.foodItems = props.foodItems.map(foodItem => {
         if (foodItem.id === id) {
-          apiRequest("PUT", "/foodItems/" + id, { "status": newStatus[foodItem.status] })
+          apiRequest(
+            "PUT",
+            "/api/foodItems/" + id,
+            { "status": newStatus[foodItem.status] }
+          )
           return { ...foodItem, status: newStatus[foodItem.status] }
         } else {
           return foodItem
@@ -183,7 +200,11 @@ let store = new Reef.Store({
     updateFoodItem: (props, id, name) => {
       props.foodItems = props.foodItems.map(foodItem => {
         if (foodItem.id === id) {
-          apiRequest("PUT", "/foodItems/" + id, { "id": id, "name": name })
+          apiRequest(
+            "PUT",
+            "/api/foodItems/" + id,
+            { "id": id, "name": name }
+          )
           return { ...foodItem, name: name }
         } else {
           return foodItem
@@ -194,7 +215,11 @@ let store = new Reef.Store({
       console.log("BUYING ITEM: ", id)
       props.foodItems = props.foodItems.map(foodItem => {
         if (foodItem.id === id) {
-          apiRequest("PUT", "/foodItems/" + id, { id, status: "GOOD" })
+          apiRequest(
+            "PUT",
+            "/api/foodItems/" + id,
+            { id, status: "GOOD" }
+          )
           return { ...foodItem, status: "GOOD" }
         } else {
           return foodItem
@@ -348,6 +373,14 @@ const aboutPage = (props) => {
 
 const householdPage = (props) => {
   console.log("RENDERING HOUSEHOLD PAGE")
+  return `
+  <div>
+    <h1>Households</h1>
+    ${_(props.households).map(household => {
+      return `<div><h2>${household.name}</h2></div>`
+    }).join('')}
+    ^ Just filler code to get you started, iterates through all the household names
+  </div>`
 }
 
 
