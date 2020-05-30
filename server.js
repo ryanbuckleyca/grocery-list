@@ -43,6 +43,14 @@ app.get('/api/households', async function(req, res) {
   return res.send(households)
 })
 
+app.post('/api/households', async function(req, res) {
+  console.log('POST /api/households - Body: ', req.body)
+  const { name } = req.body
+  const household = await db.Household.create({ name })
+
+  return res.send(household)
+})
+
 app.get('/api/foodItems', async function(req, res) {
   console.log('GET /api/foodItems')
   const foodItems = await db.FoodItem.findAll(
