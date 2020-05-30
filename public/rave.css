@@ -10,3 +10,12 @@
   --glow: 0px 0px 15px; 
   --strobe: raveOn .7s infinite;
 }
+iframe {
+  display: block;
+}
+#lasers {
+  display: block;
+}
+#addDisco {
+  display: block;
+}

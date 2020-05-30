@@ -10,3 +10,12 @@
   --glow: none;
   --strobe: none;
 }
+iframe {
+  display: none;
+}
+#lasers {
+  display: none;
+}
+#addDisco {
+  display: none;
+}
