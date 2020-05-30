@@ -20,7 +20,29 @@
     <link type="text/css" rel="stylesheet" href="style.css" />
     <link type="text/css" rel="stylesheet" href="lasers.css" />
     <script>
-      const cookieStyle = document.cookie.replace("style=", "")
+
+      function createCookie(name,value) {
+        document.cookie = name+"="+value+"; path=/"
+      }
+
+      function readCookie(name) {
+        var nameEQ = name + "="
+        var ca = document.cookie.split(';')
+        for(var i=0;i < ca.length;i++) {
+          var c = ca[i]
+          while (c.charAt(0)==' ') c = c.substring(1,c.length)
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length)
+        }
+        return null;
+      }
+
+      function eraseCookie(name) {
+        createCookie(name,"",-1)
+      }
+      
+      //create 311 by default, for now
+      if(readCookie("household")==="") { createCookie("household", "311")}
+
       const linkTags = document.getElementsByTagName("link")
       let linkElToSwap
 
@@ -35,8 +57,8 @@
         console.log("cannot find a <link> tag with title \"swap\"")
        } else {
         //set user's preferred style, if exists
-        if(cookieStyle === "light.css" || cookieStyle === "dark.css" || cookieStyle === "rave.css")
-          setLinkTag(cookieStyle)
+        if(readCookie("style") === "light.css" || readCookie("style") === "dark.css" || readCookie("style") === "rave.css")
+          setLinkTag(readCookie("style"))
 
         function switchStyle() {
           if(linkElToSwap.href.includes("light.css")) {
@@ -100,7 +122,7 @@
 
         function setLinkTag(value) {
           linkElToSwap.setAttribute("href", value)
-          document.cookie = "style=" + value
+          createCookie("style", value)
         }
       }
     </script>
@@ -119,6 +141,7 @@
           <div id="dropdown" style="display: none">
             <a href="/stock"><span>Stock</span></a>
             <a href="/shop"><span>Shop</span></a>
+            <a href="/households"><span>Households</span></a>
             <a href="/about"><span>About</span></a>
             <a href="#style" onclick="switchStyle()"><span><i class="fas fa-adjust"></i></span></a>
           </div>
