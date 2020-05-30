@@ -100,7 +100,7 @@ const handleOnEnterEdit = (event, id) => {
 
 const getFoodItems = () => {
   let request = new XMLHttpRequest() 
-  request.open('GET', '/api/foodItems', false)
+  request.open('GET', '/api/foodItems?householdId='+readCookie('householdId'), false)
   request.setRequestHeader("Content-Type", "application/json")
   request.send()
   return JSON.parse(request.responseText)
@@ -112,6 +112,15 @@ const getHouseholds = () => {
   request.setRequestHeader("Content-Type", "application/json")
   request.send()
   return JSON.parse(request.responseText)
+}
+
+const getHouseholdStatus = (id) => {
+  console.log("householdId cookie is " + readCookie("householdId"))
+  if(id.toString() === readCookie("householdId")) {
+    return "good"
+  } else {
+    return "low"
+  }
 }
 
 const apiRequest = async (action, url, data) => {
@@ -161,6 +170,27 @@ let store = new Reef.Store({
     refreshData: (props) => {
       props.foodItems = getFoodItems()
     },
+    addHousehold: async (props) => {
+      console.log("addHousehold entered")
+      let name = titleCase(prompt("Enter the name of the household:"))
+      let newItem = await apiRequest(
+        "POST",
+        "/api/households",
+        { name }
+      )
+      props.households = props.households.concat([newItem])
+      app.render()
+    },
+    selectHousehold: (props, id) => {
+      const newStatus = {
+        GOOD: "LOW",
+        LOW: "GOOD",
+      }
+      createCookie("householdId", id)
+      props.foodItems = getFoodItems()
+    },
+
+
     removeFoodItem: (props, id) => {
       if(!confirm("Delete?")) return 
       apiRequest("DELETE", "/api/foodItems/" + id, { "id": id })
@@ -169,10 +199,11 @@ let store = new Reef.Store({
     addFoodItem: async (props) => {
       let name = titleCase(prompt("Enter the name of the item:"))
       let category = titleCase(prompt("Enter the category for " + name))
+      let householdId = readCookie("householdId")
       let newItem = await apiRequest(
         "POST",
         "/api/foodItems",
-        { name, category, status: "OUT" }
+        { name, category, status: "OUT", householdId }
       )
       props.foodItems = props.foodItems.concat([newItem])
       app.render()
@@ -253,6 +284,17 @@ const determineRootPath = (props) => {
 
 const stockPage = (props) => {
   console.log("RENDERING STOCK PAGE")
+  if(props.foodItems.length === 0) { 
+    return `
+    <p align='center'>
+      No grocery items yet. Click the + button below to start creating your list!
+    </p> 
+    <div id="addButton" class="addItem">
+      <button type="button" onclick="store.do('addFoodItem')">
+        <i class="fas fa-cart-plus"></i>
+      </button>
+    </div>` 
+  }
   let foodItemsByCategory = _.groupBy(props.foodItems, "category")
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
@@ -388,8 +430,8 @@ const householdPage = (props) => {
         </button>
       </div>
       <div id="itemName-${household.id}" class="groceryName col-10 p-2 text-center align-self-center">
-        <p id="statusButton-${household.id}" class="groceryItem good" 
-           onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('toggleStatus', ${household.id})" 
+        <p id="statusButton-${household.id}" class="groceryItem ${getHouseholdStatus(household.id)}" 
+           onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})" 
            onkeydown="handleOnEnterEdit(event, ${household.id})">
           ${household.name}
         </p>

@@ -52,20 +52,22 @@ app.post('/api/households', async function(req, res) {
 })
 
 app.get('/api/foodItems', async function(req, res) {
+  console.log(req.query)
   console.log('GET /api/foodItems')
-  const foodItems = await db.FoodItem.findAll(
-    {order: [
+  const foodItems = await db.FoodItem.findAll({
+    order: [
       ['category', 'DESC'],
       ['status', 'DESC']
-    ]}
-  )
+    ],
+    where: { householdId: req.query.householdId }
+  })
   return res.send(foodItems)
 })
 
 app.post('/api/foodItems', async function(req, res) {
   console.log('POST /api/foodItems - Body: ', req.body)
-  const { name, category, notes, status } = req.body
-  const foodItem = await db.FoodItem.create({ name, category, notes, status })
+  const { name, category, notes, status, householdId } = req.body
+  const foodItem = await db.FoodItem.create({ name, category, notes, status, householdId })
 
   refreshClients(req)
   return res.send(foodItem)

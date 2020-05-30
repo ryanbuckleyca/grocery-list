@@ -52,7 +52,6 @@ hr {
 }
 #groceryMenu a {
   color: rgb(var(--foreground));
-  width: 50%;
   margin: 2vh auto;
   text-decoration: none;
   font-size: inherit;
