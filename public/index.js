@@ -160,10 +160,16 @@ let router = new Reef.Router({
 		}
 	]
 })
-
+const getFoodItemsForStoredHousehold = () => {
+  if(readCookie("householdId")) {
+    return getFoodItems()
+  } else {
+    return []
+  }
+}
 let store = new Reef.Store({
   data: {
-    foodItems: [],
+    foodItems: getFoodItemsForStoredHousehold(),
     households: getHouseholds()
   },
   setters: {
