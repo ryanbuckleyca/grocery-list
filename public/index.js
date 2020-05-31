@@ -430,22 +430,12 @@ const householdPage = (props) => {
     ${_(props.households).map(household => {
       return `
       <div id="groceryRow-${household.id}" class="groceryRow row no-gutters text-center">
-      <div id="delItem-${household.id}" class="delItem col-1 text-center align-self-center">
-        <button type="button" id="delButton-${household.id}" class="delItem" onclick="store.do('removehousehold', ${household.id})"}>
-          <li id="delIcon-${household.id}" class="fas fa-trash" aria-hidden="true"></li>
-        </button>
-      </div>
-      <div id="itemName-${household.id}" class="groceryName col-10 p-2 text-center align-self-center">
+      <div id="itemName-${household.id}" class="groceryName col-12 p-2 text-center align-self-center">
         <p id="statusButton-${household.id}" class="groceryItem ${getHouseholdStatus(household.id)}" 
            onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})" 
            onkeydown="handleOnEnterEdit(event, ${household.id})">
           ${household.name}
         </p>
-      </div>
-      <div id="editItem-${household.id}" class="editItem col-1 text-center align-self-center">
-        <button type="button" id="editButton-${household.id}" class="editButton" onmousedown="editItem(event, ${household.id})">
-          <li id="editIcon-${household.id}" class="fas fa-pen" aria-hidden="true"></li>
-        </button>
       </div>
     </div>`
     }).join('')}
