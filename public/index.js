@@ -163,7 +163,7 @@ let router = new Reef.Router({
 
 let store = new Reef.Store({
   data: {
-    foodItems: getFoodItems(),
+    foodItems: [],
     households: getHouseholds()
   },
   setters: {
