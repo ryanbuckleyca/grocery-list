@@ -306,13 +306,16 @@ const stockPage = (props) => {
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
         <div id="${category}" class="groceryHeader row col-10 no-gutters">
-          <div class="col-10 groceryHeaderName">
+           <a class="col-10 groceryHeaderName" data-toggle="collapse" href="#stockListCategory-${category}" aria-expanded="true" >
             ${category}
-          </div>
+            <i class="fa fa-chevron-right pull-right"></i>
+            <i class="fa fa-chevron-down pull-right"></i>  
+          </a>
         </div>
+        <span class="stockListCategory collapse show" id="stockListCategory-${category}">
         ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
           return `
-            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center collapse show">
               <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
                 <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
                   <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
@@ -331,7 +334,8 @@ const stockPage = (props) => {
                 </button>
               </div>
             </div>`
-        }).join('')}`
+        }).join('')}
+        </span>`
       }).join('')}
     </div>
     <div id="addButton" class="addItem">
