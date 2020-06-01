@@ -26,6 +26,74 @@ hr {
   border-color: rgba(var(--foreground), 0.1) !important;
 }
 
+.modal-dialog {
+  min-width: 90vw;
+}
+.modal-content {
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  border-radius: 3%;
+}
+.modal-header, .modal-body {
+  padding: 25px;
+}
+.modal-content .close {
+  color: rgb(var(--out));
+  text-shadow: none;
+  font-size: 125%;
+  opacity: 1;
+}
+.modal-footer {
+  padding: 25px;
+  justify-content: space-around;
+}
+/*the container must be positioned relative:*/
+#addItems {
+  position: relative;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;    
+  box-sizing: border-box;
+  width: 100%;
+}
+#addItems input {
+  width: 100%;
+  font-size: 100%;
+  padding: 10px;  
+  border-radius: 5px;
+  background-color: rgba(var(--foreground), 0.05);
+  color: rgb(var(--foreground));
+  outline: 0 !important;
+  border: 1px solid rgba(var(--foreground), 0.1);
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid rgba(var(--background), 0.5);
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: rgb(var(--background)); 
+  border-bottom: 1px solid rgba(var(--background), 0.7); 
+}
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: rgb(var(--background)); 
+  filter: brightness(110%);
+}
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: rgb(var(--accent)) !important; 
+  color: rgb(var(--foreground)); 
+}
+
 #groceryMenu {
   position: sticky;
   z-index: 1;

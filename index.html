@@ -61,6 +61,39 @@
 
   </head>
   <body onload="attachSlip()">
+      <!-- The Modal -->
+      <div class="modal modal-lg" id="addFoodItemModal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <div class="modal-title">Add item and category:</div>
+              <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+            <form id="addItems" autocomplete="off">
+              <div>
+                <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
+              </div>
+              <hr style="margin-top: 7px;" />
+              <div class="autocomplete">
+                <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
+              </div>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer groceryName">
+              <button type="button" class="good" style="width:100%" data-dismiss="modal" onclick="store.do('addFoodItem')">Submit</button>
+            </div>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+  
     <span id="lasers">
       <div class="laser-beam-blue"></div>
       <div class="laser-beam-red"></div>
@@ -99,9 +132,13 @@
 
        <!-- set to display:none until rave mode enabled -->
       <div id="addDisco">
-        <button id="discoButton" onclick="store.do('addFoodItem')"><img src="discoball.gif"></button>
+        <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal">
+          <img src="discoball.gif">
+        </button>
       </div>
 
       <script src="index.js" type="application/javascript"></script>
+      <script src="autocomplete.js" type="application/javascript"></script>
+
   </body>
 </html>

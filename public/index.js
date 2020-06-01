@@ -97,6 +97,14 @@ const handleOnEnterEdit = (event, id) => {
     handleOnBlurEdit(id)
   }
 }
+const submitOnEnter = (event) => {
+  console.log(event)
+  if (event.which == 13 || event.keyCode == 13) {
+    event.preventDefault()
+    document.getElementById("addFoodItemModal").modal('hide')
+    store.do('addFoodItem')
+  }
+}
 
 const getFoodItems = () => {
   let request = new XMLHttpRequest() 
@@ -203,8 +211,8 @@ let store = new Reef.Store({
       _.remove(props.foodItems, { id })
     },
     addFoodItem: async (props) => {
-      let name = titleCase(prompt("Enter the name of the item:"))
-      let category = titleCase(prompt("Enter the category for " + name))
+      let name = document.getElementById("foodItemToAdd").value
+      let category = document.getElementById("categoryToAddTo").value
       let householdId = readCookie("householdId")
       let newItem = await apiRequest(
         "POST",
@@ -294,12 +302,9 @@ const stockPage = (props) => {
     return `
     <p align='center'>
       No grocery items yet. Click the + button below to start creating your list!
-    </p> 
-    <div id="addButton" class="addItem">
-      <button type="button" onclick="store.do('addFoodItem')">
-        <i class="fas fa-cart-plus"></i>
-      </button>
-    </div>` 
+    </p>
+    ${addFoodItemComponent()}
+    ` 
   }
   let foodItemsByCategory = _.groupBy(props.foodItems, "category")
   return `
@@ -337,13 +342,17 @@ const stockPage = (props) => {
         }).join('')}
         </span>`
       }).join('')}
-    </div>
+      ${addFoodItemComponent()}
+    `
+}
+
+const addFoodItemComponent = () => {
+  return `
     <div id="addButton" class="addItem">
-      <button type="button" onclick="store.do('addFoodItem')">
+      <button type="button" data-toggle="modal" data-target="#addFoodItemModal">
         <i class="fas fa-cart-plus"></i>
       </button>
-    </div>
-  </div>`
+    </div>`
 }
 
 const attachSlip = () => {
