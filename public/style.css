@@ -198,16 +198,19 @@ hr {
 .groceryHeaderName {
   background: rgb(var(--background));
   padding: 1.5vh 0 2vh 0;
-  margin: auto;
+  margin: 2px auto;
   color: rgb(var(--foreground));
   animation: var(--flicker);
+}
+.groceryHeaderName:focus {
+  outline: none !important;
 }
 .groceryHeaderName a {
   background: rgb(var(--background));
   color: rgb(var(--foreground));
 }
 .groceryHeader a:hover {
-  text-decoration: none;
+  text-decoration: none !important;
   color: rgb(var(--foreground));
 }
 a[aria-expanded=true] .fa-chevron-right {
