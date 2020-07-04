@@ -1,6 +1,10 @@
 *:active {
   outline: 0;
 }
+*:focus {
+  outline: 2px solid rgba(var(--accent), 0.5) !important;
+}
+
 html {
   padding:0;
   margin:0;
@@ -99,22 +103,23 @@ hr {
   z-index: 1;
   top: 0;
   background: rgb(var(--background));
-  padding-top: 2vh;
+  padding: 2vh 2px 2px 2px;
   overflow: hidden;
+  margin-bottom: 2vh;
 }
 #groceryMenu button {
   font-size: 120%;
   background: rgb(var(--background));
   color: rgb(var(--foreground));
   border: 0;
-  padding-bottom: 2vh;
   margin-bottom: auto;
 }
 #groceryMenu #dropdown {
   display: none;
   position: relative;
   background: rgb(var(--background));
-  width: 100%;
+  width: 99%;
+  margin: auto;
   top: 2vh;
   padding: 2vh 3vh;
 }
@@ -142,6 +147,11 @@ hr {
   background: linear-gradient(177deg, rgb(var(--background)) 50%, rgba(var(--accent), 0.5) 51%);
   padding: 0 1vh 0 1vh;
 }
+#groceryMenu h1:focus { 
+  outline: none !important; 
+  -webkit-appearance: none !important;
+  outline: 0 !important;
+}
 
 .groceryRow {
   cursor: pointer;
@@ -156,7 +166,7 @@ hr {
 .delItem button {
   color: rgba(var(--out), 1);
   border: 0;
-  padding: 0;
+  padding: 8px;
   margin: 0;
   background: none;
   font-size: 120%;
@@ -166,7 +176,7 @@ hr {
 }
 .editItem button {
   color: rgb(var(--accent));
-  padding: 0;
+  padding: 8px;
   margin: 0;
   border: 0;
   background: none;
