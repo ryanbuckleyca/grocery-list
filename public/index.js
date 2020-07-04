@@ -123,7 +123,6 @@ const getHouseholds = () => {
 }
 
 const getHouseholdStatus = (id) => {
-  console.log("householdId cookie is " + readCookie("householdId"))
   if(id.toString() === readCookie("householdId")) {
     return "good"
   } else {
