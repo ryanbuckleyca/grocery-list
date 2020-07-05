@@ -53,6 +53,13 @@
     </script>
   </head>
   <body>  
+    <span id="lasers">	
+      <div class="laser-beam-blue"></div>	
+      <div class="laser-beam-red"></div>	
+      <div class="laser-beam-purple"></div>	
+      <div class="laser-beam-green"></div>	
+    </span>
+
     <div id="groceryMenu" class="container row">
       <button id="menuButton" class="button top left" onclick="toggleMenu()">
         <i class="fas fa-hamburger"></i>
@@ -72,6 +79,9 @@
       </button>
     </div>
     <hr />
+
+    <!-- set to display:none until rave mode enabled -->	    
+    <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/gute-nacht-party" title="GUTE NACHT" target="_blank" style="color: #cccccc; text-decoration: none;">GUTE NACHT</a> · <a href="https://soundcloud.com/gute-nacht-party/gn-mix002-brazilian-session-by-paoninho" title="GN MIX.002 - Brazilian Session by Paoninho" target="_blank" style="color: #cccccc; text-decoration: none;">GN MIX.002 - Brazilian Session by Paoninho</a></div>
 
     <div id="app" class="container">
     </div>
@@ -98,6 +108,13 @@
       document.querySelector(".modal").classList.toggle("show-modal");
     }
     </script>
+
+    <!-- set to display:none until rave mode enabled -->
+      <div id="addDisco">
+        <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal">
+          <img src="discoball.gif">
+        </button>
+      </div>
 
     <script src="index.js" type="application/javascript"></script>
     <script src="autocomplete.js" type="application/javascript"></script>

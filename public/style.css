@@ -38,6 +38,8 @@ h1 {
 h1 span {
   background: linear-gradient(177deg, rgb(var(--background)) 50%, rgba(var(--accent), 0.5) 51%);
   padding: 0 1vh 0 1vh;
+  margin:0;
+  white-space: nowrap;
 }
 h2 {
   font-size: 120%;
@@ -53,7 +55,7 @@ h2 {
 
 #headerMenu {
   margin: 0;
-  padding: 0 0 3vh 0;
+  padding: 0 0 1.5vh 0;
 }
 
 .container {
@@ -71,7 +73,7 @@ h2 {
 .header {
   position: sticky;
   top: 0;
-  width: calc(100% - 120px);
+  width: calc(100% - 10.5vh);
   align-self: center;
   margin: 0 auto;
   font-weight: bolder;
@@ -88,7 +90,7 @@ h2 {
 .headerName {
   padding: 3vh 0 3vh;
   margin: 0;
-  width: calc(100% - 120px);
+  width: 100%;
   background: rgb(var(--background));
   color: rgb(var(--foreground));
   animation: var(--flicker);
