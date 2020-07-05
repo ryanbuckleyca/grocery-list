@@ -354,17 +354,6 @@ const addFoodItemComponent = () => {
     </div>`
 }
 
-const attachSlip = () => {
-  console.log("ATTACHED")
-
-  document.querySelectorAll('.shopListCategory').forEach(item => {
-    new Slip(item)
-    item.addEventListener('slip:swipe', event => {
-      store.do("buyFoodItem", parseInt(event.target.dataset.id))
-    })
-  })
-}
-
 const connectWebsocket = () => {
   clientId = createUuid()
 
@@ -385,6 +374,24 @@ const connectWebsocket = () => {
         break
     }
   }
+}
+
+function removeShopItem( id, category, status ) {
+  var item = document.getElementById('groceryRow-' + id)
+  var catSpan = document.getElementById('shopListCategory-' + category.id)
+  if(status === "bought") {
+    document.getElementById('shopItem-' + id).classList.add("good")
+    document.getElementById('shopItem-' + id).style.transform = "rotate(0.5deg) scale(1.07)";
+  }
+  item.style.transition = "opacity 1.5s ease"
+  item.style.opacity = 0
+  setTimeout( function() {
+      item.parentNode.removeChild(item)
+      if(status === "bought")
+        store.do("buyFoodItem", id)
+      if(catSpan.children.length === 0) 
+        document.getElementById('app').removeChild(category);    
+  }, 500)
 }
 
 const shopPage = (props) => {
@@ -409,18 +416,26 @@ const shopPage = (props) => {
             <i class="fa fa-chevron-down pull-right"></i>  
           </a>
         </div>
-        <ul class="shopListCategory collapse show" id="shopListCategory-${category}">
+        <span class="shopListCategory collapse show" id="shopListCategory-${category}">
           ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
             return `
-            <li class="shopListItem" id="shopListItem-${foodItem.id}" data-id=${foodItem.id}>
-              <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-                <div id="itemName-${foodItem.id}" class="groceryName col-12 p-2 text-center align-self-center">
-                  <p id="stockItem-${foodItem.id}" class="shopItem ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
-                </div>
+            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
+              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
+                <button type="button" id="editButton-${foodItem.id}" class="editItem" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought');">
+                  <li class="fas fa-check" aria-hidden="true"></li>
+                </button>
               </div>
-            </li>`
+              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
+                <p id="shopItem-${foodItem.id}" class="shopItem ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
+              </div>
+              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
+                <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="removeShopItem(${foodItem.id}, ${foodItem.category});"}>
+                  <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
+                </button>
+              </div>
+            </div>`
           }).join('')}
-        </ul>`
+        </span>`
       }).join('')}
     </div>
   </div>`

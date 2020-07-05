@@ -6,8 +6,8 @@
 }
 
 html {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
   max-width: 100%;
   touch-action: manipulation;
 }
@@ -28,6 +28,9 @@ hr {
   margin: 0 0 1vh 0;
   border: 0.1px solid;
   border-color: rgba(var(--foreground), 0.1) !important;
+}
+ul {
+  padding: 0 !important; 
 }
 
 .modal-dialog {
@@ -103,12 +106,13 @@ hr {
   z-index: 1;
   top: 0;
   background: rgb(var(--background));
-  padding: 2vh 2px 2vh 2px;
+  width: 100%;
+  padding: 2vh 0 2vh 0;
   overflow: hidden;
   margin-bottom: 2vh;
 }
 #groceryMenu button {
-  font-size: 120%;
+  font-size: 125%;
   background: rgb(var(--background));
   color: rgb(var(--foreground));
   border: 0;
@@ -156,8 +160,17 @@ hr {
 .groceryRow {
   cursor: pointer;
 }
+.groceryRow li {
+  list-style: none; 
+}
+.groceryRow input {
+  height: 40px;
+  align-self: center;
+  margin: 0;
+}
 
-.delItem, .editItem {
+
+.delItem, .editItem, .chekBox {
   border: 0;
   margin: 0;
   padding: 0;
@@ -190,6 +203,7 @@ hr {
   position: sticky;
   z-index: 3;
   top: 0;
+  width: 100%;
   margin: auto;
   text-align: center;
   font-weight: bolder;
@@ -220,6 +234,10 @@ a[aria-expanded=true] .fa-chevron-right {
 a[aria-expanded=false] .fa-chevron-down {
   display: none;
   transform: scale(0.7);
+}
+
+.shopItem {
+  transition: all 0.2s ease-in-out;
 }
 
 .groceryName button {
@@ -289,13 +307,6 @@ a[aria-expanded=false] .fa-chevron-down {
 }
 .addItem button:hover {
   filter: brightness(120%);
-}
-
-.shopListCategory {
-  padding: 0;
-}
-.shopListItem {
-  list-style-type: none;
 }
 
 /* Animate neon flicker */
