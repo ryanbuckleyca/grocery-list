@@ -3,22 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Leckerli+One&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/reef.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/router.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
-    <!-- bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="cookies.js" type="application/javascript"></script>
     <!-- App styles -->
-    <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
     <link type="text/css" rel="stylesheet" href="style.css" />
+    <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
     <link type="text/css" rel="stylesheet" href="lasers.css" />
+    <link type="text/css" rel="stylesheet" href="fireworks.css" />
     <script>    
 
       const linkTags = document.getElementsByTagName("link")
@@ -56,88 +51,56 @@
         }
       }
     </script>
-
-
   </head>
-  <body onload="attachSlip()">
-      <!-- The Modal -->
-      <div class="modal modal-lg" id="addFoodItemModal">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-          
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <div class="modal-title">Add item and category:</div>
-              <button type="button" class="close" data-dismiss="modal">x</button>
-            </div>
-            
-            <!-- Modal body -->
-            <div class="modal-body">
-            <form id="addItems" autocomplete="off">
-              <div>
-                <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
-              </div>
-              <hr style="margin-top: 7px;" />
-              <div class="autocomplete">
-                <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
-              </div>
-            </div>
-            
-            <!-- Modal footer -->
-            <div class="modal-footer groceryName">
-              <button type="button" class="good" style="width:100%" data-dismiss="modal" onclick="store.do('addFoodItem')">Submit</button>
-            </div>
-            </form>
-            
-          </div>
-        </div>
-      </div>
-  
-    <span id="lasers">
-      <div class="laser-beam-blue"></div>
-      <div class="laser-beam-red"></div>
-      <div class="laser-beam-purple"></div>
-      <div class="laser-beam-green"></div>
-    </span>
-
-    <div id="groceryList" class="container-fluid">
-      <div id="groceryMenu" class="row no-gutters text-center align-top">
-        <button id="menuButton" class="menuButton col-1" onclick="toggleMenu()">
-          <i class="fas fa-hamburger"></i>
-        </button>
-      </a>
-        <div class="col-10">
+  <body>  
+    <div id="groceryMenu" class="container row">
+      <button id="menuButton" class="button top left" onclick="toggleMenu()">
+        <i class="fas fa-hamburger"></i>
+      </button>
+      <div id="headerMenu" class="item center">
         <h1><span>Grocery List</span></h1>
-          <div id="dropdown" style="display: none">
-            <a href="/stock"><span>Stock</span></a>
-            <a href="/shop"><span>Shop</span></a>
-            <a href="/households"><span>Households</span></a>
-            <a href="/about"><span>About</span></a>
-            <a href="#style" onclick="switchStyle()"><span><i class="fas fa-adjust"></i></span></a>
-          </div>
+        <div id="dropdown" style="display: none">
+          <a href="/stock" onclick="toggleMenu()"><span>Stock</span></a>
+          <a href="/shop" onclick="toggleMenu()"><span>Shop</span></a>
+          <a href="/households" onclick="toggleMenu()"><span>Households</span></a>
+          <a href="/about" onclick="toggleMenu()"><span>About</span></a>
+          <a href="#style" onclick="switchStyle()"><span><i class="fas fa-adjust"></i></span></a>
         </div>
-        <button class="scrollButton col-1" onclick="window.scroll(0,0)">
-          <i class="fas fa-arrow-up"></i>
-        </button>
       </div>
-      <hr />
+      <button id="scrollButton" class="button top right" onclick="window.scroll(0,0)">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+    <hr />
 
-      <!-- set to display:none until rave mode enabled -->
-      <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+    <div id="app" class="container">
+    </div>
 
-      <div class="row">
-        <div id="app" class="col-12"></div>
+    <div class="modal">
+      <div class="modal-content">
+          <h2 class="center">Add item and category:</h2>
+          <i class="close fas fa-times" onclick="toggleModal()"></i>
+        <span class="container row">
+          <form id="addItems" autocomplete="off">
+            <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
+            <hr style="margin-top: 7px;">
+            <div class="autocomplete">
+              <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
+            </div>
+            <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
+          </form>
+        </span>
       </div>
+    </div>
 
-       <!-- set to display:none until rave mode enabled -->
-      <div id="addDisco">
-        <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal">
-          <img src="discoball.gif">
-        </button>
-      </div>
+    <script>
+    function toggleModal() {
+      document.querySelector(".modal").classList.toggle("show-modal");
+    }
+    </script>
 
-      <script src="index.js" type="application/javascript"></script>
-      <script src="autocomplete.js" type="application/javascript"></script>
+    <script src="index.js" type="application/javascript"></script>
+    <script src="autocomplete.js" type="application/javascript"></script>
 
   </body>
 </html>
