@@ -20,6 +20,30 @@ const createUuid = () => {
   return uuid
 }
 
+const collapseCat = (category, elementID) => {
+  var elToColl = document.getElementById(elementID + category.id)
+  var fa = document.getElementById(category.id).querySelector('.fa')
+
+  var position = document.getElementById(category.id).offsetTop;
+
+  if(fa.className === "fa fa-caret-right")
+  {
+    fa.setAttribute("class", "fa fa-caret-down")
+  } else {
+    fa.setAttribute("class", "fa fa-caret-right")
+  }
+  console.log(elToColl.style.display)
+  if (elToColl.style.display === "block") {
+    console.log("style was Block")
+    elToColl.style.display = "none";
+  } else {
+    console.log("style was not block")
+    elToColl.style.display = "block";
+  }
+
+  window.scrollTo(0, position);
+}
+
 //close menu when clicking outside or on links
 window.addEventListener('mousedown', function(e){   
   let menuDiv = document.getElementById('dropdown').contains(e.target)
@@ -62,11 +86,11 @@ const editItem = (event, itemID) => {
 
   if (element.contentEditable === "true") {
     element.contentEditable = "false"
-    element.classList.remove("edit")
+    element.classList.remove("modify")
   } else {
     element.onclick = ""
     element.contentEditable = "true"
-    element.classList.add("edit")
+    element.classList.add("modify")
     //should set cursor to end of text
     var selection = window.getSelection();
     var range = document.createRange();
@@ -300,7 +324,7 @@ const stockPage = (props) => {
   if(props.foodItems.length === 0) { 
     return `
     <p align='center'>
-      No grocery items yet. Click the + button below to start creating your list!
+      No grocery items yet. Click the + button icon below to start creating your list!
     </p>
     ${addFoodItemComponent()}
     ` 
@@ -309,37 +333,32 @@ const stockPage = (props) => {
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
-        <div id="${category}" class="groceryHeader row col-10 no-gutters">
-           <a class="col-10 groceryHeaderName" data-toggle="collapse" href="#stockListCategory-${category}" aria-expanded="true" >
+        <div id="${category}" class="container row header center">
+          <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'stockListCategory-')">
             ${category}
-            <i class="fa fa-chevron-right pull-right"></i>
-            <i class="fa fa-chevron-down pull-right"></i>  
+            <i class="fa fa-caret-down"></i>  
           </a>
         </div>
-        <span class="stockListCategory collapse show" id="stockListCategory-${category}">
+
+        <div id="stockListCategory-${category}" class="stockListCategory container" style="display: block;">
+
         ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
           return `
-            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center collapse show">
-              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
-                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
-                </button>
-              </div>
-              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                <p id="statusButton-${foodItem.id}" class="groceryItem ${foodItem.status.toLowerCase()}" 
-                   onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" 
-                   onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
-                  ${foodItem.name}
-                </p>
-              </div>
-              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                <button type="button" id="editButton-${foodItem.id}" class="editButton" onmousedown="editItem(event, ${foodItem.id})">
-                  <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
-                </button>
-              </div>
+            <div id="groceryRow-${foodItem.id}" class="container row">
+              <button type="button" id="delButton-${foodItem.id}" class="del button icon left" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
+              </button>
+              <p id="statusButton-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}" 
+                  onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" 
+                  onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                ${foodItem.name}
+              </p>
+              <button type="button" id="editButton-${foodItem.id}" class="edit button icon right" onmousedown="editItem(event, ${foodItem.id})">
+                <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
+              </button>
             </div>`
         }).join('')}
-        </span>`
+        </div>`
       }).join('')}
       ${addFoodItemComponent()}
     `
@@ -348,7 +367,7 @@ const stockPage = (props) => {
 const addFoodItemComponent = () => {
   return `
     <div id="addButton" class="addItem">
-      <button type="button" data-toggle="modal" data-target="#addFoodItemModal">
+      <button type="button" onclick="toggleModal()">
         <i class="fas fa-cart-plus"></i>
       </button>
     </div>`
@@ -409,33 +428,28 @@ const shopPage = (props) => {
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
-        <div id="${category}" class="groceryHeader row col-10 no-gutters">
-          <a class="col-10 groceryHeaderName" data-toggle="collapse" href="#shopListCategory-${category}" aria-expanded="true" >
+        <div id="${category}" class="container row header center">
+          <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'shopListCategory-')">
             ${category}
-            <i class="fa fa-chevron-right pull-right"></i>
-            <i class="fa fa-chevron-down pull-right"></i>  
+            <i class="fa fa-caret-down"></i>  
           </a>
         </div>
-        <span class="shopListCategory collapse show" id="shopListCategory-${category}">
+
+        <div id="shopListCategory-${category}" class="container" style="display: block;">
+
           ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
             return `
-            <div id="groceryRow-${foodItem.id}" class="groceryRow row no-gutters text-center">
-              <div id="editItem-${foodItem.id}" class="editItem col-1 text-center align-self-center">
-                <button type="button" id="editButton-${foodItem.id}" class="editItem" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought');">
-                  <li class="fas fa-check" aria-hidden="true"></li>
-                </button>
-              </div>
-              <div id="itemName-${foodItem.id}" class="groceryName col-10 p-2 text-center align-self-center">
-                <p id="shopItem-${foodItem.id}" class="shopItem ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
-              </div>
-              <div id="delItem-${foodItem.id}" class="delItem col-1 text-center align-self-center">
-                <button type="button" id="delButton-${foodItem.id}" class="delItem" onclick="removeShopItem(${foodItem.id}, ${foodItem.category});"}>
-                  <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
-                </button>
-              </div>
+            <div id="groceryRow-${foodItem.id}" class="container row">
+              <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought');">
+                <li class="fas fa-check" aria-hidden="true"></li>
+              </button>
+              <p id="shopItem-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
+              <button type="button" id="delButton-${foodItem.id}" class="del button icon right" onclick="removeShopItem(${foodItem.id}, ${foodItem.category});"}>
+                <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
+              </button>
             </div>`
           }).join('')}
-        </span>`
+        </div>`
       }).join('')}
     </div>
   </div>`
@@ -449,21 +463,17 @@ const aboutPage = (props) => {
 const householdPage = (props) => {
   console.log("RENDERING HOUSEHOLD PAGE")
   return `
-    <div id="households" class="groceryHeader row col-10 no-gutters">
-      <div class="col-10 groceryHeaderName">
-        Households
-      </div>
+    <div id="households" class="container row header center">
+      <p class="headerName">Households</p>
     </div>
     ${_(props.households).map(household => {
       return `
-      <div id="groceryRow-${household.id}" class="groceryRow row no-gutters text-center">
-      <div id="itemName-${household.id}" class="groceryName col-12 p-2 text-center align-self-center">
-        <p id="statusButton-${household.id}" class="groceryItem ${getHouseholdStatus(household.id)}" 
+      <div id="groceryRow-${household.id}" class="container row">
+        <p id="statusButton-${household.id}" class="item center ${getHouseholdStatus(household.id)}" 
            onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})" 
            onkeydown="handleOnEnterEdit(event, ${household.id})">
           ${household.name}
         </p>
-      </div>
     </div>`
     }).join('')}
     <div id="addButton" class="addItem">
@@ -473,7 +483,6 @@ const householdPage = (props) => {
     </div>
   </div>`
 }
-
 
 app.render()
 connectWebsocket()

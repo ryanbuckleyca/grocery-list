@@ -2,12 +2,9 @@
   outline: 0;
 }
 *:focus {
-  outline: 2px solid rgba(var(--accent), 0.5) !important;
+  outline: 0 !important;
 }
-
 html {
-  padding: 0;
-  margin: 0;
   max-width: 100%;
   touch-action: manipulation;
 }
@@ -16,246 +13,122 @@ body {
   color: rgb(var(--foreground));
   font-size: 3.7vh;
   font-family: var(--font);
-  margin: 0 2vh 0 1vh;
+  margin: 0 3vh 0 2vh;
   padding: 0;
   max-width: 100%;
 }
-p {
-  padding: 0vh;
-  margin: 1vh;
+form {
+  width: 90%;
 }
 hr {
   margin: 0 0 1vh 0;
   border: 0.1px solid;
   border-color: rgba(var(--foreground), 0.1) !important;
 }
-ul {
-  padding: 0 !important; 
+span {
+  margin: auto;
+  max-height: 100%;
 }
-
-.modal-dialog {
-  min-width: 90vw;
-}
-.modal-content {
-  background-color: rgb(var(--background));
+h1 {
+  font-size: 150%;
+  margin: 15px auto;
+  text-shadow: 0.5px 0.5px 0px;
   color: rgb(var(--foreground));
-  border-radius: 3%;
 }
-.modal-header, .modal-body {
-  padding: 25px;
+h1 span {
+  background: linear-gradient(177deg, rgb(var(--background)) 50%, rgba(var(--accent), 0.5) 51%);
+  padding: 0 1vh 0 1vh;
 }
-.modal-content .close {
-  color: rgb(var(--out));
-  text-shadow: none;
-  font-size: 125%;
-  opacity: 1;
-}
-.modal-footer {
-  padding: 25px;
-  justify-content: space-around;
-}
-/*the container must be positioned relative:*/
-#addItems {
-  position: relative;
-  display: inline-block;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;    
-  box-sizing: border-box;
-  width: 100%;
-}
-#addItems input {
-  width: 100%;
-  font-size: 100%;
-  padding: 10px;  
-  border-radius: 5px;
-  background-color: rgba(var(--foreground), 0.05);
-  color: rgb(var(--foreground));
-  outline: 0 !important;
-  border: 1px solid rgba(var(--foreground), 0.1);
-}
-.autocomplete-items {
-  position: absolute;
-  border: 1px solid rgba(var(--background), 0.5);
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: rgb(var(--background)); 
-  border-bottom: 1px solid rgba(var(--background), 0.7); 
-}
-/*when hovering an item:*/
-.autocomplete-items div:hover {
-  background-color: rgb(var(--background)); 
-  filter: brightness(110%);
-}
-/*when navigating through the items using the arrow keys:*/
-.autocomplete-active {
-  background-color: rgb(var(--accent)) !important; 
-  color: rgb(var(--foreground)); 
+h2 {
+  font-size: 120%;
+  margin: 10px 0 20px;
 }
 
 #groceryMenu {
   position: sticky;
-  z-index: 1;
   top: 0;
+  background:rgb(var(--background));
+  z-index: 1;
+}
+
+#headerMenu {
+  margin: 0;
+  padding: 0 0 10px 0;
+}
+
+.container {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  justify-content: center;
+}
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  width: calc(100% - 110px);
+  align-self: center;
+  margin: 0 auto;
+  font-weight: bolder;
+  font-size: 130%;
+  z-index: 2;
+}
+.header a {
+  text-decoration: none !important;
+  color: rgb(var(--foreground));
+}
+.header a:hover {
+  text-decoration: none !important;
+}
+.headerName {
+  padding: 20px 0 20px;
+  margin: 0;
+  width: calc(100% - 110px);
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  animation: var(--flicker);
+}
+
+#dropdown {
+  display: none;
+  position: fixed;
   background: rgb(var(--background));
   width: 100%;
-  padding: 2vh 0 2vh 0;
-  overflow: hidden;
-  margin-bottom: 2vh;
-}
-#groceryMenu button {
-  font-size: 125%;
-  background: rgb(var(--background));
-  color: rgb(var(--foreground));
-  border: 0;
-  margin-bottom: auto;
-}
-#groceryMenu #dropdown {
-  display: none;
-  position: relative;
-  background: rgb(var(--background));
-  width: 99%;
   margin: auto;
-  top: 2vh;
-  padding: 2vh 3vh;
+  top: 80px;
+  left: 0;
+  padding: 0 0 15px 0;
+  border-bottom: 0.1px solid rgba(var(--foreground), 0.1);
+
+  box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.1);
 }
-#groceryMenu a {
+#dropdown a {
   color: rgb(var(--foreground));
-  margin: 2vh auto;
+  margin: 3vh auto;
   text-decoration: none;
   font-size: inherit;
   display: block;
-  z-index: 6;
 }
-#groceryMenu a:hover span {
+#dropdown a:hover span {
   padding: 0 1vh 0 1vh;
   color: rgb(var(--foreground));
   background: linear-gradient(181deg, rgb(var(--background)) 62%, rgba(var(--accent), 0.3) 51%);
 }
-#groceryMenu h1 {
-  font-size: 150%;
-  height: 4.7vh;
-  margin: auto;
-  text-shadow: 0.5px 0.5px 0px;
-  color: rgb(var(--foreground));
-}
-#groceryMenu h1 span {
-  background: linear-gradient(177deg, rgb(var(--background)) 50%, rgba(var(--accent), 0.5) 51%);
-  padding: 0 1vh 0 1vh;
-}
-#groceryMenu h1:focus { 
-  outline: none !important; 
-  -webkit-appearance: none !important;
-  outline: 0 !important;
-}
-
-.groceryRow {
-  cursor: pointer;
-}
-.groceryRow li {
-  list-style: none; 
-}
-.groceryRow input {
-  height: 40px;
-  align-self: center;
-  margin: 0;
-}
 
 
-.delItem, .editItem, .chekBox {
+.item {
+  flex: 1 0 auto;
+  max-width: calc(100% - 150px);
   border: 0;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.delItem button {
-  color: rgba(var(--out), 1);
-  border: 0;
-  padding: 8px;
-  margin: 0;
-  background: none;
-  font-size: 120%;
-}
-.delItem button:hover {
-  filter: brightness(115%);
-}
-.editItem button {
-  color: rgb(var(--accent));
-  padding: 8px;
-  margin: 0;
-  border: 0;
-  background: none;
-  font-size: 120%;
-}
-.editItem button:hover {
-  filter: brightness(115%);
-}
-
-.groceryHeader {
-  position: sticky;
-  z-index: 3;
-  top: 0;
-  width: 100%;
-  margin: auto;
-  text-align: center;
-  font-weight: bolder;
-  font-size: 130%;
-}
-.groceryHeaderName {
-  background: rgb(var(--background));
-  padding: 1.5vh 0 2vh 0;
-  margin: 2px auto;
-  color: rgb(var(--foreground));
-  animation: var(--flicker);
-}
-.groceryHeaderName:focus {
-  outline: none !important;
-}
-.groceryHeaderName a {
-  background: rgb(var(--background));
-  color: rgb(var(--foreground));
-}
-.groceryHeader a:hover {
-  text-decoration: none !important;
-  color: rgb(var(--foreground));
-}
-a[aria-expanded=true] .fa-chevron-right {
-  display: none;
-  transform: scale(0.7);
-}
-a[aria-expanded=false] .fa-chevron-down {
-  display: none;
-  transform: scale(0.7);
-}
-
-.shopItem {
-  transition: all 0.2s ease-in-out;
-}
-
-.groceryName button {
-  z-index: 2;
-  padding: 2vh;
-  border-radius: 8px;
-  width: 95%;
-  text-align: center;
-}
-
-.groceryName p {
-  z-index: 2;
-  padding: 2vh;
+  padding: 3vh;
   border-radius: 8px;
   text-align: center;
-}
-.groceryName:hover {
-  filter: brightness(103%);
+  margin: 8px 15px;
 }
 .low {
   color: rgb(var(--foreground));
@@ -278,7 +151,7 @@ a[aria-expanded=false] .fa-chevron-down {
   box-shadow: var(--glow) rgb(var(--good)); 
 
 }
-.edit {
+.modify {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   outline: 0 !important;
@@ -286,12 +159,44 @@ a[aria-expanded=false] .fa-chevron-down {
   border: 0vh solid rgba(var(--foreground), 0.5);
 }
 
+.button {
+  flex: 0;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  padding: 8px;
+  margin: 0;
+  background: none;
+  font-size: 120%;
+  border: 0;
+  cursor: pointer;
+}
+.del {
+  color: rgba(var(--out), 1);
+}
+.edit {
+  color: rgb(var(--accent));
+}
+.center {
+  text-align: center;
+}
+.left {
+  position: absolute;
+  left: 0;
+}
+.right {
+  position: absolute;
+  right: 0;
+}
+.top {
+  color:rgb(var(--foreground))
+}
 
 .addItem {
   position: fixed;
   bottom: 1vh;
   right: 3.5vh;
-  z-index: 5;
+  z-index: 4;
 }
 .addItem button {
   width: 14vh;
@@ -303,10 +208,97 @@ a[aria-expanded=false] .fa-chevron-down {
   font-size: 6vh;
   border: 0;
   border-radius: 50%;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
 }
 .addItem button:hover {
   filter: brightness(120%);
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 3;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal input {
+  width: calc(100% - 25px);
+  font-size: 100%;
+  height: 30px;
+  padding: 10px;
+  font-family: inherit;
+}
+.modal button {
+  width: 100%;
+  border: 0;
+  padding: 3vh;
+  margin: 10px 0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 100%;
+  font-family: inherit;
+}
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(var(--background));
+  padding: 1rem 1.5rem;
+  width: 75%;
+  border-radius: 0.5rem;
+}
+.close {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  height: 5px;
+  width: 5px;
+}
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1.0);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.autocomplete {
+  position: relative;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid rgba(var(--foreground), 0.5);
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: rgb(var(--foreground)); 
+  border-bottom: 1px solid rgba(var(--foreground), 0.7); 
+  color: rgb(var(--background)); 
+}
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: rgb(var(--foreground)); 
+  color: rgb(var(--accent)); 
+}
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: rgb(var(--accent)) !important; 
+  color: rgb(var(--background)); 
 }
 
 /* Animate neon flicker */
