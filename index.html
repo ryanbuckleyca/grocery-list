@@ -14,19 +14,19 @@
     <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
     <link type="text/css" rel="stylesheet" href="lasers.css" />
     <link type="text/css" rel="stylesheet" href="fireworks.css" />
-    <script>    
+    <script>
 
       const linkTags = document.getElementsByTagName("link")
       let linkElToSwap
 
-      for(link of linkTags) { 
-        if(link.title === "swap") { 
-          linkElToSwap = link 
+      for(link of linkTags) {
+        if(link.title === "swap") {
+          linkElToSwap = link
         } else if(link.title === "lasers")
           linkLaserToDel = link
       }
 
-      if(!linkElToSwap) { 
+      if(!linkElToSwap) {
         console.log("cannot find a <link> tag with title \"swap\"")
        } else {
         //set user's preferred style, if exists
@@ -52,12 +52,12 @@
       }
     </script>
   </head>
-  <body>  
-    <span id="lasers">	
-      <div class="laser-beam-blue"></div>	
-      <div class="laser-beam-red"></div>	
-      <div class="laser-beam-purple"></div>	
-      <div class="laser-beam-green"></div>	
+  <body>
+    <span id="lasers">
+      <div class="laser-beam-blue"></div>
+      <div class="laser-beam-red"></div>
+      <div class="laser-beam-purple"></div>
+      <div class="laser-beam-green"></div>
     </span>
 
     <div id="groceryMenu" class="container row">
@@ -80,8 +80,8 @@
     </div>
     <hr />
 
-    <!-- set to display:none until rave mode enabled -->	    
-    <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+    <!-- set to display:none until rave mode enabled -->
+    <iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
 
     <div id="app" class="container">
     </div>

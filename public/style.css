@@ -5,16 +5,23 @@
   outline: 0 !important;
 }
 html {
+  margin: 0;
+  padding: 0;
   max-width: 100%;
   touch-action: manipulation;
+}
+@media screen and (min-width: 1600px) {
+  body {
+     font-size: 30px;
+  }
 }
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
-  font-size: 3.8vh;
   font-family: var(--font);
-  margin: 0 2vh 0 2vh;
+  margin: 0 3%;
   padding: 0;
+  font-size: 5vw;
   max-width: 100%;
 }
 form {
@@ -30,20 +37,20 @@ span {
   max-height: 100%;
 }
 h1 {
-  font-size: 150%;
-  margin: 2vh auto;
+  font-size: 130%;
+  margin: 2vw auto;
   text-shadow: 0.5px 0.5px 0px;
   color: rgb(var(--foreground));
 }
 h1 span {
   background: linear-gradient(177deg, rgb(var(--background)) 50%, rgba(var(--accent), 0.5) 51%);
-  padding: 0 1vh 0 1vh;
+  padding: 0 1vw 0 1vw;
   margin:0;
   white-space: nowrap;
 }
 h2 {
   font-size: 120%;
-  margin: 10px 0 20px;
+  margin: 0 0 3vw;
 }
 
 #groceryMenu {
@@ -55,7 +62,7 @@ h2 {
 
 #headerMenu {
   margin: 0;
-  padding: 0 0 1.5vh 0;
+  padding: 0 0 2% 0;
 }
 
 .container {
@@ -73,11 +80,11 @@ h2 {
 .header {
   position: sticky;
   top: 0;
-  width: calc(100% - 10.5vh);
+  width: 65%;
   align-self: center;
   margin: 0 auto;
   font-weight: bolder;
-  font-size: 130%;
+  font-size: 120%;
   z-index: 2;
 }
 .header a {
@@ -88,7 +95,7 @@ h2 {
   text-decoration: none !important;
 }
 .headerName {
-  padding: 3vh 0 3vh;
+  padding: 3vw 0;
   margin: 0;
   width: 100%;
   background: rgb(var(--background));
@@ -102,21 +109,21 @@ h2 {
   background: rgb(var(--background));
   width: 100%;
   margin: auto;
-  top: 10vh;
+  top: 13vw;
   left: 0;
-  padding: 0 0 2vh 0;
+  padding: 0 0 4vw 0;
   border-bottom: 0.1px solid rgba(var(--background), 0.1);
   box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.1);
 }
 #dropdown a {
   color: rgb(var(--foreground));
-  margin: 3vh auto;
+  margin: 3.5vw auto;
   text-decoration: none;
   font-size: inherit;
   display: block;
 }
 #dropdown a:hover span {
-  padding: 0 1vh 0 1vh;
+  padding: 0 1vw 0 1vw;
   color: rgb(var(--foreground));
   background: linear-gradient(181deg, rgb(var(--background)) 62%, rgba(var(--accent), 0.3) 51%);
 }
@@ -124,32 +131,32 @@ h2 {
 
 .item {
   flex: 1 0 auto;
-  max-width: calc(100% - 20.5vh);
+  max-width: 65%;
   border: 0;
-  padding: 3vh;
+  padding: 5%;
   border-radius: 8px;
   text-align: center;
-  margin: 1vh 2vh;
+  margin: 1% 2%;
 }
 .low {
   color: rgb(var(--foreground));
   background-color: rgba(var(--low), 1);
-  border: 0vh solid rgba(var(--low), 0.5);
-  box-shadow: var(--glow) rgb(var(--low)); 
+  border: 0.1vw solid rgba(var(--low), 0.5);
+  box-shadow: var(--glow) rgb(var(--low));
 
 }
 .out {
   color: rgb(var(--foreground));
   background-color: rgba(var(--out), 1);
-  border: 0vh solid rgb(var(--out), 0.5);
-  box-shadow: var(--glow) rgb(var(--out)); 
+  border: 0.1vw solid rgb(var(--out), 0.5);
+  box-shadow: var(--glow) rgb(var(--out));
 
 }
 .good {
   color: rgb(var(--foreground));
   background-color: rgba(var(--good), 1);
-  border: 0vh solid rgb(var(--good), 0.5);
-  box-shadow: var(--glow) rgb(var(--good)); 
+  border: 0.1vw solid rgb(var(--good), 0.5);
+  box-shadow: var(--glow) rgb(var(--good));
 
 }
 .modify {
@@ -157,7 +164,7 @@ h2 {
   color: rgb(var(--foreground));
   outline: 0 !important;
   box-shadow: inset 0px 0px 4px 0px rgb(var(--foreground));
-  border: 0vh solid rgba(var(--foreground), 0.5);
+  border: 0.1vw solid rgba(var(--foreground), 0.5);
 }
 
 .button {
@@ -193,18 +200,18 @@ h2 {
 
 .addItem {
   position: fixed;
-  bottom: 1vh;
-  right: 3.5vh;
+  bottom: 1vw;
+  right: 3.5vw;
   z-index: 4;
 }
 .addItem button {
-  width: 14vh;
-  height: 14vh;
+  width: 22vw;
+  height: 22vw;
   color: rgb(255, 255, 255);
   padding: 0;
-  margin: 2vh 2vh 2vh 0vh;
+  margin: 3vw 3vw 4vw 0vw;
   background: rgb(var(--accent));
-  font-size: 6vh;
+  font-size: 9vw;
   border: 0;
   border-radius: 50%;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
@@ -228,17 +235,17 @@ h2 {
   transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
 .modal input {
-  width: calc(100% - 4vh);
+  width: 90%;
   font-size: 100%;
-  height: 4vh;
-  padding: 2vh;
+  height: 6vw;
+  padding: 3vw;
   font-family: inherit;
 }
 .modal button {
   width: 100%;
   border: 0;
-  padding: 3vh;
-  margin: 2vh 0;
+  padding: 4vw;
+  margin: 3vw 0;
   border-radius: 8px;
   text-align: center;
   font-size: 100%;
@@ -256,9 +263,9 @@ h2 {
 }
 .close {
   position: absolute;
-  top: 2vh;
-  right: 4vh;
-  width: 1vh;
+  top: 3vw;
+  right: 6vw;
+  width: 1vw;
 }
 .show-modal {
   opacity: 1;
@@ -282,26 +289,26 @@ h2 {
   right: 0;
 }
 .autocomplete-items div {
-  padding: 2vh;
+  padding: 3vw;
   cursor: pointer;
-  background-color: rgb(var(--foreground)); 
-  border-bottom: 1px solid rgba(var(--foreground), 0.7); 
-  color: rgb(var(--background)); 
+  background-color: rgb(var(--foreground));
+  border-bottom: 1px solid rgba(var(--foreground), 0.7);
+  color: rgb(var(--background));
 }
 /*when hovering an item:*/
 .autocomplete-items div:hover {
-  background-color: rgb(var(--foreground)); 
-  color: rgb(var(--accent)); 
+  background-color: rgb(var(--foreground));
+  color: rgb(var(--accent));
 }
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
-  background-color: rgb(var(--accent)) !important; 
-  color: rgb(var(--background)); 
+  background-color: rgb(var(--accent)) !important;
+  color: rgb(var(--background));
 }
 
 /* Animate neon flicker */
 @keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {    
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
       text-shadow:
       0 0 1px #fff,
       0 0 2px #fff,
@@ -311,9 +318,9 @@ h2 {
       0 0 15px rgb(var(--accent)),
       0 0 20px rgb(var(--accent))
   }
-  20%, 24%, 55% {        
+  20%, 24%, 55% {
       text-shadow: none;
-  }    
+  }
 }
 
 body{
