@@ -1,14 +1,14 @@
 #addDisco {
   position: fixed;
-  bottom: 3vh;
-  right: 5.4vh;
+  bottom: 5vw;
+  right: 6.5vw;
   z-index: 5;
   margin: 0 auto;
 }
 #addDisco button {
   position: relative;
-  width: 15vh;
-  height: 15vh;
+  width: 22vw;
+  height: 22vw;
   float: right;
   padding: 0;
   background: none;
@@ -19,7 +19,7 @@
 }
 #addDisco img {
   position: relative;
-  margin: -2vh;
+  margin: -2vw;
   height: 110%;
   width: auto;
 }
@@ -30,16 +30,16 @@
 }
 .laser-beam-blue {
   position: fixed;
-  bottom: 10vh;
-  right: 12vh;
+  bottom: 15vw;
+  right: 17vw;
   z-index: 4;
   transform-origin: 0 100%;
-  width: 1vh;
+  width: 1vw;
   height: 500%;
   background: rgba(99,195,231,0.6);
-  -webkit-box-shadow: 0vh 0vh 2vh .2vh rgba(99,195,231,1);
-  -moz-box-shadow: 0vh 0vh 2vh .2vh rgba(99,195,231,1);
-  box-shadow: 0vh 0vh 2vh .2vh rgba(99,195,231,1);
+  -webkit-box-shadow: 0 0 3vw .5vw rgba(99,195,231,1);
+  -moz-box-shadow: 0 0 3vw .5vw rgba(99,195,231,1);
+  box-shadow: 0 0 3vw .5vw rgba(99,195,231,1);
   -webkit-animation: laser 7s infinite;
   -moz-animation: laser 7s infinite;
   -o-animation: laser 7s infinite;
@@ -48,33 +48,33 @@
 
 .laser-beam-red {
   position: fixed;
-  bottom: 10vh;
-  right: 12vh;
+  bottom: 15vw;
+  right: 17vw;
   z-index: 4;
   transform-origin: 0 100%;
-  width: 1vh;
+  width: 1vw;
   height: 500%;
   background: rgba(236,19,65,0.6);
-  -webkit-box-shadow: 0vh 0vh 2vh .2vh rgba(236,19,65,1);
-  -moz-box-shadow: 0vh 0vh 2vh .2vh rgba(236,19,65,1);
-  box-shadow: 0vh 0vh 2vh .2vh rgba(236,19,65,1);
+  -webkit-box-shadow: 0 0 3vw .5vw rgba(236,19,65,1);
+  -moz-box-shadow: 0 0 3vw .5vw rgba(236,19,65,1);
+  box-shadow: 0 0 3vw .5vw rgba(236,19,65,1);
   -webkit-animation: laser 7.5s infinite;
   -moz-animation: laser 7.5s infinite;
   -o-animation: laser 7.5s infinite;
   animation: laser 7.5s infinite;
-} 
+}
 .laser-beam-purple {
   position: fixed;
-  bottom: 10vh;
-  right: 12vh;
+  bottom: 15vw;
+  right: 17vw;
   z-index: 4;
   transform-origin: 0 100%;
-  width: 1vh;
+  width: 1vw;
   height: 500%;
   background: rgba(204, 102, 255, 0.6);
-  -webkit-box-shadow: 0vh 0vh 2vh .2vh rgba(204, 102, 255,1);
-  -moz-box-shadow: 0vh 0vh 2vh .2vh rgba(204, 102, 255,1);
-  box-shadow: 0vh 0vh 2vh .2vh rgba(204, 102, 255,1);
+  -webkit-box-shadow: 0 0 3vw .5vw rgba(204, 102, 255,1);
+  -moz-box-shadow: 0 0 3vw .5vw rgba(204, 102, 255,1);
+  box-shadow: 0 0 3vw .5vw rgba(204, 102, 255,1);
   -webkit-animation: laser 7.3s infinite;
   -moz-animation: laser 7.3s infinite;
   -o-animation: laser 7.3s infinite;
@@ -83,30 +83,30 @@
 }
 .laser-beam-green {
   position: fixed;
-  bottom: 10vh;
-  right: 12vh;
+  bottom: 15vw;
+  right: 17vw;
   z-index: 4;
   transform-origin: 0 100%;
-  width: 1vh;
+  width: 1vw;
   height: 500%;
   background: rgba(86, 212, 69, 0.6);
-  -webkit-box-shadow: 0vh 0vh 2vh .2vh rgba(86, 212, 69,1);
-  -moz-box-shadow: 0vh 0vh 2vh .2vh rgba(86, 212, 69,1);
-  box-shadow: 0vh 0vh 2vh .2vh rgba(86, 212, 69,1);
+  -webkit-box-shadow: 0 0 3vw .5vw rgba(86, 212, 69,1);
+  -moz-box-shadow: 0 0 3vw .5vw rgba(86, 212, 69,1);
+  box-shadow: 0 0 3vw .5vw rgba(86, 212, 69,1);
   -webkit-animation: laser 7.7s infinite;
   -moz-animation: laser 7.7s infinite;
   -o-animation: laser 7.7s infinite;
   animation: laser 7.7s infinite;
-} 
+}
 
 @-webkit-keyframes laser {
-  0%  { 
+  0% {
     -webkit-transform: rotate(-180deg);
   }
-    50% { 
+  50% {
     -webkit-transform: rotate(45deg);
   }
-  100% { 
+  100% {
     -webkit-transform: rotate(-120deg);
   }
 }
