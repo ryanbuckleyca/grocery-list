@@ -199,12 +199,14 @@ h2 {
 }
 .addItem button {
   width: 22vw;
+  max-width: 175px;
   height: 22vw;
+  max-height: 175px;
   color: rgb(255, 255, 255);
   padding: 0;
   margin: 3vw 3vw 4vw 0vw;
   background: rgb(var(--accent));
-  font-size: 9vw;
+  font-size: 180%;
   border: 0;
   border-radius: 50%;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
