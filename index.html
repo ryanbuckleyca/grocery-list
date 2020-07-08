@@ -88,12 +88,11 @@
 
     <div class="modal">
       <div class="modal-content">
-          <h2 class="center">Add item and category:</h2>
+          <p class="center">Add item and category:</p>
           <i class="close fas fa-times" onclick="toggleModal()"></i>
         <span class="container row">
           <form id="addItems" autocomplete="off">
             <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
-            <hr style="margin-top: 7px;">
             <div class="autocomplete">
               <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
             </div>
@@ -112,7 +111,7 @@
     <!-- set to display:none until rave mode enabled -->
       <div id="addDisco">
         <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal">
-          <img src="discoball.gif">
+          <img src="discoball.gif"><i class="fas fa-plus"></i>
         </button>
       </div>
 

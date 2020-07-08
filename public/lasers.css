@@ -7,7 +7,9 @@
 }
 #addDisco button {
   position: relative;
+  max-width: 175px;
   width: 22vw;
+  max-height: 175px;
   height: 22vw;
   float: right;
   padding: 0;
@@ -16,12 +18,26 @@
   border-radius: 50%;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  cursor: pointer;
 }
 #addDisco img {
   position: relative;
   margin: -2vw;
   height: 110%;
   width: auto;
+}
+@media screen and (min-width: 1000px) {
+  #addDisco i {
+    top: calc(50% - 35px);
+    right: calc(50% - 25px);
+  }
+}
+#addDisco i {
+  position: absolute;
+  top: calc(50% - 4vw);
+  right: calc(50% - 3vw);
+  font-size: 7vw;
+  color: rgba(var(--foreground), 1);
 }
 
 .lasers {
