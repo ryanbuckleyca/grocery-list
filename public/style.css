@@ -10,7 +10,7 @@ html {
   max-width: 100%;
   touch-action: manipulation;
 }
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 1000px) {
   body {
      font-size: 30px;
   }
@@ -19,7 +19,7 @@ body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   font-family: var(--font);
-  margin: 0 3%;
+  margin: 0 3% 10%;
   padding: 0;
   font-size: 5vw;
   max-width: 100%;
@@ -131,9 +131,8 @@ h2 {
 
 .item {
   flex: 1 0 auto;
-  max-width: 65%;
-  border: 0;
-  padding: 5%;
+  max-width: 66%;
+  padding: 4%;
   border-radius: 8px;
   text-align: center;
   margin: 1% 2%;
@@ -141,23 +140,17 @@ h2 {
 .low {
   color: rgb(var(--foreground));
   background-color: rgba(var(--low), 1);
-  border: 0.1vw solid rgba(var(--low), 0.5);
   box-shadow: var(--glow) rgb(var(--low));
-
 }
 .out {
   color: rgb(var(--foreground));
   background-color: rgba(var(--out), 1);
-  border: 0.1vw solid rgb(var(--out), 0.5);
   box-shadow: var(--glow) rgb(var(--out));
-
 }
 .good {
   color: rgb(var(--foreground));
   background-color: rgba(var(--good), 1);
-  border: 0.1vw solid rgb(var(--good), 0.5);
   box-shadow: var(--glow) rgb(var(--good));
-
 }
 .modify {
   background-color: rgb(var(--background));
@@ -206,15 +199,18 @@ h2 {
 }
 .addItem button {
   width: 22vw;
+  max-width: 175px;
   height: 22vw;
+  max-height: 175px;
   color: rgb(255, 255, 255);
   padding: 0;
   margin: 3vw 3vw 4vw 0vw;
   background: rgb(var(--accent));
-  font-size: 9vw;
+  font-size: 180%;
   border: 0;
   border-radius: 50%;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 .addItem button:hover {
   filter: brightness(120%);
@@ -229,7 +225,7 @@ h2 {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
-  z-index: 3;
+  z-index: 4;
   visibility: hidden;
   transform: scale(1.1);
   transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
@@ -238,18 +234,25 @@ h2 {
   width: 90%;
   font-size: 100%;
   height: 6vw;
+  margin-bottom: 1.5vw;
   padding: 3vw;
   font-family: inherit;
-}
+  border-radius: 0.5rem;
+  border: 1px solid rgba(var(--foreground), 0.12);
+  }
 .modal button {
   width: 100%;
   border: 0;
   padding: 4vw;
-  margin: 3vw 0;
-  border-radius: 8px;
+  margin: 0 0 3vw;
+  border-radius: 0.5rem;
   text-align: center;
   font-size: 100%;
   font-family: inherit;
+  cursor: pointer;
+}
+.modal p {
+  margin: 3vw;
 }
 .modal-content {
   position: absolute;
@@ -257,15 +260,18 @@ h2 {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgb(var(--background));
-  padding: 1rem 1.5rem;
+  padding: 3%;
   width: 75%;
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
 }
 .close {
   position: absolute;
   top: 3vw;
-  right: 6vw;
+  right: 7vw;
   width: 1vw;
+  font-size: 115%;
+  color: rgb(var(--out));
+  cursor: pointer;
 }
 .show-modal {
   opacity: 1;
