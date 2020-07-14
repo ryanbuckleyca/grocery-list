@@ -10,7 +10,7 @@ html {
   max-width: 100%;
   touch-action: manipulation;
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 700px) {
   body {
      font-size: 30px;
   }
@@ -19,8 +19,7 @@ body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   font-family: var(--font);
-  margin: 0 3% 10%;
-  padding: 0;
+  padding: 0 2% 10%;
   font-size: 5vw;
   max-width: 100%;
 }
@@ -52,7 +51,6 @@ h2 {
   font-size: 120%;
   margin: 0 0 3vw;
 }
-
 #groceryMenu {
   position: sticky;
   top: 0;
@@ -80,7 +78,7 @@ h2 {
 .header {
   position: sticky;
   top: 0;
-  width: 65%;
+  width: 75%;
   align-self: center;
   margin: 0 auto;
   font-weight: bolder;
@@ -190,7 +188,13 @@ h2 {
 .top {
   color:rgb(var(--foreground))
 }
-
+@media screen and (min-width: 700px) {
+  #addDisco button i {
+    font-size: 60px !important;
+    top: 45px;
+    right: 55px;
+  }
+}
 .addItem {
   position: fixed;
   bottom: 1vw;
@@ -198,15 +202,15 @@ h2 {
   z-index: 4;
 }
 .addItem button {
-  width: 22vw;
-  max-width: 175px;
-  height: 22vw;
-  max-height: 175px;
+  width: 28vw;
+  max-width: 160px;
+  height: 28vw;
+  max-height: 160px;
   color: rgb(255, 255, 255);
   padding: 0;
-  margin: 3vw 3vw 4vw 0vw;
+  margin: 2vw 2vw 3vw 0vw;
   background: rgb(var(--accent));
-  font-size: 180%;
+  font-size: 200%;
   border: 0;
   border-radius: 50%;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
