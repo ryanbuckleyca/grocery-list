@@ -45,7 +45,7 @@ const collapseCat = (category, elementID) => {
 }
 
 //close menu when clicking outside or on links
-window.addEventListener('mousedown', function(e){   
+window.addEventListener('mousedown', function(e){
   let menuDiv = document.getElementById('dropdown').contains(e.target)
   let menuButton = document.getElementById('menuButton').contains(e.target)
   let menuDivDisp = document.getElementById('dropdown').style.display
@@ -131,7 +131,7 @@ const submitOnEnter = (event) => {
 }
 
 const getFoodItems = () => {
-  let request = new XMLHttpRequest() 
+  let request = new XMLHttpRequest()
   request.open('GET', '/api/foodItems?householdId='+readCookie('householdId'), false)
   request.setRequestHeader("Content-Type", "application/json")
   request.send()
@@ -139,7 +139,7 @@ const getFoodItems = () => {
 }
 
 const getHouseholds = () => {
-  let request = new XMLHttpRequest() 
+  let request = new XMLHttpRequest()
   request.open('GET', '/api/households', false)
   request.setRequestHeader("Content-Type", "application/json")
   request.send()
@@ -229,7 +229,7 @@ let store = new Reef.Store({
 
 
     removeFoodItem: (props, id) => {
-      if(!confirm("Delete?")) return 
+      if(!confirm("Delete?")) return
       apiRequest("DELETE", "/api/foodItems/" + id, { "id": id })
       _.remove(props.foodItems, { id })
     },
@@ -244,6 +244,7 @@ let store = new Reef.Store({
       )
       props.foodItems = props.foodItems.concat([newItem])
       app.render()
+      document.querySelector(".modal").classList.remove("show-modal");
     },
     toggleStatus: (props, id) => {
       const newStatus = {
@@ -315,19 +316,19 @@ const app = new Reef('#app', {
 })
 
 const determineRootPath = (props) => {
-  return readCookie("householdId") 
+  return readCookie("householdId")
     ? stockPage(props) : householdPage(props)
 }
 
 const stockPage = (props) => {
   console.log("RENDERING STOCK PAGE")
-  if(props.foodItems.length === 0) { 
+  if(props.foodItems.length === 0) {
     return `
     <p align='center'>
       No grocery items yet. Click the + button icon below to start creating your list!
     </p>
     ${addFoodItemComponent()}
-    ` 
+    `
   }
   let foodItemsByCategory = _.groupBy(props.foodItems, "category")
   return `
@@ -336,7 +337,7 @@ const stockPage = (props) => {
         <div id="${category}" class="container row header center">
           <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'stockListCategory-')">
             ${category}
-            <i class="fa fa-caret-down"></i>  
+            <i class="fa fa-caret-down"></i>
           </a>
         </div>
 
@@ -348,8 +349,8 @@ const stockPage = (props) => {
               <button type="button" id="delButton-${foodItem.id}" class="del button icon left" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
                 <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
               </button>
-              <p id="statusButton-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}" 
-                  onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})" 
+              <p id="statusButton-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}"
+                  onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})"
                   onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
                 ${foodItem.name}
               </p>
@@ -408,8 +409,8 @@ function removeShopItem( id, category, status ) {
       item.parentNode.removeChild(item)
       if(status === "bought")
         store.do("buyFoodItem", id)
-      if(catSpan.children.length === 0) 
-        document.getElementById('app').removeChild(category);    
+      if(catSpan.children.length === 0)
+        document.getElementById('app').removeChild(category);
   }, 500)
 }
 
@@ -431,7 +432,7 @@ const shopPage = (props) => {
         <div id="${category}" class="container row header center">
           <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'shopListCategory-')">
             ${category}
-            <i class="fa fa-caret-down"></i>  
+            <i class="fa fa-caret-down"></i>
           </a>
         </div>
 
@@ -469,8 +470,8 @@ const householdPage = (props) => {
     ${_(props.households).map(household => {
       return `
       <div id="groceryRow-${household.id}" class="container row">
-        <p id="statusButton-${household.id}" class="item center ${getHouseholdStatus(household.id)}" 
-           onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})" 
+        <p id="statusButton-${household.id}" class="item center ${getHouseholdStatus(household.id)}"
+           onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})"
            onkeydown="handleOnEnterEdit(event, ${household.id})">
           ${household.name}
         </p>
