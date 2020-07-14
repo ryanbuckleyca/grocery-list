@@ -225,7 +225,7 @@ h2 {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
-  z-index: 4;
+  z-index: 6;
   visibility: hidden;
   transform: scale(1.1);
   transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
@@ -293,6 +293,7 @@ h2 {
   top: 0;
   left: 0;
   right: 0;
+  color: rgb(var(--background));
 }
 .autocomplete-items div {
   padding: 3vw;
