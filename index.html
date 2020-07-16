@@ -12,7 +12,6 @@
     <!-- App styles -->
     <link type="text/css" rel="stylesheet" href="style.css" />
     <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
-    <link type="text/css" rel="stylesheet" href="lasers.css" />
     <link type="text/css" rel="stylesheet" href="fireworks.css" />
     <script>
 
@@ -36,10 +35,13 @@
         function switchStyle() {
           if(linkElToSwap.href.includes("light.css")) {
             switchTo = "dark.css"
+            console.log(document.querySelector(".addItem").style.display = "block")
           } else if(linkElToSwap.href.includes("rave.css")) {
             switchTo = "light.css"
+            console.log(document.querySelector(".addItem").style.display = "block")
           } else {
             switchTo = "rave.css"
+            console.log(document.querySelector(".addItem").style.display = "none")
           }
 
           setLinkTag(switchTo)
