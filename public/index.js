@@ -327,7 +327,7 @@ const stockPage = (props) => {
     <p align='center'>
       No grocery items yet. Click the + button icon below to start creating your list!
     </p>
-    ${addFoodItemComponent()}
+    ${addItemComponent()}
     `
   }
   let foodItemsByCategory = _.groupBy(props.foodItems, "category")
@@ -361,15 +361,15 @@ const stockPage = (props) => {
         }).join('')}
         </div>`
       }).join('')}
-      ${addFoodItemComponent()}
+      ${addItemComponent()}
     `
 }
 
-const addFoodItemComponent = () => {
+const addItemComponent = (action='toggleModal()', icon='<i class="fas fa-cart-plus"></i>') => {
   return `
     <div id="addButton" class="addItem">
-      <button type="button" onclick="toggleModal()">
-        <i class="fas fa-cart-plus"></i>
+      <button type="button" onclick="${action}">
+        ${icon}
       </button>
     </div>`
 }
@@ -477,11 +477,7 @@ const householdPage = (props) => {
         </p>
     </div>`
     }).join('')}
-    <div id="addButton" class="addItem">
-      <button type="button" onclick="store.do('addHousehold')">
-        <i class="fas fa-home">+</i>
-      </button>
-    </div>
+    ${addItemComponent(store.do('addHousehold'), '<i class="fas fa-home">+</i>')}
   </div>`
 }
 

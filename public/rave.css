@@ -15,7 +15,132 @@ iframe {
 }
 #lasers {
   display: block;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
-#addDisco {
+
+/* RAVE MODE */
+#disco {
   display: block;
+  z-index: 5;
+  margin-right: -0.5% !important;
+  margin-bottom: -60px !important;
+}
+#disco button {
+  background: none;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+#disco img {
+  position: relative;
+  margin: -40%;
+  height: 140%;
+}
+@media screen and (min-width: 700px) {
+  #disco i {
+    top: calc(50% - 35px);
+    right: calc(50% - 25px);
+  }
+}
+#disco i {
+  position: absolute;
+  top: calc(50% - 4vw);
+  right: calc(50% - 3vw);
+  font-size: 7vw;
+  color: rgba(var(--foreground), 1);
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      text-shadow:
+      0 0 1px #fff,
+      0 0 2px #fff,
+      0 0 1px rgb(var(--accent)),
+      0 0 5px rgb(var(--accent)),
+      0 0 10px rgb(var(--accent)),
+      0 0 15px rgb(var(--accent)),
+      0 0 20px rgb(var(--accent))
+  }
+  20%, 24%, 55% {
+      text-shadow: none;
+  }
+}
+
+body{
+  -webkit-animation: var(--strobe);
+}
+@-webkit-keyframes raveOn{
+  0%{ opacity: 1; }
+  100%{ opacity: 0.7; }
+}
+
+.laser {
+  position: fixed;
+  bottom: 17vw;
+  right: 17vw;
+  z-index: 4;
+  transform-origin: 0 100%;
+  width: 1%;
+  height: 500%;
+}
+@media screen and (min-width: 800px) {
+  .laser {
+    right: calc(50vw - 310px);
+    bottom: 17%;
+  }
+}
+
+.beam-blue {
+  background: rgba(99,195,231,0.6);
+  -webkit-box-shadow: 0 0 3% .5% rgba(99,195,231,1);
+  -moz-box-shadow: 0 0 3% .5% rgba(99,195,231,1);
+  box-shadow: 0 0 3% .5% rgba(99,195,231,1);
+  -webkit-animation: laser 7s infinite;
+  -moz-animation: laser 7s infinite;
+  -o-animation: laser 7s infinite;
+  animation: laser 7s infinite;
+}
+
+.beam-red {
+  background: rgba(236,19,65,0.6);
+  -webkit-box-shadow: 0 0 3% .5% rgba(236,19,65,1);
+  -moz-box-shadow: 0 0 3% .5% rgba(236,19,65,1);
+  box-shadow: 0 0 3% .5% rgba(236,19,65,1);
+  -webkit-animation: laser 7.5s infinite;
+  -moz-animation: laser 7.5s infinite;
+  -o-animation: laser 7.5s infinite;
+  animation: laser 7.5s infinite;
+}
+.beam-purple {
+  background: rgba(204, 102, 255, 0.6);
+  -webkit-box-shadow: 0 0 3% .5% rgba(204, 102, 255,1);
+  -moz-box-shadow: 0 0 3% .5% rgba(204, 102, 255,1);
+  box-shadow: 0 0 3% .5% rgba(204, 102, 255,1);
+  -webkit-animation: laser 7.3s infinite;
+  -moz-animation: laser 7.3s infinite;
+  -o-animation: laser 7.3s infinite;
+  animation: laser 7.3s infinite;
+
+}
+.beam-green {
+  background: rgba(86, 212, 69, 0.6);
+  -webkit-box-shadow: 0 0 3% .5% rgba(86, 212, 69,1);
+  -moz-box-shadow: 0 0 3% .5% rgba(86, 212, 69,1);
+  box-shadow: 0 0 3% .5% rgba(86, 212, 69,1);
+  -webkit-animation: laser 7.7s infinite;
+  -moz-animation: laser 7.7s infinite;
+  -o-animation: laser 7.7s infinite;
+  animation: laser 7.7s infinite;
+}
+
+@-webkit-keyframes laser {
+  0% {
+    -webkit-transform: rotate(-180deg);
+  }
+  50% {
+    -webkit-transform: rotate(45deg);
+  }
+  100% {
+    -webkit-transform: rotate(-120deg);
+  }
 }
