@@ -21,13 +21,15 @@
       for(link of linkTags) {
         if(link.title === "swap") {
           linkElToSwap = link
-        } else if(link.title === "lasers")
+        } 
+        else if(link.title === "lasers") {
           linkLaserToDel = link
+        }
       }
 
       if(!linkElToSwap) {
-        console.log("cannot find a <link> tag with title \"swap\"")
-       } else {
+        console.log('cannot find a <link> tag with title "swap"')
+      } else {
         //set user's preferred style, if exists
         if(readCookie("style") === "light.css" || readCookie("style") === "dark.css" || readCookie("style") === "rave.css")
           setLinkTag(readCookie("style"))
@@ -35,15 +37,11 @@
         function switchStyle() {
           if(linkElToSwap.href.includes("light.css")) {
             switchTo = "dark.css"
-            console.log(document.querySelector(".addItem").style.display = "block")
           } else if(linkElToSwap.href.includes("rave.css")) {
             switchTo = "light.css"
-            console.log(document.querySelector(".addItem").style.display = "block")
           } else {
             switchTo = "rave.css"
-            console.log(document.querySelector(".addItem").style.display = "none")
           }
-
           setLinkTag(switchTo)
         }
 
@@ -55,69 +53,71 @@
     </script>
   </head>
   <body>
-    <span id="lasers">
-      <div class="laser-beam-blue"></div>
-      <div class="laser-beam-red"></div>
-      <div class="laser-beam-purple"></div>
-      <div class="laser-beam-green"></div>
-    </span>
+    <div id="main-frame">
+      <span id="lasers">
+        <div class="laser beam-blue"></div>
+        <div class="laser beam-red"></div>
+        <div class="laser beam-purple"></div>
+        <div class="laser beam-green"></div>
+      </span>
 
-    <div id="groceryMenu" class="container row">
-      <button id="menuButton" class="button top left" onclick="toggleMenu()">
-        <i class="fas fa-hamburger"></i>
-      </button>
-      <div id="headerMenu" class="item center">
-        <h1><span>Grocery List</span></h1>
-        <div id="dropdown" style="display: none">
-          <a href="/stock" onclick="toggleMenu()"><span>Stock</span></a>
-          <a href="/shop" onclick="toggleMenu()"><span>Shop</span></a>
-          <a href="/households" onclick="toggleMenu()"><span>Households</span></a>
-          <a href="/about" onclick="toggleMenu()"><span>About</span></a>
-          <a href="#style" onclick="switchStyle()"><span><i class="fas fa-adjust"></i></span></a>
+      <div id="groceryMenu" class="container row">
+        <button id="menuButton" class="button top left" onclick="toggleMenu()">
+          <i class="fas fa-hamburger"></i>
+        </button>
+        <div id="headerMenu" class="item center">
+          <h1><span>Grocery List</span></h1>
+          <div id="dropdown" style="display: none">
+            <a href="/stock" onclick="toggleMenu()"><span>Stock</span></a>
+            <a href="/shop" onclick="toggleMenu()"><span>Shop</span></a>
+            <a href="/households" onclick="toggleMenu()"><span>Households</span></a>
+            <a href="/about" onclick="toggleMenu()"><span>About</span></a>
+            <a href="#style" onclick="switchStyle()"><span><i class="fas fa-adjust"></i></span></a>
+          </div>
         </div>
-      </div>
-      <button id="scrollButton" class="button top right" onclick="window.scroll(0,0)">
-        <i class="fas fa-arrow-up"></i>
-      </button>
-    </div>
-    <hr />
-
-    <!-- set to display:none until rave mode enabled -->
-    <iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
-
-    <div id="app" class="container">
-    </div>
-
-    <div class="modal">
-      <div class="modal-content">
-          <p class="center">Add item and category:</p>
-          <i class="close fas fa-times" onclick="toggleModal()"></i>
-        <span class="container row">
-          <form id="addItems" autocomplete="off">
-            <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
-            <div class="autocomplete">
-              <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
-            </div>
-            <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
-          </form>
-        </span>
-      </div>
-    </div>
-
-    <script>
-    function toggleModal() {
-      document.querySelector(".modal").classList.toggle("show-modal");
-    }
-    </script>
-
-    <!-- set to display:none until rave mode enabled -->
-      <div id="addDisco">
-        <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal" onclick="toggleModal()">
-          <img src="discoball.gif"><i class="fas fa-plus"></i>
+        <button id="scrollButton" class="button top right" onclick="window.scroll(0,0)">
+          <i class="fas fa-arrow-up"></i>
         </button>
       </div>
+      <hr />
 
-    <script src="index.js" type="application/javascript"></script>
-    <script src="autocomplete.js" type="application/javascript"></script>
+      <!-- set to display:none until rave mode enabled -->
+      <iframe width="99%" style="height: 30vh;" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+
+      <div id="app" class="container">
+      </div>
+
+      <div class="modal">
+        <div class="modal-content">
+            <p class="center">Add item and category:</p>
+            <i class="close fas fa-times" onclick="toggleModal()"></i>
+          <span class="container row">
+            <form id="addItems" autocomplete="off">
+              <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
+              <div class="autocomplete">
+                <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
+              </div>
+              <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
+            </form>
+          </span>
+        </div>
+      </div>
+
+      <script>
+      function toggleModal() {
+        document.querySelector(".modal").classList.toggle("show-modal");
+      }
+      </script>
+
+      <!-- set to display:none until rave mode enabled -->
+        <div class="addItem" id="disco">
+          <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal" onclick="toggleModal()">
+            <img src="discoball.gif"><i class="fas fa-plus"></i>
+          </button>
+        </div>
+
+      <script src="index.js" type="application/javascript"></script>
+      <script src="autocomplete.js" type="application/javascript"></script>
+    </div>
   </body>
 </html>
