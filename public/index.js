@@ -368,7 +368,7 @@ const stockPage = (props) => {
 const addItemComponent = (action='toggleModal()', icon='<i class="fas fa-cart-plus"></i>') => {
   return `
     <div id="addButton" class="addItem">
-      <button type="button" onclick="${action}">
+      <button type="button" onClick="${action}">
         ${icon}
       </button>
     </div>`
@@ -477,7 +477,7 @@ const householdPage = (props) => {
         </p>
     </div>`
     }).join('')}
-    ${addItemComponent(store.do('addHousehold'), '<i class="fas fa-home">+</i>')}
+    ${addItemComponent("store.do('addHousehold')", '<i class="fas fa-home">+</i>')}
   </div>`
 }
 
