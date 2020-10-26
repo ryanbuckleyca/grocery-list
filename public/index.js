@@ -224,6 +224,7 @@ let store = new Reef.Store({
         LOW: "GOOD",
       }
       createCookie("householdId", id)
+      console.log('householdId = ', id)
       props.foodItems = getFoodItems()
       router.navigate('/stock');
     },
