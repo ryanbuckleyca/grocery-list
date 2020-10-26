@@ -17,7 +17,7 @@ body {
   padding: 0 2% 10%;
   font-size: 5vw;
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1000px) {
   body {
      font-size: 40px;
   }
