@@ -11,11 +11,11 @@ const titleCase = (str) => {
 }
 
 const createUuid = () => {
-  let dt = new Date().getTime();
+  let dt = new Date().getTime()
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = (dt + Math.random()*16)%16 | 0;
-      dt = Math.floor(dt/16);
-      return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+      const r = (dt + Math.random()*16)%16 | 0
+      dt = Math.floor(dt/16)
+      return (c=='x' ? r :(r&0x3|0x8)).toString(16)
   })
   return uuid
 }
@@ -24,24 +24,17 @@ const collapseCat = (category, elementID) => {
   var elToColl = document.getElementById(elementID + category.id)
   var fa = document.getElementById(category.id).querySelector('.fa')
 
-  var position = document.getElementById(category.id).offsetTop;
+  var position = document.getElementById(category.id).offsetTop
 
-  if(fa.className === "fa fa-caret-right")
-  {
-    fa.setAttribute("class", "fa fa-caret-down")
-  } else {
+  fa.className === "fa fa-caret-right" ?
+    fa.setAttribute("class", "fa fa-caret-down") :
     fa.setAttribute("class", "fa fa-caret-right")
-  }
-  console.log(elToColl.style.display)
-  if (elToColl.style.display === "block") {
-    console.log("style was Block")
-    elToColl.style.display = "none";
-  } else {
-    console.log("style was not block")
-    elToColl.style.display = "block";
-  }
 
-  window.scrollTo(0, position);
+  elToColl.style.display === "block" ?
+    elToColl.style.display = "none" :
+    elToColl.style.display = "block"
+
+  window.scrollTo(0, position)
 }
 
 //close menu when clicking outside or on links
@@ -53,9 +46,9 @@ window.addEventListener('mousedown', function(e){
   //if user clicks outside of dropdown and it's open, close it
   if (!menuDiv && menuDivDisp==="block" && !menuButton){
     document.getElementById('dropdown').style.display = "none"
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>";
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>"
   }
-});
+})
 
 let OrigScrollPos = window.scrollY
 const toggleMenu = () => {
@@ -65,14 +58,14 @@ const toggleMenu = () => {
     //menu is open, close it
     dropdown.style.display = "none"
     groceryMenu.style.zIndex = 1
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>";
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>"
   } else {
     dropdown.style.display = "block"
     groceryMenu.style.zIndex = 4
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-times\"></i>";
+    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-times\"></i>"
     OrigScrollPos = window.scrollY //showing div adjusts scrollY value, so reset
   }
-};
+}
 //close menu when scrolling, if it's open
 window.onscroll = function() {
   let vis = document.getElementById('dropdown').style.display
@@ -92,13 +85,13 @@ const editItem = (event, itemID) => {
     element.contentEditable = "true"
     element.classList.add("modify")
     //should set cursor to end of text
-    var selection = window.getSelection();
-    var range = document.createRange();
-    selection.removeAllRanges();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection.addRange(range);
-    element.focus();
+    var selection = window.getSelection()
+    var range = document.createRange()
+    selection.removeAllRanges()
+    range.selectNodeContents(element)
+    range.collapse(false)
+    selection.addRange(range)
+    element.focus()
 
     event.preventDefault()
   }
@@ -226,10 +219,8 @@ let store = new Reef.Store({
       createCookie("householdId", id)
       console.log('householdId = ', id)
       props.foodItems = getFoodItems()
-      router.navigate('/stock');
+      router.navigate('/stock')
     },
-
-
     removeFoodItem: (props, id) => {
       if(!confirm("Delete?")) return
       apiRequest("DELETE", "/api/foodItems/" + id, { "id": id })
@@ -246,7 +237,7 @@ let store = new Reef.Store({
       )
       props.foodItems = props.foodItems.concat([newItem])
       app.render()
-      document.querySelector(".modal").classList.remove("show-modal");
+      document.querySelector(".modal").classList.remove("show-modal")
     },
     toggleStatus: (props, id) => {
       const newStatus = {
@@ -308,6 +299,10 @@ const app = new Reef('#app', {
       console.log("RENDERING APP")
     }, false)
 
+    console.log('route object is ', route)
+    console.log('/stock === route.url ? ', route.url === '/stock')
+    console.log('&#47;shop === route.url ? ', route.url === '&#47;shop')
+
     if (route.url === '/') return determineRootPath(props)
     else if (route.url === '/households') return householdPage(props)
     else if (route.url === '/stock') return stockPage(props)
@@ -343,7 +338,7 @@ const stockPage = (props) => {
           </a>
         </div>
 
-        <div id="stockListCategory-${category}" class="stockListCategory container" style="display: block;">
+        <div id="stockListCategory-${category}" class="stockListCategory container" style="display: block">
 
         ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
           return `
@@ -403,7 +398,7 @@ function removeShopItem( id, category, status ) {
   var catSpan = document.getElementById('shopListCategory-' + category.id)
   if(status === "bought") {
     document.getElementById('shopItem-' + id).classList.add("good")
-    document.getElementById('shopItem-' + id).style.transform = "rotate(0.5deg) scale(1.07)";
+    document.getElementById('shopItem-' + id).style.transform = "rotate(0.5deg) scale(1.07)"
   }
   item.style.transition = "opacity 1.5s ease"
   item.style.opacity = 0
@@ -412,7 +407,7 @@ function removeShopItem( id, category, status ) {
       if(status === "bought")
         store.do("buyFoodItem", id)
       if(catSpan.children.length === 0)
-        document.getElementById('app').removeChild(category);
+        document.getElementById('app').removeChild(category)
   }, 500)
 }
 
@@ -438,16 +433,16 @@ const shopPage = (props) => {
           </a>
         </div>
 
-        <div id="shopListCategory-${category}" class="container" style="display: block;">
+        <div id="shopListCategory-${category}" class="container" style="display: block">
 
           ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
             return `
             <div id="groceryRow-${foodItem.id}" class="container row">
-              <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought');">
+              <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought')">
                 <li class="fas fa-check" aria-hidden="true"></li>
               </button>
               <p id="shopItem-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
-              <button type="button" id="delButton-${foodItem.id}" class="del button icon right" onclick="removeShopItem(${foodItem.id}, ${foodItem.category});"}>
+              <button type="button" id="delButton-${foodItem.id}" class="del button icon right" onclick="removeShopItem(${foodItem.id}, ${foodItem.category})"}>
                 <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
               </button>
             </div>`
