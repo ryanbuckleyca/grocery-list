@@ -14,8 +14,13 @@ body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   font-family: var(--font);
-  padding: 0 2% 10%;
+  padding: 0 4% 10% 3%;
   font-size: 5vw;
+}
+#main-frame {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 @media screen and (min-width: 1000px) {
   body {
@@ -49,11 +54,6 @@ h1 span {
 h2 {
   font-size: 120%;
   margin: 0 0 3%;
-}
-#main-frame {
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
 }
 #groceryMenu {
   position: sticky;
