@@ -300,14 +300,13 @@ const app = new Reef('#app', {
     }, false)
 
     console.log('route object is ', route)
-    console.log('/stock === route.url ? ', route.url === '/stock')
-    console.log('&#47;shop === route.url ? ', route.url === '&#47;shop')
+    console.log('[rb] changed routes from "/stock" to "&#47;stock" for temporary fix')
 
-    if (route.url === '/') return determineRootPath(props)
-    else if (route.url === '/households') return householdPage(props)
-    else if (route.url === '/stock') return stockPage(props)
-    else if (route.url === '/shop') return shopPage(props)
-    else if (route.url === '/about') return aboutPage(props)
+    if (route.url === '&#47;') return determineRootPath(props)
+    else if (route.url === '&#47;households') return householdPage(props)
+    else if (route.url === '&#47;stock') return stockPage(props)
+    else if (route.url === '&#47;shop') return shopPage(props)
+    else if (route.url === '&#47;about') return aboutPage(props)
     else return stockPage(props)
   }
 })
