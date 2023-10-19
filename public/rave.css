@@ -26,8 +26,8 @@ iframe {
 #disco {
   display: block;
   z-index: 5;
-  margin-right: -0.5% !important;
-  margin-bottom: -110px !important;
+  margin-right: 0 !important;
+  margin-bottom: -5px !important;
 }
 #disco button {
   background: none;

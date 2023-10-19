@@ -58,10 +58,13 @@ const toggleMenu = () => {
     //menu is open, close it
     dropdown.style.display = "none"
     groceryMenu.style.zIndex = 1
+    document.getElementById("app").style.opacity = "100%"
     document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>"
   } else {
+    //menu is closed, open it
     dropdown.style.display = "block"
     groceryMenu.style.zIndex = 4
+    document.getElementById("app").style.opacity = "40%"
     document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-times\"></i>"
     OrigScrollPos = window.scrollY //showing div adjusts scrollY value, so reset
   }
@@ -335,17 +338,17 @@ const stockPage = (props) => {
   return `
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
-        <div id="${category}" class="container row header center">
+        <div id="${category}" class="row header center">
           <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'stockListCategory-')">
             ${category}
             <i class="fa fa-caret-down"></i>
           </a>
         </div>
 
-        <div id="stockListCategory-${category}" class="stockListCategory container" style="display: block">
+        <div id="stockListCategory-${category}" class="stockListCategory" style="display: block">
           ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
             return `
-              <div id="groceryRow-${foodItem.id}" class="container row">
+              <div id="groceryRow-${foodItem.id}" class="row">
                 <button type="button" id="delButton-${foodItem.id}" class="del button icon left" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
                   <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
                 </button>
@@ -427,17 +430,17 @@ const shopPage = (props) => {
   }
 
   return _.map(foodItemsByCategory, (foodItems, category) => `
-    <div id="${category}" class="container row header center">
+    <div id="${category}" class="row header center">
       <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'shopListCategory-')">
         ${category}
         <i class="fa fa-caret-down"></i>
       </a>
     </div>
 
-    <div id="shopListCategory-${category}" class="container" style="display: block">
+    <div id="shopListCategory-${category}" class="" style="display: block">
       ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
         return `
-        <div id="groceryRow-${foodItem.id}" class="container row">
+        <div id="groceryRow-${foodItem.id}" class="row">
           <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought')">
             <li class="fas fa-check" aria-hidden="true"></li>
           </button>
@@ -459,12 +462,12 @@ const aboutPage = (props) => {
 const householdPage = (props) => {
   console.log("RENDERING HOUSEHOLD PAGE")
   return `
-    <div id="households" class="container row header center">
+    <div id="households" class="row header center">
       <p class="headerName">Households</p>
     </div>
     ${_(props.households).map(household => {
       return `
-      <div id="groceryRow-${household.id}" class="container row">
+      <div id="groceryRow-${household.id}" class="row">
         <p id="statusButton-${household.id}" class="item center ${getHouseholdStatus(household.id)}"
            onblur="handleOnBlurEdit(${household.id})" contentEditable="false" onclick="store.do('selectHousehold', ${household.id})"
            onkeydown="handleOnEnterEdit(event, ${household.id})">

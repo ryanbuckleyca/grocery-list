@@ -295,6 +295,7 @@ h2 {
 }
 .center {
   text-align: center;
+  margin: 0 auto;
 }
 .left {
   position: absolute;
@@ -308,9 +309,9 @@ h2 {
   color:rgb(var(--foreground))
 }
 .addItem {
-  position: absolute;
-  bottom: 18vw;
-  right: 2vw;
+  position: fixed;
+  bottom: 6vw;
+  right: 5vw;
   width: 22vw;
   height: 22vw;
   max-width: 200px;
