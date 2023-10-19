@@ -6,8 +6,8 @@
   --low: 251, 212, 0;
   --out: 255, 0, 0;
   --good: 11, 255, 5;
-  --flicker: flicker 3s infinite alternate; 
-  --glow: 0px 0px 15px; 
+  --flicker: flicker 3s infinite alternate;
+  --glow: 0px 0px 15px;
   --strobe: raveOn .7s infinite;
 }
 iframe {
@@ -20,11 +20,14 @@ iframe {
 }
 
 /* RAVE MODE */
+#addButton {
+  display: none;
+}
 #disco {
   display: block;
   z-index: 5;
   margin-right: -0.5% !important;
-  margin-bottom: -60px !important;
+  margin-bottom: -110px !important;
 }
 #disco button {
   background: none;
@@ -76,18 +79,12 @@ body{
 
 .laser {
   position: fixed;
-  bottom: 17vw;
-  right: 17vw;
+  bottom: 16vw;
+  right: 16vw;
   z-index: 4;
   transform-origin: 0 100%;
   width: 1%;
   height: 500%;
-}
-@media screen and (min-width: 800px) {
-  .laser {
-    right: calc(50vw - 310px);
-    bottom: 17%;
-  }
 }
 
 .beam-blue {

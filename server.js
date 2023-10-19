@@ -4,6 +4,7 @@ const http = require("http")
 const url = require('url')
 const db = require('./models')
 const path = require('path')
+global._ = require('lodash');
 
 const app = express()
 const port = process.env.PORT || 3000

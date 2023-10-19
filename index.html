@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <title>311 Grocery List</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Leckerli+One&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/reef.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reefjs/dist/router.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reefjs@8/dist/reef.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reefjs@8/dist/router.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://kit.fontawesome.com/a367e5e4f1.js" crossorigin="anonymous"></script>
     <script src="cookies.js" type="application/javascript"></script>
     <!-- App styles -->
@@ -21,7 +21,7 @@
       for(link of linkTags) {
         if(link.title === "swap") {
           linkElToSwap = link
-        } 
+        }
         else if(link.title === "lasers") {
           linkLaserToDel = link
         }
@@ -31,8 +31,10 @@
         console.log('cannot find a <link> tag with title "swap"')
       } else {
         //set user's preferred style, if exists
-        if(readCookie("style") === "light.css" || readCookie("style") === "dark.css" || readCookie("style") === "rave.css")
-          setLinkTag(readCookie("style"))
+        const styles = ["lights.css", "dark.css", "rave.css"]
+        const userStyle = readCookie("style")
+        const userHasPreferredStyle = styles.includes()
+        if(userHasPreferredStyle) setLinkTag(userStyle)
 
         function switchStyle() {
           if(linkElToSwap.href.includes("light.css")) {
@@ -82,9 +84,15 @@
       <hr />
 
       <!-- set to display:none until rave mode enabled -->
-      <iframe width="99%" style="height: 30vh;" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/820219951&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+      <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1285328824&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
 
       <div id="app" class="container">
+      </div>
+      <!-- set to display:none until rave mode enabled -->
+      <div class="addItem" id="disco">
+        <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal" onclick="toggleModal()">
+          <img src="discoball.gif"><i class="fas fa-plus"></i>
+        </button>
       </div>
 
       <div class="modal">
@@ -108,14 +116,6 @@
         document.querySelector(".modal").classList.toggle("show-modal");
       }
       </script>
-
-      <!-- set to display:none until rave mode enabled -->
-        <div class="addItem" id="disco">
-          <button id="discoButton" type="button" data-toggle="modal" data-target="#addFoodItemModal" onclick="toggleModal()">
-            <img src="discoball.gif"><i class="fas fa-plus"></i>
-          </button>
-        </div>
-
       <script src="index.js" type="application/javascript"></script>
       <script src="autocomplete.js" type="application/javascript"></script>
     </div>

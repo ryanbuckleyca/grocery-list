@@ -160,25 +160,30 @@ const apiRequest = async (action, url, data) => {
   return response
 }
 
-let router = new Reef.Router({
+let router = new ReefRouter({
 	routes: [
     {
+      id: 'home',
       title: 'Home',
       url: '/'
     },
     {
+      id: 'households',
       title: 'Households',
       url: '/households'
     },
 		{
+      id: 'stock',
 			title: 'Stock',
 			url: '/stock'
 		},
 		{
+      id: 'shop',
 			title: 'Shop',
 			url: '/shop'
 		},
 		{
+      id: 'about',
 			title: 'About',
 			url: '/about'
 		}
@@ -300,20 +305,20 @@ const app = new Reef('#app', {
     }, false)
 
     console.log('route object is ', route)
-    console.log('[rb] changed routes from "/stock" to "&#47;stock" for temporary fix')
 
-    if (route.url === '&#47;') return determineRootPath(props)
-    else if (route.url === '&#47;households') return householdPage(props)
-    else if (route.url === '&#47;stock') return stockPage(props)
-    else if (route.url === '&#47;shop') return shopPage(props)
-    else if (route.url === '&#47;about') return aboutPage(props)
+    if (route.url === '/') return determineRootPath(props)
+    else if (route.url === '/households') return householdPage(props)
+    else if (route.url === '/stock') return stockPage(props)
+    else if (route.url === '/shop') return shopPage(props)
+    else if (route.url === '/about') return aboutPage(props)
     else return stockPage(props)
   }
 })
 
 const determineRootPath = (props) => {
   return readCookie("householdId")
-    ? stockPage(props) : householdPage(props)
+    ? stockPage(props)
+    : householdPage(props)
 }
 
 const stockPage = (props) => {
@@ -338,23 +343,22 @@ const stockPage = (props) => {
         </div>
 
         <div id="stockListCategory-${category}" class="stockListCategory container" style="display: block">
-
-        ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
-          return `
-            <div id="groceryRow-${foodItem.id}" class="container row">
-              <button type="button" id="delButton-${foodItem.id}" class="del button icon left" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
-                <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
-              </button>
-              <p id="statusButton-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}"
-                  onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})"
-                  onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
-                ${foodItem.name}
-              </p>
-              <button type="button" id="editButton-${foodItem.id}" class="edit button icon right" onmousedown="editItem(event, ${foodItem.id})">
-                <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
-              </button>
-            </div>`
-        }).join('')}
+          ${_(foodItems).sortBy(['createdAt', 'name']).map(foodItem => {
+            return `
+              <div id="groceryRow-${foodItem.id}" class="container row">
+                <button type="button" id="delButton-${foodItem.id}" class="del button icon left" onclick="store.do('removeFoodItem', ${foodItem.id})"}>
+                  <li id="delIcon-${foodItem.id}" class="fas fa-trash" aria-hidden="true"></li>
+                </button>
+                <p id="statusButton-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}"
+                    onblur="handleOnBlurEdit(${foodItem.id})" contentEditable="false" onclick="store.do('toggleStatus', ${foodItem.id})"
+                    onkeydown="handleOnEnterEdit(event, ${foodItem.id})">
+                  ${foodItem.name}
+                </p>
+                <button type="button" id="editButton-${foodItem.id}" class="edit button icon right" onmousedown="editItem(event, ${foodItem.id})">
+                  <li id="editIcon-${foodItem.id}" class="fas fa-pen" aria-hidden="true"></li>
+                </button>
+              </div>`
+          }).join('')}
         </div>`
       }).join('')}
       ${addItemComponent()}
@@ -422,34 +426,29 @@ const shopPage = (props) => {
       </div>`
   }
 
-  return `
-    ${_.map(foodItemsByCategory, (foodItems, category) => {
-      return `
-        <div id="${category}" class="container row header center">
-          <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'shopListCategory-')">
-            ${category}
-            <i class="fa fa-caret-down"></i>
-          </a>
-        </div>
+  return _.map(foodItemsByCategory, (foodItems, category) => `
+    <div id="${category}" class="container row header center">
+      <a name="${category}" class="headerName" onClick="collapseCat(${category}, 'shopListCategory-')">
+        ${category}
+        <i class="fa fa-caret-down"></i>
+      </a>
+    </div>
 
-        <div id="shopListCategory-${category}" class="container" style="display: block">
-
-          ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
-            return `
-            <div id="groceryRow-${foodItem.id}" class="container row">
-              <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought')">
-                <li class="fas fa-check" aria-hidden="true"></li>
-              </button>
-              <p id="shopItem-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
-              <button type="button" id="delButton-${foodItem.id}" class="del button icon right" onclick="removeShopItem(${foodItem.id}, ${foodItem.category})"}>
-                <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
-              </button>
-            </div>`
-          }).join('')}
+    <div id="shopListCategory-${category}" class="container" style="display: block">
+      ${_(foodItems).sortBy(foodItem => foodItem.status).reverse().map(foodItem => {
+        return `
+        <div id="groceryRow-${foodItem.id}" class="container row">
+          <button type="button" id="editButton-${foodItem.id}" class="edit button icon left" onclick="removeShopItem(${foodItem.id}, ${foodItem.category}, 'bought')">
+            <li class="fas fa-check" aria-hidden="true"></li>
+          </button>
+          <p id="shopItem-${foodItem.id}" class="item center ${foodItem.status.toLowerCase()}">${foodItem.name}</p>
+          <button type="button" id="delButton-${foodItem.id}" class="del button icon right" onclick="removeShopItem(${foodItem.id}, ${foodItem.category})"}>
+            <li id="delIcon-${foodItem.id}" class="fas fa-eye-slash" aria-hidden="true" style="transform: scale(0.9)"></li>
+          </button>
         </div>`
       }).join('')}
     </div>
-  </div>`
+  `).join('')
 }
 
 const aboutPage = (props) => {
@@ -471,10 +470,10 @@ const householdPage = (props) => {
            onkeydown="handleOnEnterEdit(event, ${household.id})">
           ${household.name}
         </p>
-    </div>`
+      </div>`
     }).join('')}
     ${addItemComponent("store.do('addHousehold')", '<i class="fas fa-home">+</i>')}
-  </div>`
+  `
 }
 
 app.render()

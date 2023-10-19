@@ -9,6 +9,7 @@ html {
   padding: 0;
   max-width: 100%;
   touch-action: manipulation;
+  height: 100%;
 }
 body {
   background-color: rgb(var(--background));
@@ -16,10 +17,12 @@ body {
   font-family: var(--font);
   padding: 0 4% 10% 3%;
   font-size: 5vw;
+  height: 100%;
 }
 #main-frame {
   position: relative;
   max-width: 1000px;
+  height: 100%;
   margin: 0 auto;
 }
 @media screen and (min-width: 1000px) {
@@ -60,6 +63,7 @@ h2 {
   top: 0;
   background:rgb(var(--background));
   z-index: 1;
+  height: 125px;
 }
 
 #headerMenu {
@@ -73,10 +77,12 @@ h2 {
   padding: 0;
   width: 100%;
   justify-content: center;
+  height: 100%;
 }
 .row {
   display: flex;
   align-items: center;
+  height: 125px;
 }
 
 .header {
@@ -302,9 +308,9 @@ h2 {
   color:rgb(var(--foreground))
 }
 .addItem {
-  position: sticky;
-  bottom: 4%;
-  margin: 0px 20px 0px auto !important;
+  position: absolute;
+  bottom: 18vw;
+  right: 2vw;
   width: 22vw;
   height: 22vw;
   max-width: 200px;
@@ -329,4 +335,7 @@ h2 {
 /* hide until rave mode enabled */
 #disco {
   display: none;
+}
+#addButton {
+  display: block;
 }

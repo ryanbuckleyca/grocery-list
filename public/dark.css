@@ -19,3 +19,6 @@ iframe {
 #addDisco {
   display: none;
 }
+#addButton {
+  display: block;
+}

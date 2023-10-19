@@ -8,7 +8,7 @@ const importCsv = async () => {
   const household = await db.Household.create({
     name: '311'
   })
-  
+
   foodItems.forEach(async foodItem => {
     await db.FoodItem.create(
       {
