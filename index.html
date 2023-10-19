@@ -14,7 +14,6 @@
     <link type="text/css" rel="stylesheet" href="light.css" title="swap" />
     <link type="text/css" rel="stylesheet" href="fireworks.css" />
     <script>
-
       const linkTags = document.getElementsByTagName("link")
       let linkElToSwap
 
@@ -97,17 +96,15 @@
 
       <div class="modal">
         <div class="modal-content">
-            <p class="center">Add item and category:</p>
-            <i class="close fas fa-times" onclick="toggleModal()"></i>
-          <span>
-            <form id="addItems" autocomplete="off">
-              <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
-              <div class="autocomplete">
-                <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
-              </div>
-              <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
-            </form>
-          </span>
+          <p class="center">Add item and category:</p>
+          <i class="close fas fa-times" onclick="toggleModal()"></i>
+          <div id="addItems">
+            <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
+            <div class="autocomplete">
+              <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
+            </div>
+            <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
+          </div>
         </div>
       </div>
 
