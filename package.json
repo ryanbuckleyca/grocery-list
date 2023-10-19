@@ -25,6 +25,7 @@
     "node": ">=10.20.1"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.10",
     "sequelize-cli": "^6.6.1"
   }
 }
