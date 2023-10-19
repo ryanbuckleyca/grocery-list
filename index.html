@@ -94,14 +94,14 @@
         </button>
       </div>
 
-      <div class="modal">
+      <div id="itemEntryModal" class="modal">
         <div class="modal-content">
           <p class="center">Add item and category:</p>
           <i class="close fas fa-times" onclick="toggleModal()"></i>
           <div id="addItems">
             <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
             <div class="autocomplete">
-              <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category" onkeydown="submitOnEnter(event)">
+              <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category">
             </div>
             <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
           </div>

@@ -50,6 +50,19 @@ window.addEventListener('mousedown', function(e){
   }
 })
 
+window.addEventListener('keydown', function(e) {
+  const modal = document.getElementById('itemEntryModal')
+  const modalDisplay = window.getComputedStyle(modal)['display'];
+  if (modalDisplay === 'none') return;
+
+  const itemValue = document.getElementById("foodItemToAdd").value
+  const catValue = document.getElementById("categoryToAddTo").value
+
+  if (itemValue.length < 1 || catValue < 1) return
+
+  if (e.key === 'Enter') store.do('addFoodItem')
+})
+
 let OrigScrollPos = window.scrollY
 const toggleMenu = () => {
   var dropdown = document.getElementById("dropdown")
@@ -118,12 +131,6 @@ const handleOnEnterEdit = (event, id) => {
   }
 }
 const submitOnEnter = (event) => {
-  console.log(event)
-  if (event.which == 13 || event.keyCode == 13) {
-    event.preventDefault()
-    document.getElementById("addFoodItemModal").modal('hide')
-    store.do('addFoodItem')
-  }
 }
 
 const getFoodItems = () => {
@@ -235,6 +242,7 @@ let store = new Reef.Store({
       _.remove(props.foodItems, { id })
     },
     addFoodItem: async (props) => {
+      console.log('calling addFoodItem method...')
       let name = document.getElementById("foodItemToAdd").value
       let category = document.getElementById("categoryToAddTo").value
       let householdId = readCookie("householdId")
