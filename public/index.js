@@ -4,11 +4,6 @@ const printToServer = msg => {
   apiRequest("POST", "/api/debug", { msg })
 }
 
-const titleCase = (str) => {
-  return str.trim().toLowerCase().split(' ').map(function(word) {
-    return word.replace(word[0], word[0].toUpperCase())
-  }).join(' ')
-}
 
 const createUuid = () => {
   let dt = new Date().getTime()
@@ -37,19 +32,6 @@ const collapseCat = (category, elementID) => {
   window.scrollTo(0, position)
 }
 
-//close menu when clicking outside or on links
-window.addEventListener('mousedown', function(e){
-  let menuDiv = document.getElementById('dropdown').contains(e.target)
-  let menuButton = document.getElementById('menuButton').contains(e.target)
-  let menuDivDisp = document.getElementById('dropdown').style.display
-
-  //if user clicks outside of dropdown and it's open, close it
-  if (!menuDiv && menuDivDisp==="block" && !menuButton){
-    document.getElementById('dropdown').style.display = "none"
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>"
-  }
-})
-
 window.addEventListener('keydown', function(e) {
   const modal = document.getElementById('itemEntryModal')
   const modalDisplay = window.getComputedStyle(modal)['display'];
@@ -64,24 +46,6 @@ window.addEventListener('keydown', function(e) {
 })
 
 let OrigScrollPos = window.scrollY
-const toggleMenu = () => {
-  var dropdown = document.getElementById("dropdown")
-  var groceryMenu = document.getElementById("groceryMenu")
-  if (dropdown.style.display === "block") {
-    //menu is open, close it
-    dropdown.style.display = "none"
-    groceryMenu.style.zIndex = 1
-    document.getElementById("app").style.opacity = "100%"
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-hamburger\"></i>"
-  } else {
-    //menu is closed, open it
-    dropdown.style.display = "block"
-    groceryMenu.style.zIndex = 4
-    document.getElementById("app").style.opacity = "40%"
-    document.getElementById("menuButton").innerHTML = "<i class=\"fas fa-times\"></i>"
-    OrigScrollPos = window.scrollY //showing div adjusts scrollY value, so reset
-  }
-}
 //close menu when scrolling, if it's open
 window.onscroll = function() {
   let vis = document.getElementById('dropdown').style.display
@@ -129,8 +93,6 @@ const handleOnEnterEdit = (event, id) => {
     event.preventDefault()
     handleOnBlurEdit(id)
   }
-}
-const submitOnEnter = (event) => {
 }
 
 const getFoodItems = () => {
@@ -199,6 +161,7 @@ let router = new ReefRouter({
 		}
 	]
 })
+
 const getFoodItemsForStoredHousehold = () => {
   if(readCookie("householdId")) {
     return getFoodItems()
@@ -242,10 +205,26 @@ let store = new Reef.Store({
       _.remove(props.foodItems, { id })
     },
     addFoodItem: async (props) => {
-      console.log('calling addFoodItem method...')
-      let name = document.getElementById("foodItemToAdd").value
-      let category = document.getElementById("categoryToAddTo").value
+      console.log('addFoodItem;')
+      let name = document.getElementById("foodItemToAdd").value.trim()
+      let category = document.getElementById("categoryToAddTo").value.trim()
       let householdId = readCookie("householdId")
+
+      if (name.length < 1 || category.length < 1) {
+        alert('Item was not added because it needs both a name and a category');
+        return false;
+      }
+
+      const itemAlreadyInList = props.foodItems.some((item) =>
+        item.name.toLowerCase() === name.toLowerCase() &&
+        item.category.toLowerCase() === category.toLowerCase()
+      );
+
+      if (itemAlreadyInList) {
+        alert('This item is already in your list')
+        return false;
+      }
+
       let newItem = await apiRequest(
         "POST",
         "/api/foodItems",
@@ -253,6 +232,8 @@ let store = new Reef.Store({
       )
       props.foodItems = props.foodItems.concat([newItem])
       app.render()
+      document.getElementById("foodItemToAdd").value = ""
+      document.getElementById("categoryToAddTo").value = ""
       document.querySelector(".modal").classList.remove("show-modal")
     },
     toggleStatus: (props, id) => {
@@ -336,6 +317,7 @@ const stockPage = (props) => {
   console.log("RENDERING STOCK PAGE")
   if(props.foodItems.length === 0) {
     return `
+    ${itemEntryModal()}
     <p align='center'>
       No grocery items yet. Click the + button icon below to start creating your list!
     </p>
@@ -344,6 +326,7 @@ const stockPage = (props) => {
   }
   let foodItemsByCategory = _.groupBy(props.foodItems, "category")
   return `
+    ${itemEntryModal()}
     ${_.map(foodItemsByCategory, (foodItems, category) => {
       return `
         <div id="${category}" class="row header center">
@@ -470,6 +453,7 @@ const aboutPage = (props) => {
 const householdPage = (props) => {
   console.log("RENDERING HOUSEHOLD PAGE")
   return `
+    ${itemEntryModal()}
     <div id="households" class="row header center">
       <p class="headerName">Households</p>
     </div>
@@ -486,6 +470,21 @@ const householdPage = (props) => {
     ${addItemComponent("store.do('addHousehold')", '<i class="fas fa-home">+</i>')}
   `
 }
+
+const itemEntryModal = () => `
+  <div id="itemEntryModal" class="modal">
+    <div class="modal-content">
+      <p class="center">Add item and category:</p>
+      <i class="close fas fa-times" onclick="toggleModal()"></i>
+      <div id="addItems">
+        <input id="foodItemToAdd" type="text" name="foodItem" placeholder="Item name">
+        <div class="autocomplete">
+          <input id="categoryToAddTo" type="text" name="newCategory" placeholder="Category">
+        </div>
+        <button type="button" class="good" onclick="store.do('addFoodItem')">Submit</button>
+      </div>
+    </div>
+  </div>`
 
 app.render()
 connectWebsocket()

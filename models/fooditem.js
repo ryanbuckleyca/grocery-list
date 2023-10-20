@@ -1,8 +1,6 @@
 'use strict';
 
-const Household = require('./household')
-
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const FoodItem = sequelize.define('FoodItem', {
     name: DataTypes.STRING,
     status: DataTypes.STRING,

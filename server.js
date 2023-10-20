@@ -1,13 +1,15 @@
-const express = require('express')
-const WebSocket = require('ws')
-const http = require("http")
-const url = require('url')
-const db = require('./models')
-const path = require('path')
-global._ = require('lodash');
+import express from 'express'
+import WebSocket from 'ws'
+import http from "http"
+import url from 'url'
+import db from './models/index.js'
+import path from 'path'
 
 const app = express()
 const port = process.env.PORT || 3000
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 let wss
 
 app.use(express.static('public'))

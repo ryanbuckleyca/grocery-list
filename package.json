@@ -1,5 +1,6 @@
 {
   "name": "grocery-list",
+  "type": "module",
   "version": "1.0.0",
   "description": "311 grocery list",
   "main": "server.js",
@@ -22,7 +23,7 @@
     "ws": "^7.3.0"
   },
   "engines": {
-    "node": ">=10.20.1"
+    "node": ">=14"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.10",

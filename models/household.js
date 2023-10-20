@@ -1,8 +1,6 @@
 'use strict';
 
-const db = require('./index')
-
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Household = sequelize.define('Household', {
     name: DataTypes.STRING
   }, {});
