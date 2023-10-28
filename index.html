@@ -15,49 +15,6 @@
     <script src="cookies.js" type="application/javascript"></script>
     <script src="helpers.js" type="application/javascript"></script>
     <script src="autocomplete.js" type="application/javascript"></script>
-    <script>
-      function toggleModal() {
-        document.querySelector(".modal").classList.toggle("show-modal");
-      }
-
-      const linkTags = document.getElementsByTagName("link")
-      let linkElToSwap
-
-      for(link of linkTags) {
-        if(link.title === "swap") {
-          linkElToSwap = link
-        }
-        else if(link.title === "lasers") {
-          linkLaserToDel = link
-        }
-      }
-
-      if(!linkElToSwap) {
-        console.log('cannot find a <link> tag with title "swap"')
-      } else {
-        //set user's preferred style, if exists
-        const styles = ["lights.css", "dark.css", "rave.css"]
-        const userStyle = readCookie("style")
-        const userHasPreferredStyle = styles.includes()
-        if(userHasPreferredStyle) setLinkTag(userStyle)
-
-        function switchStyle() {
-          if(linkElToSwap.href.includes("light.css")) {
-            switchTo = "dark.css"
-          } else if(linkElToSwap.href.includes("rave.css")) {
-            switchTo = "light.css"
-          } else {
-            switchTo = "rave.css"
-          }
-          setLinkTag(switchTo)
-        }
-
-        function setLinkTag(value) {
-          linkElToSwap.setAttribute("href", value)
-          createCookie("style", value)
-        }
-      }
-    </script>
   </head>
   <body>
     <div id="main-frame">
